@@ -1,0 +1,61 @@
+
+#ITEMS#
+item.improvableskills:skills_book.name=Book of Skills
+
+#SKILLS#
+skill.improvableskills:accelerated_furnace.name=Accelerated Furnace
+skill.improvableskills:accelerated_furnace.desc=Increases the melting speed of furnace. To have your furnace became faster, you must to stand in a radius of 5 blocks from them.
+
+skill.improvableskills:mining.name=Mining
+skill.improvableskills:mining.desc=Increases the mining speed of the pickaxe.
+
+skill.improvableskills:digging.name=Digging
+skill.improvableskills:digging.desc=Increases the digging speed of the shovel.
+
+skill.improvableskills:cutting.name=Cutting
+skill.improvableskills:cutting.desc=Increases the cutting speed of the axe.
+
+skill.improvableskills:attack_speed.name=Attack Speed
+skill.improvableskills:attack_speed.desc=Increases the strike speed of the any instruments.
+
+skill.improvableskills:leaper.name=Leaper
+skill.improvableskills:leaper.desc=Increases the jump height.
+
+skill.improvableskills:soft_landing.name=Soft Landing
+skill.improvableskills:soft_landing.desc=Decreases the fall damage. If player falls from high place (with max level), he will survive.
+
+skill.improvableskills:obsidian_skin.name=Obsidian Shield
+skill.improvableskills:obsidian_skin.desc=Decreases the fire/lava damage of the player.
+
+skill.improvableskills:ladder_king.name=King of the Ladder
+skill.improvableskills:ladder_king.desc=Increases the climbing speed of the player on ladder.
+
+skill.improvableskills:treasure_finder.name=Treasure Finder
+skill.improvableskills:treasure_finder.desc=Allows players to find precious materials, while mining.
+
+skill.improvableskills:pvp_protection.name=PvP Protection
+skill.improvableskills:pvp_protection.desc=Increases PvP-type damage protection.
+
+skill.improvableskills:luck_of_sea.name=Luck of The Sea
+skill.improvableskills:luck_of_sea.desc=Increases lure of fishing.
+
+skill.improvableskills:item_repair.name=Item Repairer
+skill.improvableskills:item_repair.desc=Slowly repairs items. This works for both hands and worn armor.
+
+skill.improvableskills:xp_bank.name=XP Bank
+
+#BUTTONS#
+button.improvableskills:upgrade=Upgrade
+button.improvableskills:degrade=Degrade
+
+#TEXTS#
+text.improvableskills:level=Level %s/%s
+text.improvableskills:totalXP=Your XP: %s XP
+text.improvableskills:storeall=Store All
+text.improvableskills:draw1lvl=Take 1 Lvl.
+text.improvableskills:draw10lvls=Take 10 Lvl.
+
+#SUBTITLES#
+subtitles.improvableskills:treasure_found=Treasure Found
+subtitles.improvableskills:skill_book_open=Book of skill opened
+subtitles.improvableskills:skill_book_closed=Book of skill closed

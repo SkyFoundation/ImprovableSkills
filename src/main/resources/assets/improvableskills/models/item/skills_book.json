@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+		"layer0": "improvableskills:items/skills_book_master",
+        "layer1": "improvableskills:items/skills_book"
+    }
+}
