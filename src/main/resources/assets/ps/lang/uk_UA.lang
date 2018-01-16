@@ -1,0 +1,64 @@
+﻿
+#ITEMS#
+item.ps:stats_book.name=Книжка статистик
+
+#STATS#
+stats.ps:accelerated_furnace.name=Прискорена піч
+stats.ps:accelerated_furnace.desc=Ця статистика збільшує швидкість переплавки в печі. Щоб ваші печі стали швидше, ви повинні стояти в радіусі 5 блоків від них. Поточний множник: +%m до швидкості
+
+stats.ps:mining.name=Видобуток
+stats.ps:mining.desc=Ця статистика збільшує швидкість видобутку киркою. Поточний множник: +%m до швидкості
+
+stats.ps:digging.name=Риття
+stats.ps:digging.desc=Ця статистика збільшує швидкість риття лопатою. Поточний множник: +%m до швидкості
+
+stats.ps:cutting.name=Рубка
+stats.ps:cutting.desc=Збільшує швидкість рубки сокирою. Поточний множник: +%m до швидкості
+
+stats.ps:attack_speed.name=Швидкісна атака
+stats.ps:attack_speed.desc=Збільшує швидкість удару будь-якого інструменту. Поточний множник: +%m до швидкості
+
+stats.ps:leaper.name=Стрибун
+stats.ps:leaper.desc=Збільшує висоту стрибка. Поточний множник: +%m до стрибку.
+
+stats.ps:soft_landing.name=М'яке приземлення
+stats.ps:soft_landing.desc=Знижує шкоди від падіння. Якщо гравець з макс. рівнем впаде з висоти, то він виживе. Поточний бонус: -%m урону від падіння.
+
+stats.ps:obsidian_skin.name=Обсидіановий щит
+stats.ps:obsidian_skin.desc=Знижує урон від вогню/лави. Поточний множник: %m урону від вогню.
+
+stats.ps:ladder_king.name=Цар гори
+stats.ps:ladder_king.desc=Збільшує швидкість лазіння по драбині. Поточний множник: +%m до швидкості.
+
+stats.ps:treasure_finder.name=Шукач скарбів
+stats.ps:treasure_finder.desc=Дозволяє знаходити цінні матеріали під час видобутку в шахтах.
+
+stats.ps:pvp_protection.name=Захист від PvP
+stats.ps:pvp_protection.desc=Збільшує рівень захисту від PvP. Захист: %d.
+
+stats.ps:luck_of_sea.name=Морська вдача
+stats.ps:luck_of_sea.desc=Підвищує улов.
+
+stats.ps:item_repair.name=Починка предметів
+stats.ps:item_repair.desc=Повільно лагодить предмети. Це працює для обох рук і одягненої броні. Поточна швидкість: %s використань/сек.
+
+stats.ps:xp_bank.name=Сховище досвіду
+
+#BUTTONS#
+button.ps:upgrade=Поліпшити
+button.ps:degrade=Погіршити
+button.ps:prevpage=Попередня сторінка
+button.ps:nextpage=Наступна сторінка
+button.ps:download=Скачати
+
+#TEXTS#
+text.ps:level=Рівень %l/%lm
+text.ps:totalXP=Ваш досвід: %x XP
+text.ps:storeall=Злити весь
+text.ps:draw1lvl=Взяти 1 рів.
+text.ps:draw10lvls=Взяти 10 рів.
+
+#SUBTITLES#
+subtitles.ps:treasure_found=Знайден скарб
+subtitles.ps:stats_book_open=Книжка статистик відкрита
+subtitles.ps:stats_book_closed=Книжка статистик закрита

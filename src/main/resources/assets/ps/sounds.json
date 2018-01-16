@@ -1,0 +1,5 @@
+{
+    "stats_book_open" : {"sounds": ["ps:stats_book_open"], "subtitle": "subtitles.ps:stats_book_open" },
+    "stats_book_closed" : {"sounds": ["ps:stats_book_closed"], "subtitle": "subtitles.ps:stats_book_closed" },
+	"treasure_found" : { "sounds": [ "ps:treasure1", "ps:treasure2", "ps:treasure3", "ps:treasure4" ], "subtitle": "subtitles.ps:treasure_found" }
+}

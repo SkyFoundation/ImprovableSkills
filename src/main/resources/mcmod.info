@@ -1,0 +1,9 @@
+[
+	{
+		"modid": "ps",
+		"name": "Player Stats",
+		"description": "Boost player abilities using single book and your XP",
+		"authorList": ["APengu", "EndieDargon"],
+		"logoFile": "assets/ps/logo.png"
+	}
+]
