@@ -1,11 +1,12 @@
 package com.endie.is.net;
 
+import com.endie.is.InfoIS;
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.iGuiSkillDataConsumer;
-import com.endie.is.proxy.SyncStats;
+import com.endie.is.data.PlayerDataManager;
+import com.endie.is.proxy.SyncSkills;
 import com.pengu.hammercore.common.utils.WorldUtil;
 import com.pengu.hammercore.common.utils.XPUtil;
-import com.pengu.hammercore.core.gui.iGuiCallback;
 import com.pengu.hammercore.net.packetAPI.iPacket;
 import com.pengu.hammercore.net.packetAPI.iPacketListener;
 
@@ -27,11 +28,14 @@ public class PacketSyncSkillData implements iPacket, iPacketListener<PacketSyncS
 	
 	public PacketSyncSkillData()
 	{
+		nbt = new NBTTagCompound();
 	}
 	
 	@Override
 	public iPacket onArrived(PacketSyncSkillData packet, MessageContext context)
 	{
+		if(context.side == Side.SERVER)
+			return new PacketSyncSkillData(PlayerDataManager.getDataFor(context.getServerHandler().player));
 		if(context.side == Side.CLIENT)
 			packet.client();
 		return null;
@@ -41,9 +45,10 @@ public class PacketSyncSkillData implements iPacket, iPacketListener<PacketSyncS
 	public void client()
 	{
 		iGuiSkillDataConsumer c = WorldUtil.cast(Minecraft.getMinecraft().currentScreen, iGuiSkillDataConsumer.class);
-		SyncStats.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
+		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
+		SyncSkills.CLIENT_DATA.player.getEntityData().setTag(InfoIS.NBT_DATA_TAG, nbt);
 		if(c != null)
-			c.applySkillData(SyncStats.CLIENT_DATA);
+			c.applySkillData(SyncSkills.CLIENT_DATA);
 		XPUtil.setPlayersExpTo(Minecraft.getMinecraft().player, nbt.getInteger("PlayerLocalXP"));
 	}
 	

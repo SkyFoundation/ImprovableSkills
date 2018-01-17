@@ -8,12 +8,17 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.endie.is.InfoIS;
 import com.endie.is.data.PlayerDataManager;
+import com.endie.is.net.PacketSyncSkillData;
+import com.pengu.hammercore.net.HCNetwork;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -26,6 +31,8 @@ public class PlayerSkillData
 	
 	public final EntityPlayer player;
 	public NBTTagCompound persistedData = new NBTTagCompound();
+	public boolean hasCraftedSkillBook = false;
+	private boolean hcsbPrev = false;
 	private Map<String, Short> stats = new HashMap<>();
 	
 	public PlayerSkillData(EntityPlayer player)
@@ -40,9 +47,27 @@ public class PlayerSkillData
 	
 	public void handleTick()
 	{
+		if(player == null)
+			return;
+		
 		List<PlayerSkillBase> skills = GameRegistry.findRegistry(PlayerSkillBase.class).getValues();
 		for(int i = 0; i < skills.size(); ++i)
 			skills.get(i).tick(this);
+		
+		if(!player.world.isRemote && hcsbPrev != hasCraftedSkillBook && !hcsbPrev)
+		{
+			player.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ".guide"));
+			hcsbPrev = true;
+			sync();
+		}
+		
+		hcsbPrev = hasCraftedSkillBook;
+	}
+	
+	public void sync()
+	{
+		if(player instanceof EntityPlayerMP)
+			HCNetwork.manager.sendTo(new PacketSyncSkillData(this), (EntityPlayerMP) player);
 	}
 	
 	public void setSkillLevel(PlayerSkillBase stat, Number lvl)
@@ -55,6 +80,11 @@ public class PlayerSkillData
 		stats.put(stat.getRegistryName().toString(), lvl.shortValue());
 		if(save)
 			PlayerDataManager.save(player);
+	}
+	
+	public boolean hasCraftedSkillsBook()
+	{
+		return hasCraftedSkillBook;
 	}
 	
 	public static PlayerSkillData deserialize(EntityPlayer player, NBTTagCompound nbt)
@@ -89,6 +119,9 @@ public class PlayerSkillData
 				data.storageXp = BigInteger.ZERO;
 			}
 		
+		data.hasCraftedSkillBook = data.persistedData.getBoolean("SkillBookCrafted");
+		data.hcsbPrev = data.persistedData.getBoolean("PrevSkillBookCrafted");
+		
 		return data;
 	}
 	
@@ -97,6 +130,8 @@ public class PlayerSkillData
 		NBTTagCompound nbt = new NBTTagCompound();
 		
 		persistedData.setString("BankXP", storageXp.toString(36));
+		persistedData.setBoolean("SkillBookCrafted", hasCraftedSkillBook);
+		persistedData.setBoolean("PrevSkillBookCrafted", hcsbPrev);
 		
 		IForgeRegistry<PlayerSkillBase> reg = GameRegistry.findRegistry(PlayerSkillBase.class);
 		nbt.setTag("Persisted", persistedData);

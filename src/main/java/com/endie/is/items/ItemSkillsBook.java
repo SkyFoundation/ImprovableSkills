@@ -4,6 +4,7 @@ import com.endie.is.data.PlayerDataManager;
 import com.endie.is.net.PacketOpenSkillsBook;
 import com.pengu.hammercore.net.HCNetwork;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -26,5 +27,13 @@ public class ItemSkillsBook extends Item
 		if(!worldIn.isRemote && playerIn instanceof EntityPlayerMP)
 			HCNetwork.manager.sendTo(new PacketOpenSkillsBook(PlayerDataManager.getDataFor(playerIn)), (EntityPlayerMP) playerIn);
 		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+	{
+		if(entityIn instanceof EntityPlayerMP && !worldIn.isRemote)
+			PlayerDataManager.getDataFor((EntityPlayerMP) entityIn).hasCraftedSkillBook = true;
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 	}
 }

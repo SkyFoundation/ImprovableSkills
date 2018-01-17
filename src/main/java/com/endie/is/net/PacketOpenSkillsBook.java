@@ -1,8 +1,9 @@
 package com.endie.is.net;
 
 import com.endie.is.api.PlayerSkillData;
-import com.endie.is.client.gui.GuiSkillBook;
-import com.endie.is.proxy.SyncStats;
+import com.endie.is.client.gui.GuiSkillsBook;
+import com.endie.is.data.PlayerDataManager;
+import com.endie.is.proxy.SyncSkills;
 import com.pengu.hammercore.net.packetAPI.iPacket;
 import com.pengu.hammercore.net.packetAPI.iPacketListener;
 
@@ -23,12 +24,15 @@ public class PacketOpenSkillsBook implements iPacket, iPacketListener<PacketOpen
 	
 	public PacketOpenSkillsBook()
 	{
+		nbt = new NBTTagCompound();
 	}
 	
 	@Override
 	public iPacket onArrived(PacketOpenSkillsBook packet, MessageContext context)
 	{
-		if(context.side == Side.CLIENT)
+		if(context.side == Side.SERVER)
+			return new PacketOpenSkillsBook(PlayerDataManager.getDataFor(context.getServerHandler().player));
+		else if(context.side == Side.CLIENT)
 			packet.client();
 		return null;
 	}
@@ -37,14 +41,15 @@ public class PacketOpenSkillsBook implements iPacket, iPacketListener<PacketOpen
 	public void client()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		SyncStats.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
-		mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSkillBook(SyncStats.CLIENT_DATA)));
+		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
+		mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSkillsBook(SyncSkills.CLIENT_DATA)));
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setTag("Data", this.nbt);
+		if(this.nbt != null)
+			nbt.setTag("Data", this.nbt);
 	}
 	
 	@Override

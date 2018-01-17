@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.net.PacketSyncSkillData;
-import com.endie.is.proxy.SyncStats;
+import com.endie.is.proxy.SyncSkills;
 import com.mojang.authlib.GameProfile;
 import com.pengu.hammercore.net.HCNetwork;
 
@@ -26,7 +26,7 @@ public class PlayerDataManager
 		if(player == null)
 			return null;
 		if(player.world.isRemote)
-			return SyncStats.CLIENT_DATA;
+			return SyncSkills.CLIENT_DATA;
 		LPLAYER.set(player);
 		return getDataFor(player.getGameProfile());
 	}
