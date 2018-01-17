@@ -36,8 +36,8 @@ stats.improvableskills:treasure_finder.desc=Дозволяє знаходити 
 stats.improvableskills:pvp_protection.name=Захист від PvP
 stats.improvableskills:pvp_protection.desc=Збільшує рівень захисту від PvP.
 
-stats.improvableskills:luck_of_sea.name=Морська вдача
-stats.improvableskills:luck_of_sea.desc=Підвищує улов.
+stats.improvableskills:luck_of_the_sea.name=Морська вдача
+stats.improvableskills:luck_of_the_sea.desc=Підвищує улов.
 
 stats.improvableskills:item_repair.name=Починка предметів
 stats.improvableskills:item_repair.desc=Повільно лагодить предмети. Це працює для обох рук і одягненої броні.

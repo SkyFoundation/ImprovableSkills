@@ -36,8 +36,8 @@ skill.improvableskills:treasure_finder.desc=Allows players to find precious mate
 skill.improvableskills:pvp_protection.name=PvP Protection
 skill.improvableskills:pvp_protection.desc=Increases PvP-type damage protection.
 
-skill.improvableskills:luck_of_sea.name=Luck of The Sea
-skill.improvableskills:luck_of_sea.desc=Increases lure of fishing.
+skill.improvableskills:luck_of_the_sea.name=Luck of The Sea
+skill.improvableskills:luck_of_the_sea.desc=Increases lure of fishing.
 
 skill.improvableskills:item_repair.name=Item Repairer
 skill.improvableskills:item_repair.desc=Slowly repairs items. This works for both hands and worn armor.

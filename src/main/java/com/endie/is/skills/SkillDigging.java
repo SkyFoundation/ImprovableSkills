@@ -28,7 +28,7 @@ public class SkillDigging extends PlayerSkillBase implements iDigSpeedAffectorSk
 	{
 		Block b = data.player.world.getBlockState(pos).getBlock();
 		String obj = b.getHarvestTool(data.player.world.getBlockState(pos));
-		if(stack.isEmpty())
+		if(stack.isEmpty() || obj == null)
 			return 0.0F;
 		boolean isQ = false;
 		String[] strs = stack.getItem().getToolClasses(stack).toArray(new String[0]);

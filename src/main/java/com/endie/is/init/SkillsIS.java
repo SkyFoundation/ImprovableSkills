@@ -7,6 +7,7 @@ import com.endie.is.skills.SkillCutting;
 import com.endie.is.skills.SkillDigging;
 import com.endie.is.skills.SkillLadderKing;
 import com.endie.is.skills.SkillLeaper;
+import com.endie.is.skills.SkillLuckOfTheSea;
 import com.endie.is.skills.SkillMining;
 import com.endie.is.skills.SkillObsidianSkin;
 import com.endie.is.skills.SkillSoftLanding;
@@ -25,6 +26,7 @@ public class SkillsIS
 	public static final SkillDigging DIGGING = new SkillDigging();
 	public static final SkillCutting CUTTING = new SkillCutting();
 	public static final SkillObsidianSkin OBSIDIAN_SKIN = new SkillObsidianSkin();
+	public static final SkillLuckOfTheSea LUCK_OF_THE_SEA = new SkillLuckOfTheSea();
 	
 	public static void register(IForgeRegistry<PlayerSkillBase> reg)
 	{
@@ -38,5 +40,6 @@ public class SkillsIS
 		reg.register(DIGGING);
 		reg.register(CUTTING);
 		reg.register(OBSIDIAN_SKIN);
+		reg.register(LUCK_OF_THE_SEA);
 	}
 }
