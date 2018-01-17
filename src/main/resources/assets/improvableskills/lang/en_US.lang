@@ -54,6 +54,8 @@ text.improvableskills:totalXP=Your XP: %s XP
 text.improvableskills:storeall=Store All
 text.improvableskills:draw1lvl=Take 1 Lvl.
 text.improvableskills:draw10lvls=Take 10 Lvl.
+chat.improvableskills.guide=You just made Book of Skills! Now you can boost certain skills.
+gui.improvableskills.locked=§4Unavaliable. Craft Book of Skills to unlock.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Treasure Found

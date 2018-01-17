@@ -2,47 +2,47 @@
 #ITEMS#
 item.improvableskills:skills_book.name=Книга навыков
 
-#STATS#
-stats.improvableskills:accelerated_furnace.name=Ускоренная печь
-stats.improvableskills:accelerated_furnace.desc=Эта статистика увеличивает скорость переплавки в печи. Чтобы ваши печи стали быстрее, вы должны стоять в радиусе 5 блоков от них.
+#SKILLS#
+skill.improvableskills:accelerated_furnace.name=Ускоренная печь
+skill.improvableskills:accelerated_furnace.desc=Эта статистика увеличивает скорость переплавки в печи. Чтобы ваши печи стали быстрее, вы должны стоять в радиусе 5 блоков от них.
 
-stats.improvableskills:mining.name=Добыча
-stats.improvableskills:mining.desc=Эта статистика увеличивает скорость добычи киркой.
+skill.improvableskills:mining.name=Добыча
+skill.improvableskills:mining.desc=Эта статистика увеличивает скорость добычи киркой.
 
-stats.improvableskills:digging.name=Рытьё
-stats.improvableskills:digging.desc=Эта статистика увеличивает скорость рытья лопатой.
+skill.improvableskills:digging.name=Рытьё
+skill.improvableskills:digging.desc=Эта статистика увеличивает скорость рытья лопатой.
 
-stats.improvableskills:cutting.name=Рубка
-stats.improvableskills:cutting.desc=Увеличивает скорость рубки топором.
+skill.improvableskills:cutting.name=Рубка
+skill.improvableskills:cutting.desc=Увеличивает скорость рубки топором.
 
-stats.improvableskills:attack_speed.name=Скоростная атака
-stats.improvableskills:attack_speed.desc=Увеличивает скорость удара любого инструмента.
+skill.improvableskills:attack_speed.name=Скоростная атака
+skill.improvableskills:attack_speed.desc=Увеличивает скорость удара любого инструмента.
 
-stats.improvableskills:leaper.name=Прыгун
-stats.improvableskills:leaper.desc=Увеличивает высоту прыжка.
+skill.improvableskills:leaper.name=Прыгун
+skill.improvableskills:leaper.desc=Увеличивает высоту прыжка.
 
-stats.improvableskills:soft_landing.name=Мягкое приземление
-stats.improvableskills:soft_landing.desc=Снижает урон от падения. Если игрок с макс. уровнем упадет с высоты, то он выживет.
+skill.improvableskills:soft_landing.name=Мягкое приземление
+skill.improvableskills:soft_landing.desc=Снижает урон от падения. Если игрок с макс. уровнем упадет с высоты, то он выживет.
 
-stats.improvableskills:obsidian_skin.name=Обсидиановый щит
-stats.improvableskills:obsidian_skin.desc=Снижает урон от огня/лавы игроку.
+skill.improvableskills:obsidian_skin.name=Обсидиановый щит
+skill.improvableskills:obsidian_skin.desc=Снижает урон от огня/лавы игроку.
 
-stats.improvableskills:ladder_king.name=Царь горы
-stats.improvableskills:ladder_king.desc=Увеличивает скорость лазанья игрока по лестнице.
+skill.improvableskills:ladder_king.name=Царь горы
+skill.improvableskills:ladder_king.desc=Увеличивает скорость лазанья игрока по лестнице.
 
-stats.improvableskills:treasure_finder.name=Искатель Сокровищ
-stats.improvableskills:treasure_finder.desc=Позволяет находить ценные материалы во время добычи в шахтах.
+skill.improvableskills:treasure_finder.name=Искатель Сокровищ
+skill.improvableskills:treasure_finder.desc=Позволяет находить ценные материалы во время добычи в шахтах.
 
-stats.improvableskills:pvp_protection.name=Защита от PvP
-stats.improvableskills:pvp_protection.desc=Увеличивает уровень защиты от PvP урона.
+skill.improvableskills:pvp_protection.name=Защита от PvP
+skill.improvableskills:pvp_protection.desc=Увеличивает уровень защиты от PvP урона.
 
-stats.improvableskills:luck_of_the_sea.name=Морская удача
-stats.improvableskills:luck_of_the_sea.desc=Повышает улов.
+skill.improvableskills:luck_of_the_sea.name=Морская удача
+skill.improvableskills:luck_of_the_sea.desc=Повышает улов.
 
-stats.improvableskills:item_repair.name=Починка предметов
-stats.improvableskills:item_repair.desc=Медленно чинит предметы. Это работает для обеих рук и одетой брони.
+skill.improvableskills:item_repair.name=Починка предметов
+skill.improvableskills:item_repair.desc=Медленно чинит предметы. Это работает для обеих рук и одетой брони.
 
-stats.improvableskills:xp_bank.name=Хранилище опыта
+skill.improvableskills:xp_bank.name=Хранилище опыта
 
 #BUTTONS#
 button.improvableskills:upgrade=Улучшить
@@ -54,8 +54,10 @@ text.improvableskills:totalXP=Ваш опыт: %s XP
 text.improvableskills:storeall=Слить весь
 text.improvableskills:draw1lvl=Взять 1 ур.
 text.improvableskills:draw10lvls=Взять 10 ур.
+chat.improvableskills.guide=Вы только что сделали книгу навыков! Теперь вы можете улучшать некоторые навыки игрока.
+gui.improvableskills.locked=§4Недоступно. Создайте книгу навыков, чтобы разблокировать.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Найдено сокровище
-subtitles.improvableskills:stats_book_open=Книга статистик открыта
-subtitles.improvableskills:stats_book_closed=Книга статистик закрыта
+subtitles.improvableskills:skill_book_open=Книга статистик открыта
+subtitles.improvableskills:skill_book_closed=Книга статистик закрыта

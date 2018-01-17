@@ -7,13 +7,16 @@ import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.init.ItemsIS;
 import com.endie.is.init.SkillsIS;
+import com.endie.is.net.PacketSyncSkillData;
 import com.endie.is.proxy.CommonProxy;
 import com.pengu.hammercore.HammerCore;
 import com.pengu.hammercore.common.SimpleRegistration;
 import com.pengu.hammercore.intent.IntentManager;
+import com.pengu.hammercore.net.HCNetwork;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -88,7 +91,11 @@ public class ImprovableSkillsMod
 	@SubscribeEvent
 	public void playerJoin(PlayerLoggedInEvent e)
 	{
-		PlayerDataManager.loadLogging(e.player);
+		if(!e.player.world.isRemote && e.player instanceof EntityPlayerMP)
+		{
+			PlayerDataManager.loadLogging(e.player);
+			HCNetwork.manager.sendTo(new PacketSyncSkillData(PlayerDataManager.getDataFor(e.player)), (EntityPlayerMP) e.player);
+		}
 	}
 	
 	@SubscribeEvent

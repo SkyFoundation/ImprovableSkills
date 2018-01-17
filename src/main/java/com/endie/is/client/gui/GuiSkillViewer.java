@@ -27,7 +27,7 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer, iTooltipContext
 {
-	final GuiSkillBook parent;
+	final GuiSkillsBook parent;
 	public PlayerSkillData data;
 	public DynGuiTex tex;
 	final HCFontRenderer fr;
@@ -35,7 +35,7 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	
 	int mouseX, mouseY;
 	
-	public GuiSkillViewer(GuiSkillBook parent, PlayerSkillBase skill)
+	public GuiSkillViewer(GuiSkillsBook parent, PlayerSkillBase skill)
 	{
 		this.parent = parent;
 		this.skill = skill;
@@ -139,7 +139,7 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
-		if(keyCode == 1)
+		if(keyCode == 1 || mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode))
 			mc.displayGuiScreen(parent);
 	}
 	

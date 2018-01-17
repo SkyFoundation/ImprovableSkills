@@ -24,11 +24,11 @@ import net.minecraft.util.text.TextFormatting;
 
 public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 {
-	public GuiSkillBook parent;
+	public GuiSkillsBook parent;
 	public PlayerSkillData data;
 	public GuiButton back;
 	
-	public GuiXPBank(GuiSkillBook parent)
+	public GuiXPBank(GuiSkillsBook parent)
 	{
 		this.parent = parent;
 		this.data = parent.data;
@@ -84,7 +84,6 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 		
 		GL11.glEnable(3042);
 		
-		drawDefaultBackground();
 		GlStateManager.disableRescaleNormal();
 		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 		GlStateManager.disableLighting();
@@ -146,7 +145,7 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
 	{
-		if(keyCode == 1)
+		if(keyCode == 1 || mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode))
 			mc.displayGuiScreen(parent);
 	}
 	
