@@ -17,7 +17,9 @@ import com.endie.is.api.iGuiSkillDataConsumer;
 import com.endie.is.init.SkillsIS;
 import com.endie.lib.tuple.TwoTuple;
 import com.pengu.hammercore.client.UV;
+import com.pengu.hammercore.client.texture.gui.theme.GuiTheme;
 import com.pengu.hammercore.core.gui.GuiCentered;
+import com.pengu.hammercore.utils.ColorHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -30,7 +32,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 {
-	public final UV gui, star;
+	public final UV gui1, gui2, star;
 	public double scrolledPixels;
 	public double prevScrolledPixels;
 	public int row = 6;
@@ -56,8 +58,9 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		xSize = 195;
 		ySize = 168;
 		
-		gui = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui.png"), 0, 0, xSize, ySize);
-		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui.png"), xSize, 0, 10, 10);
+		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
+		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
+		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), xSize, 0, 10, 10);
 		
 		GameRegistry.findRegistry(PlayerSkillBase.class).forEach(skill -> texes.add(skill.tex));
 	}
@@ -67,7 +70,7 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 	{
 		drawDefaultBackground();
 		GL11.glColor4f(1, 1, 1, 1);
-		gui.render(guiLeft, guiTop);
+		gui1.render(guiLeft, guiTop);
 		
 		GlStateManager.enableDepth();
 		
@@ -77,7 +80,7 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(3089);
-		GL11.glScissor((int) Math.ceil(guiLeft * sr.getScaleFactor()), (int) Math.ceil((guiTop + 14) * sr.getScaleFactor()), (int) Math.ceil(xSize * sr.getScaleFactor()), (int) Math.ceil((ySize - 21) * sr.getScaleFactor()));
+		GL11.glScissor((int) Math.ceil(guiLeft * sr.getScaleFactor()), (int) Math.ceil((guiTop + 5) * sr.getScaleFactor()), (int) Math.ceil(xSize * sr.getScaleFactor()), (int) Math.ceil((ySize - 10) * sr.getScaleFactor()));
 		
 		int cht = 0, chtni = 0;
 		boolean singleHover = false;
@@ -139,10 +142,18 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		GL11.glDisable(3089);
 		
+		int rgb = GuiTheme.CURRENT_THEME.bodyColor;
+		if(GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla"))
+			GL11.glColor4f(0, 0, 1, 1);
+		else
+			GL11.glColor4f(ColorHelper.getRed(rgb), ColorHelper.getGreen(rgb), ColorHelper.getBlue(rgb), 1);
+		gui2.render(guiLeft, guiTop);
+		GL11.glColor4f(1, 1, 1, 1);
+		
 		if(cHover >= 0 && chtni >= 200)
 		{
 			GL11.glPushMatrix();
-			GL11.glTranslated(0, 0, 500);
+			GL11.glTranslatef(0, 0, 500);
 			drawHoveringText(texes.get(cHover % co).skill.getLocalizedName(data), mouseX, mouseY);
 			GL11.glPopMatrix();
 		}

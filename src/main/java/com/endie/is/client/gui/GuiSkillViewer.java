@@ -85,7 +85,7 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui.png");
+		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png");
 		GL11.glPushMatrix();
 		GL11.glTranslated(guiLeft + (xSize - 20) / 2 + 2, guiTop + 126, 0);
 		GL11.glScaled(1.5, 1.5, 1);

@@ -45,7 +45,6 @@ minecraft {
     mappings = "${config.mcp}"
     makeObfSourceJar = false
 	replace 'required-after:hammercore', "required-after:hammercore@[${config.hc_version},)"
-	replace 'required-after:hammermetals', "required-after:hammermetals@[3r,)"
     replace '@VERSION@', "${config.mod_version}"
 	replace '@FINGERPRINT@', project.findProperty('signSHA1')
 }
@@ -59,7 +58,6 @@ repositories {
 
 dependencies {
 	deobfCompile "apengu:HammerCore:${config.minecraft_version}-${config.hc_version}:deobf"
-	deobfCompile "apengu:HammerMetals:${config.minecraft_version}-3r:deobf"
 }
 
 processResources
@@ -175,7 +173,7 @@ task makeChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
 <h1>Changes:</h1>
   <ul>
     {{#commits}}
-    <li> <a href="https://github.com/${config.mod_id_fancy}/Sources/commit/{{hash}}" target=_blank> {{{message}}}</a>
+    <li> <a href="https://github.com/APengu/${config.mod_id_fancy}/commit/{{hash}}" target=_blank> {{{message}}}</a>
 </li>
     {{/commits}}
   </ul>

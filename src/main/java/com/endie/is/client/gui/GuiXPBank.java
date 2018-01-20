@@ -11,11 +11,13 @@ import com.endie.is.api.iGuiSkillDataConsumer;
 import com.endie.is.init.SkillsIS;
 import com.endie.is.net.PacketDrawXP;
 import com.endie.is.net.PacketStoreXP;
+import com.pengu.hammercore.client.texture.gui.theme.GuiTheme;
 import com.pengu.hammercore.client.utils.RenderUtil;
 import com.pengu.hammercore.client.utils.UtilsFX;
 import com.pengu.hammercore.common.utils.XPUtil;
 import com.pengu.hammercore.core.gui.GuiCentered;
 import com.pengu.hammercore.net.HCNetwork;
+import com.pengu.hammercore.utils.ColorHelper;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -89,8 +91,7 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 		GlStateManager.disableLighting();
 		GlStateManager.disableDepth();
 		
-		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui.png");
-		
+		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png");
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, (int) xSize, (int) ySize);
 		
 		int sizeX = 20;
@@ -103,7 +104,7 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui.png");
+		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png");
 		GL11.glPushMatrix();
 		GL11.glTranslated(back.x + back.width - 18, guiTop + 133.85, 0);
 		GL11.glScaled(1.45, 1.45, 1);
@@ -140,6 +141,15 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 		
 		drawCenteredString(fontRenderer, I18n.format("text." + InfoIS.MOD_ID + ":totalXP", XPUtil.getXPTotal(mc.player)), guiLeft + (int) xSize / 2, guiTop + (int) ySize + 4, (int) (r * 255.0F) << 16 | 0xFF00 | 0x0);
 		GL11.glColor3f(1.0F, 1.0F, 1.0F);
+		
+		int rgb = GuiTheme.CURRENT_THEME.bodyColor;
+		if(GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla"))
+			GL11.glColor4f(0, 0, 1, 1);
+		else
+			GL11.glColor4f(ColorHelper.getRed(rgb), ColorHelper.getGreen(rgb), ColorHelper.getBlue(rgb), 1);
+		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png");
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, (int) xSize, (int) ySize);
+		GL11.glColor4f(1, 1, 1, 1);
 	}
 	
 	@Override
