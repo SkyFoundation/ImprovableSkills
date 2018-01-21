@@ -35,7 +35,12 @@ public class SkillEvents
 	public void playerTick(PlayerTickEvent e)
 	{
 		if(e.phase == Phase.START)
-			PlayerDataManager.getDataFor(e.player).handleTick();
+		{
+			PlayerSkillData data = PlayerDataManager.getDataFor(e.player);
+			if(data == null)
+				return;
+			data.handleTick();
+		}
 	}
 	
 	@SubscribeEvent
@@ -45,6 +50,8 @@ public class SkillEvents
 		if(e.player instanceof EntityPlayerMP && !e.player.world.isRemote && !e.crafting.isEmpty() && e.crafting.getItem() instanceof ItemSkillsBook)
 		{
 			PlayerSkillData data = PlayerDataManager.getDataFor(e.player);
+			if(data == null)
+				return;
 			data.hasCraftedSkillBook = true;
 			HCNetwork.manager.sendTo(new PacketSyncSkillData(data), (EntityPlayerMP) e.player);
 		}
@@ -57,6 +64,8 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
 			
 			ItemStack item = p.getHeldItemMainhand();
 			
@@ -77,6 +86,8 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
 			int softLandingStatLevel = data.getSkillLevel(SkillsIS.SOFT_LANDING);
 			
 			float reduce = Math.min(0.5F, Math.max(0.25F, softLandingStatLevel / (float) SkillsIS.SOFT_LANDING.maxLvl));
@@ -98,6 +109,8 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
 			int leaper = data.getSkillLevel(SkillsIS.LEAPER);
 			
 			if(leaper > 0)
@@ -120,6 +133,8 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
 			if(data.getSkillLevel(SkillsIS.SOFT_LANDING) >= SkillsIS.SOFT_LANDING.maxLvl && e.getAmount() >= p.getHealth())
 				e.setAmount(p.getHealth() - 1F);
 		}
@@ -128,6 +143,8 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntity();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
 			int obsSkin = data.getSkillLevel(SkillsIS.OBSIDIAN_SKIN);
 			e.setAmount(e.getAmount() * (1F - obsSkin / (float) SkillsIS.OBSIDIAN_SKIN.maxLvl + .2F));
 		}
