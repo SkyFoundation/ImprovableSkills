@@ -1,6 +1,8 @@
 package com.endie.is.client.gui;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -8,15 +10,24 @@ import com.endie.is.InfoIS;
 import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.iGuiSkillDataConsumer;
+import com.endie.is.client.rendering.OnTopEffects;
+import com.endie.is.client.rendering.ote.OTEFadeOutButton;
+import com.endie.is.client.rendering.ote.OTEFadeOutUV;
+import com.endie.is.client.rendering.ote.OTESparkle;
+import com.endie.is.client.rendering.ote.OTETooltip;
 import com.endie.is.net.PacketLvlDownSkill;
 import com.endie.is.net.PacketLvlUpSkill;
 import com.pengu.hammercore.bookAPI.fancy.HCFontRenderer;
 import com.pengu.hammercore.bookAPI.fancy.HCFontRenderer.iTooltipContext;
+import com.pengu.hammercore.client.ItemColorHelper;
+import com.pengu.hammercore.client.TexturePixelGetter;
+import com.pengu.hammercore.client.UV;
 import com.pengu.hammercore.client.texture.gui.DynGuiTex;
 import com.pengu.hammercore.client.texture.gui.GuiTexBakery;
 import com.pengu.hammercore.client.texture.gui.theme.GuiTheme;
 import com.pengu.hammercore.client.utils.RenderUtil;
 import com.pengu.hammercore.client.utils.UtilsFX;
+import com.pengu.hammercore.color.InterpolationUtil;
 import com.pengu.hammercore.common.utils.XPUtil;
 import com.pengu.hammercore.core.gui.GuiCentered;
 import com.pengu.hammercore.net.HCNetwork;
@@ -24,6 +35,7 @@ import com.pengu.hammercore.net.HCNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer, iTooltipContext
 {
@@ -34,6 +46,7 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	final PlayerSkillBase skill;
 	
 	int mouseX, mouseY;
+	boolean forbidden;
 	
 	public GuiSkillViewer(GuiSkillsBook parent, PlayerSkillBase skill)
 	{
@@ -41,7 +54,8 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 		this.skill = skill;
 		this.data = parent.data;
 		this.mc = Minecraft.getMinecraft();
-		this.fr = new HCFontRenderer(mc.gameSettings, HCFontRenderer.FONT_NORMAL, mc.renderEngine, true);
+		
+		this.fr = new HCFontRenderer(mc.gameSettings, skill.isVisible(parent.data) ? HCFontRenderer.FONT_NORMAL : HCFontRenderer.FONT_GALACTIC, mc.renderEngine, true);
 		
 		xSize = 200;
 		ySize = 150;
@@ -73,15 +87,18 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		
+		forbidden = !skill.isVisible(parent.data);
+		
 		drawDefaultBackground();
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		short nsl = (short) (data.getSkillLevel(skill) + 1);
 		int xp = skill.getXPToUpgrade(data, nsl);
-		int xp2 = skill.getXPToUpgrade(data, (short) (nsl - 2));
+		int xp2 = skill.getXPToDowngrade(data, (short) (nsl - 2));
 		
-		buttonList.get(0).enabled = nsl <= skill.maxLvl && skill.canUpgrade(data);
-		buttonList.get(1).enabled = data.getSkillLevel(skill) > 0;
+		boolean max = nsl <= skill.maxLvl && !forbidden;
+		buttonList.get(0).enabled = max && skill.canUpgrade(data);
+		buttonList.get(1).enabled = data.getSkillLevel(skill) > 0 && !forbidden;
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
@@ -92,16 +109,16 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 		RenderUtil.drawTexturedModalRect(0, 0, 195, 10, 10, 11);
 		GL11.glPopMatrix();
 		
-		drawCenteredString(fontRenderer, I18n.format("text.improvableskills:totalXP", XPUtil.getXPTotal(mc.player)), (int) (guiLeft + xSize / 2), (int) (guiTop + ySize + 2), 0x88FF00);
+		drawCenteredString(forbidden ? mc.standardGalacticFontRenderer : fontRenderer, I18n.format("text.improvableskills:totalXP", XPUtil.getXPTotal(mc.player)), (int) (guiLeft + xSize / 2), (int) (guiTop + ySize + 2), 0x88FF00);
 		
-		if(buttonList.get(0).isMouseOver() && buttonList.get(0).enabled)
-			drawHoveringText("-" + xp + " XP", mouseX, mouseY);
+		if(buttonList.get(0).isMouseOver() && max)
+			OTETooltip.showTooltip("-" + xp + " XP");
 		
 		if(buttonList.get(1).isMouseOver() && buttonList.get(1).enabled)
-			drawHoveringText("+" + xp2 + " XP", mouseX, mouseY);
+			OTETooltip.showTooltip("+" + xp2 + " XP");
 		
 		if(buttonList.get(2).isMouseOver())
-			drawHoveringText(I18n.format("gui.back"), mouseX, mouseY);
+			OTETooltip.showTooltip(I18n.format("gui.back"));
 	}
 	
 	@Override
@@ -146,13 +163,37 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void actionPerformed(GuiButton b) throws IOException
 	{
+		new OTEFadeOutButton(b, 10);
+		
 		if(b.id == 2)
+		{
 			mc.displayGuiScreen(parent);
+			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.5, 11 * 1.5, guiLeft + (xSize - 20) / 2 + 2, guiTop + 126, 10);
+		}
 		
 		if(b.id == 0)
+		{
+			Random r = new Random();
+			int[] rgbs = TexturePixelGetter.getAllColors(skill.tex.toUV(true).path + "");
+			int col = rgbs[r.nextInt(rgbs.length)];
+			double tx = guiLeft + 10 + r.nextInt(64) / 2F;
+			double ty = guiTop + 6 + r.nextInt(64) / 2F;
+			OnTopEffects.effects.add(new OTESparkle(mouseX, mouseY, tx, ty, 30, col));
+			
 			HCNetwork.manager.sendToServer(new PacketLvlUpSkill(skill));
+		}
+		
 		if(b.id == 1)
+		{
+			Random r = new Random();
+			int[] rgbs = TexturePixelGetter.getAllColors(skill.tex.toUV(true).path + "");
+			int col = rgbs[r.nextInt(rgbs.length)];
+			double tx = guiLeft + 10 + r.nextInt(64) / 2F;
+			double ty = guiTop + 6 + r.nextInt(64) / 2F;
+			OnTopEffects.effects.add(new OTESparkle(tx, ty, mouseX, mouseY, 30, col));
+			
 			HCNetwork.manager.sendToServer(new PacketLvlDownSkill(skill));
+		}
 	}
 	
 	@Override
@@ -184,5 +225,11 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	public int getMouseX()
 	{
 		return mouseX;
+	}
+	
+	@Override
+	public void drawHoveringText(String text, int x, int y)
+	{
+		drawHoveringText(Arrays.asList(text), x, y, forbidden ? mc.standardGalacticFontRenderer : fontRenderer);
 	}
 }

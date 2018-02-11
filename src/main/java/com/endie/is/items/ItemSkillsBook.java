@@ -1,5 +1,6 @@
 package com.endie.is.items;
 
+import com.endie.is.api.PlayerSkillData;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.net.PacketOpenSkillsBook;
 import com.pengu.hammercore.net.HCNetwork;
@@ -33,7 +34,11 @@ public class ItemSkillsBook extends Item
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
 	{
 		if(entityIn instanceof EntityPlayerMP && !worldIn.isRemote)
-			PlayerDataManager.getDataFor((EntityPlayerMP) entityIn).hasCraftedSkillBook = true;
+		{
+			PlayerSkillData d = PlayerDataManager.getDataFor((EntityPlayerMP) entityIn);
+			if(d != null)
+				d.hasCraftedSkillBook = true;
+		}
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 	}
 }

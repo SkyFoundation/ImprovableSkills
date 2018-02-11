@@ -69,7 +69,10 @@ public class PlayerDataManager
 	{
 		if(player == null)
 			return false;
-		player.getEntityData().setTag(NBT_DATA_TAG, getDataFor(player).serialize());
+		PlayerSkillData data = getDataFor(player);
+		if(data == null)
+			return false;
+		player.getEntityData().setTag(NBT_DATA_TAG, data.serialize());
 		return true;
 	}
 	

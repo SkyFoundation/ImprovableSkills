@@ -27,8 +27,6 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 	@Override
 	public void tick(PlayerSkillData data)
 	{
-		xpValue = 2;
-		
 		int lvl = data.getSkillLevel(this);
 		boolean acquired = lvl > 0;
 		
@@ -44,7 +42,7 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 			
 			if(burnTime > 0)
 			{
-				int add = 2 * (int) Math.sqrt(lvl * 2.4);
+				int add = 2 * (int) Math.sqrt(lvl * 2);
 				tef.setField(2, progress + add);
 				tef.setField(0, (int) Math.max(0, burnTime - add * .8));
 				if(tef.getField(2) >= tef.getField(3))

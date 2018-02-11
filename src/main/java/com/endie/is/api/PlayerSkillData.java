@@ -1,6 +1,7 @@
 package com.endie.is.api;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -31,6 +33,8 @@ public class PlayerSkillData
 	
 	public final EntityPlayer player;
 	public NBTTagCompound persistedData = new NBTTagCompound();
+	/** The array of scrolls that have been used */
+	public List<String> stat_scrolls = new ArrayList<>();
 	public boolean hasCraftedSkillBook = false;
 	private boolean hcsbPrev = false;
 	private Map<String, Short> stats = new HashMap<>();
@@ -50,6 +54,8 @@ public class PlayerSkillData
 		if(player == null)
 			return;
 		
+//		stat_scrolls.clear();
+		
 		List<PlayerSkillBase> skills = GameRegistry.findRegistry(PlayerSkillBase.class).getValues();
 		for(int i = 0; i < skills.size(); ++i)
 			skills.get(i).tick(this);
@@ -66,7 +72,7 @@ public class PlayerSkillData
 	
 	public void sync()
 	{
-		if(player instanceof EntityPlayerMP)
+		if(player instanceof EntityPlayerMP && !player.world.isRemote)
 			HCNetwork.manager.sendTo(new PacketSyncSkillData(this), (EntityPlayerMP) player);
 	}
 	
@@ -109,6 +115,9 @@ public class PlayerSkillData
 			data.setSkillLevel(stat, tag.getShort("Lvl"), false);
 		}
 		
+		NBTTagList list = nbt.getTagList("Scrolls", NBT.TAG_STRING);
+		for(int i = 0; i < list.tagCount(); ++i)
+			data.stat_scrolls.add(list.getStringTagAt(i));
 		data.persistedData = nbt.getCompoundTag("Persisted");
 		if(data.persistedData.hasKey("BankXP", NBT.TAG_STRING))
 			try
@@ -152,6 +161,11 @@ public class PlayerSkillData
 			list.appendTag(tag);
 		}
 		nbt.setTag("Levels", list);
+		
+		list = new NBTTagList();
+		for(String scroll : stat_scrolls)
+			list.appendTag(new NBTTagString(scroll));
+		nbt.setTag("Scrolls", list);
 		
 		return nbt;
 	}

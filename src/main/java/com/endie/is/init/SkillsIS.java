@@ -1,16 +1,26 @@
 package com.endie.is.init;
 
+import com.endie.is.ImprovableSkillsMod;
 import com.endie.is.api.PlayerSkillBase;
+import com.endie.is.cfg.ConfigsIS;
 import com.endie.is.skills.SkillAcceleratedFurnace;
+import com.endie.is.skills.SkillAlchemist;
+import com.endie.is.skills.SkillAtkDmgMelee;
+import com.endie.is.skills.SkillAtkDmgRanged;
 import com.endie.is.skills.SkillAttackSpeed;
 import com.endie.is.skills.SkillCutting;
 import com.endie.is.skills.SkillDigging;
+import com.endie.is.skills.SkillGenericProtection;
+import com.endie.is.skills.SkillGrowth;
+import com.endie.is.skills.SkillHealth;
 import com.endie.is.skills.SkillLadderKing;
 import com.endie.is.skills.SkillLeaper;
 import com.endie.is.skills.SkillLuckOfTheSea;
 import com.endie.is.skills.SkillMining;
 import com.endie.is.skills.SkillObsidianSkin;
+import com.endie.is.skills.SkillPVP;
 import com.endie.is.skills.SkillSoftLanding;
+import com.endie.is.skills.SkillTreasureSands;
 
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -27,19 +37,55 @@ public class SkillsIS
 	public static final SkillCutting CUTTING = new SkillCutting();
 	public static final SkillObsidianSkin OBSIDIAN_SKIN = new SkillObsidianSkin();
 	public static final SkillLuckOfTheSea LUCK_OF_THE_SEA = new SkillLuckOfTheSea();
+	public static final SkillHealth HEALTH = new SkillHealth();
+	public static final SkillGrowth GROWTH = new SkillGrowth();
+	public static final SkillAlchemist ALCHEMIST = new SkillAlchemist();
+	public static final SkillGenericProtection GENERIC_PROTECTION = new SkillGenericProtection();
+	public static final SkillTreasureSands TREASURE_OF_SANDS = new SkillTreasureSands();
+	public static final SkillAtkDmgMelee DAMAGE_MELEE = new SkillAtkDmgMelee();
+	public static final SkillAtkDmgRanged DAMAGE_RANGED = new SkillAtkDmgRanged();
+	public static final SkillPVP PVP = new SkillPVP();
+	
+	public static IForgeRegistry<PlayerSkillBase> registry;
 	
 	public static void register(IForgeRegistry<PlayerSkillBase> reg)
 	{
-		reg.register(XP_STORAGE);
-		reg.register(ACCELERATED_FURNACE);
-		reg.register(LEAPER);
-		reg.register(LADDER_KING);
-		reg.register(SOFT_LANDING);
-		reg.register(ATTACK_SPEED);
-		reg.register(MINING);
-		reg.register(DIGGING);
-		reg.register(CUTTING);
-		reg.register(OBSIDIAN_SKIN);
-		reg.register(LUCK_OF_THE_SEA);
+		registry = reg;
+		
+		if(ConfigsIS.configs.getBoolean("XP Storage", "Misc", true, "Should XP Bank be active in the book? Disabling this only hides the skill from the player."))
+			reg.register(XP_STORAGE);
+		
+		register(ACCELERATED_FURNACE);
+		register(LEAPER);
+		register(LADDER_KING);
+		register(SOFT_LANDING);
+		register(ATTACK_SPEED);
+		register(MINING);
+		register(DIGGING);
+		register(CUTTING);
+		register(OBSIDIAN_SKIN);
+		register(LUCK_OF_THE_SEA);
+		register(HEALTH);
+		register(GROWTH);
+		register(ALCHEMIST);
+		register(GENERIC_PROTECTION);
+		register(TREASURE_OF_SANDS);
+		register(DAMAGE_MELEE);
+		register(DAMAGE_RANGED);
+		register(PVP);
+		
+		if(ConfigsIS.configs.hasChanged())
+			ConfigsIS.configs.save();
+	}
+	
+	public static void register(PlayerSkillBase skill)
+	{
+		boolean add = ConfigsIS.configs.getBoolean(skill.getRegistryName().toString(), "Skills", true, "Should Skill \"" + skill.getUnlocalizedName() + "\" be added to the game?");
+		ImprovableSkillsMod.LOG.info("Checking state for " + skill.getRegistryName().toString() + ": " + add);
+		if(add)
+		{
+			ImprovableSkillsMod.LOG.info("  -Registering");
+			registry.register(skill);
+		}
 	}
 }

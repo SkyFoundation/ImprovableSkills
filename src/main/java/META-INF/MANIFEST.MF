@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+FMLCorePlugin: com.endie.is.asm.ISCore
+FMLCorePluginContainsFMLMod: false

@@ -1,8 +1,10 @@
 package com.endie.is;
 
+import com.endie.is.api.DamageSourceProcessor;
 import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.iDigSpeedAffectorSkill;
+import com.endie.is.api.DamageSourceProcessor.DamageType;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.init.SkillsIS;
 import com.endie.is.items.ItemSkillsBook;
@@ -64,7 +66,7 @@ public class SkillEvents
 		{
 			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
-			if(data == null)
+			if(data == null || data.player == null)
 				return;
 			
 			ItemStack item = p.getHeldItemMainhand();
@@ -147,6 +149,43 @@ public class SkillEvents
 				return;
 			int obsSkin = data.getSkillLevel(SkillsIS.OBSIDIAN_SKIN);
 			e.setAmount(e.getAmount() * (1F - obsSkin / (float) SkillsIS.OBSIDIAN_SKIN.maxLvl + .2F));
+		}
+		
+		ic: if(DamageSourceProcessor.getDamageType(ds) == DamageType.MELEE)
+		{
+			EntityPlayer p = DamageSourceProcessor.getMeleeAttacker(ds);
+			if(p == null)
+				break ic;
+			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
+			int melee = data.getSkillLevel(SkillsIS.DAMAGE_MELEE);
+			float pp = (float) melee / SkillsIS.DAMAGE_MELEE.maxLvl;
+			e.setAmount(e.getAmount() + (e.getAmount() * pp / 2F) + pp * 7F);
+		}
+		
+		ic: if(DamageSourceProcessor.getDamageType(ds) == DamageType.RANGED)
+		{
+			EntityPlayer p = DamageSourceProcessor.getRangedOwner(ds);
+			if(p == null)
+				break ic;
+			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
+			int melee = data.getSkillLevel(SkillsIS.DAMAGE_RANGED);
+			float pp = (float) melee / SkillsIS.DAMAGE_RANGED.maxLvl;
+			e.setAmount(e.getAmount() + (e.getAmount() * pp) + melee / 2F);
+		}
+		
+		if(ds != null && e.getEntityLiving() instanceof EntityPlayer)
+		{
+			EntityPlayer p = (EntityPlayer) e.getEntityLiving();
+			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
+			if(data == null)
+				return;
+			int melee = data.getSkillLevel(SkillsIS.PVP);
+			float pp = 1 - (float) melee / SkillsIS.PVP.maxLvl;
+			e.setAmount(e.getAmount() * Math.min(1, .75F + pp / 4F));
 		}
 	}
 }

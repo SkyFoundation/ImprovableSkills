@@ -2,15 +2,21 @@ package com.endie.is.client.gui;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
 import com.endie.is.InfoIS;
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.iGuiSkillDataConsumer;
+import com.endie.is.client.rendering.OnTopEffects;
+import com.endie.is.client.rendering.ote.OTEFadeOutButton;
+import com.endie.is.client.rendering.ote.OTEFadeOutUV;
+import com.endie.is.client.rendering.ote.OTEXpOrb;
 import com.endie.is.init.SkillsIS;
 import com.endie.is.net.PacketDrawXP;
 import com.endie.is.net.PacketStoreXP;
+import com.pengu.hammercore.client.UV;
 import com.pengu.hammercore.client.texture.gui.theme.GuiTheme;
 import com.pengu.hammercore.client.utils.RenderUtil;
 import com.pengu.hammercore.client.utils.UtilsFX;
@@ -22,6 +28,7 @@ import com.pengu.hammercore.utils.ColorHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
@@ -168,21 +175,72 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
+		new OTEFadeOutButton(button, 20);
+		
 		int id = button.id;
 		
 		if(id == 0)
+		{
 			mc.displayGuiScreen(parent);
+			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.45, 11 * 1.45, back.x + back.width - 18, guiTop + 133.85, 20);
+		}
 		
 		else if(id == 1)
-			HCNetwork.manager.sendToServer(new PacketStoreXP(XPUtil.getXPTotal(mc.player)));
-		else if(id == 2)
-			HCNetwork.manager.sendToServer(new PacketDrawXP(XPUtil.getXPValueToNextLevel(XPUtil.getLevelFromXPValue(XPUtil.getXPTotal(mc.player)))));
-		else if(id == 3)
 		{
+			Random rand = new Random();
+			
+			int lvls = mc.player.experienceLevel;
+			
+			for(int i = 0; i < Math.min(100, lvls); ++i)
+			{
+				double rtx = button.x + button.width / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.width / 2F);
+				double rty = button.y + button.height / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.height / 2F);
+				
+				double rx = guiLeft + xSize / 2 + (rand.nextFloat() - rand.nextFloat()) * 30;
+				double ry = guiTop + ySize + 4 + rand.nextFloat() * fontRenderer.FONT_HEIGHT;
+				
+				OnTopEffects.effects.add(new OTEXpOrb(rx, ry, rtx, rty, 40));
+			}
+			
+			HCNetwork.manager.sendToServer(new PacketStoreXP(XPUtil.getXPTotal(mc.player)));
+		} else if(id == 2)
+		{
+			HCNetwork.manager.sendToServer(new PacketDrawXP(XPUtil.getXPValueToNextLevel(XPUtil.getLevelFromXPValue(XPUtil.getXPTotal(mc.player)))));
+			
+			if(data.storageXp.longValue() > 0L)
+			{
+				Random rand = new Random();
+				
+				double rx = button.x + button.width / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.width / 2F);
+				double ry = button.y + button.height / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.height / 2F);
+				
+				double rtx = guiLeft + xSize / 2 + (rand.nextFloat() - rand.nextFloat()) * 30;
+				double rty = guiTop + ySize + 4 + rand.nextFloat() * fontRenderer.FONT_HEIGHT;
+				
+				OnTopEffects.effects.add(new OTEXpOrb(rx, ry, rtx, rty, 40));
+			}
+		} else if(id == 3)
+		{
+			Random rand = new Random();
+			
 			int xpLvl = XPUtil.getLevelFromXPValue(XPUtil.getXPTotal(mc.player));
 			int xp = 0;
 			for(int i = 0; i < 10; i++)
+			{
+				if(data.storageXp.longValue() > 0L)
+				{
+					double rx = button.x + button.width / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.width / 2F);
+					double ry = button.y + button.height / 2F + (rand.nextFloat() - rand.nextFloat()) * (button.height / 2F);
+					
+					double rtx = guiLeft + xSize / 2 + (rand.nextFloat() - rand.nextFloat()) * 30;
+					double rty = guiTop + ySize + 4 + rand.nextFloat() * fontRenderer.FONT_HEIGHT * .8;
+					
+					OnTopEffects.effects.add(new OTEXpOrb(rx, ry, rtx, rty, 40));
+				}
+				
 				xp += XPUtil.getXPValueToNextLevel(xpLvl + i);
+			}
+			
 			HCNetwork.manager.sendToServer(new PacketDrawXP(xp));
 		}
 	}

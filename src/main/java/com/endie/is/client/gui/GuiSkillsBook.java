@@ -2,6 +2,7 @@ package com.endie.is.client.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,11 @@ import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.SkillTex;
 import com.endie.is.api.iGuiSkillDataConsumer;
+import com.endie.is.client.rendering.OnTopEffects;
+import com.endie.is.client.rendering.ote.OTEFadeOutUV;
+import com.endie.is.client.rendering.ote.OTEXpOrb;
 import com.endie.is.init.SkillsIS;
+import com.endie.is.items.ItemSkillScroll;
 import com.endie.lib.tuple.TwoTuple;
 import com.pengu.hammercore.client.UV;
 import com.pengu.hammercore.client.texture.gui.theme.GuiTheme;
@@ -26,8 +31,11 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
@@ -60,9 +68,19 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
 		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
-		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), xSize, 0, 10, 10);
+		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), xSize + 1, 0, 10, 10);
 		
-		GameRegistry.findRegistry(PlayerSkillBase.class).forEach(skill -> texes.add(skill.tex));
+		List<PlayerSkillBase> skills = new ArrayList<>(GameRegistry.findRegistry(PlayerSkillBase.class).getValues());
+		
+		skills.remove(SkillsIS.XP_STORAGE);
+		
+		texes.add(SkillsIS.XP_STORAGE.tex);
+		
+		skills //
+		        .stream() //
+		        .sorted((t1, t2) -> t1.getLocalizedName(data).compareTo(t2.getLocalizedName(data))) //
+		        .filter(skill -> skill.isVisible(data)) //
+		        .forEach(skill -> texes.add(skill.tex));
 	}
 	
 	@Override
@@ -134,7 +152,16 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 				tex.toUV(false).render(x, y, 24, 24);
 			
 			if(tex.skill != SkillsIS.XP_STORAGE && data.getSkillLevel(tex.skill) >= tex.skill.maxLvl)
-				star.render(x + 14, y + 14, 10, 10);
+				star.render(x + 15, y + 17, 10, 10);
+			
+			if(tex.skill.getScrollState().hasScroll())
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslated(x + .5, y + 19.5, 0);
+				GL11.glScaled(1 / 2D, 1 / 2D, 1);
+				mc.getRenderItem().renderItemAndEffectIntoGUI(ItemSkillScroll.of(tex.skill), 0, 0);
+				GL11.glPopMatrix();
+			}
 		}
 		
 		if(!singleHover)
@@ -152,9 +179,27 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		if(cHover >= 0 && chtni >= 200)
 		{
+			SkillTex tex = texes.get(cHover % co);
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, 0, 500);
-			drawHoveringText(texes.get(cHover % co).skill.getLocalizedName(data), mouseX, mouseY);
+			List<String> ls = new ArrayList<>();
+			boolean maxLvl = tex.skill != SkillsIS.XP_STORAGE && data.getSkillLevel(tex.skill) >= tex.skill.maxLvl;
+			ls.add(tex.skill.getLocalizedName(data) + (maxLvl ? "  " : ""));
+			drawHoveringText(ls, mouseX, mouseY);
+			if(maxLvl)
+			{
+				GL11.glPushMatrix();
+				RenderHelper.disableStandardItemLighting();
+				GL11.glColor4f(1, 1, 1, 1);
+				
+				int sw = fontRenderer.getStringWidth(ls.get(0));
+				int l1 = mouseX + 12;
+				if(l1 + sw + 4 > this.width)
+					l1 = mouseX - 16 - sw;
+				
+				star.render(l1 + sw - 7, mouseY - 14, 10, 10);
+				GL11.glPopMatrix();
+			}
 			GL11.glPopMatrix();
 		}
 		
@@ -213,6 +258,20 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 				mc.displayGuiScreen(new GuiXPBank(this));
 			else
 				mc.displayGuiScreen(new GuiSkillViewer(this, skill));
+
+			int co = texes.size();
+			for(int i = 0; i < co; ++i)
+			{
+				int j = i % co;
+				SkillTex tex = texes.get(j);
+				
+				double x = (i % row) * 28 + guiLeft + 16;
+				double y = (i / row) * 28 - (prevScrolledPixels + (scrolledPixels - prevScrolledPixels) * mc.getRenderPartialTicks());
+				
+				if(tex == skill.tex)
+					new OTEFadeOutUV(tex.toUV(true), 24, 24, x, y + guiTop + 9, 2);
+			}
+			
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
 		}
 		

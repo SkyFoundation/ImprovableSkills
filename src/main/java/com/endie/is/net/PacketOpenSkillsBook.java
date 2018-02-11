@@ -42,7 +42,7 @@ public class PacketOpenSkillsBook implements iPacket, iPacketListener<PacketOpen
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
-		mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSkillsBook(SyncSkills.CLIENT_DATA)));
+		mc.addScheduledTask(() -> mc.displayGuiScreen(new GuiSkillsBook(SyncSkills.getData())));
 	}
 	
 	@Override

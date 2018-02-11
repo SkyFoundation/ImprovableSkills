@@ -1,5 +1,6 @@
 package com.endie.is.api;
 
+import com.endie.is.api.loot.SkillLoot;
 import com.pengu.hammercore.common.utils.XPUtil;
 
 import net.minecraft.client.resources.I18n;
@@ -7,9 +8,11 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 {
+	private SkillLoot loot;
 	public final SkillTex tex = new SkillTex(this);
 	public double xpValue = 1;
 	public int maxLvl;
+	protected boolean hasScroll, genScroll;
 	
 	public PlayerSkillBase(int maxLvl)
 	{
@@ -36,6 +39,11 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 		return I18n.format(getUnlocalizedName(data) + ".name");
 	}
 	
+	public String getLocalizedName()
+	{
+		return I18n.format(getUnlocalizedName() + ".name");
+	}
+	
 	public String getUnlocalizedDesc(PlayerSkillData data)
 	{
 		return "skill." + getRegistryName().toString();
@@ -59,9 +67,54 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 	
 	public void onUpgrade(short oldLvl, short newLvl, PlayerSkillData data)
 	{
-		int xp = getXPToUpgrade(data, newLvl);
 		if(oldLvl > newLvl)
-			xp = -xp;
-		XPUtil.setPlayersExpTo(data.player, XPUtil.getXPTotal(data.player) - xp);
+			XPUtil.setPlayersExpTo(data.player, XPUtil.getXPTotal(data.player) + getXPToDowngrade(data, newLvl));
+		else
+			XPUtil.setPlayersExpTo(data.player, XPUtil.getXPTotal(data.player) - getXPToUpgrade(data, newLvl));
+	}
+	
+	public boolean isDowngradable(PlayerSkillData data)
+	{
+		return true;
+	}
+	
+	public int getXPToDowngrade(PlayerSkillData data, short to)
+	{
+		return getXPToUpgrade(data, (short) to);
+	}
+	
+	public void onDowngrade(PlayerSkillData data, short from)
+	{
+		
+	}
+	
+	public EnumScrollState getScrollState()
+	{
+		return hasScroll ? maxLvl == 1 ? EnumScrollState.SPECIAL : EnumScrollState.NORMAL : EnumScrollState.NONE;
+	}
+	
+	public SkillLoot getLoot()
+	{
+		return hasScroll && genScroll ? loot == null ? (loot = new SkillLoot(this)) : loot : null;
+	}
+	
+	public boolean isVisible(PlayerSkillData data)
+	{
+		return !hasScroll || data.stat_scrolls.contains(getRegistryName().toString());
+	}
+	
+	public int getColor()
+	{
+		return getRegistryName().toString().hashCode();
+	}
+	
+	public static enum EnumScrollState
+	{
+		NONE, NORMAL, SPECIAL;
+		
+		public boolean hasScroll()
+		{
+			return ordinal() > 0;
+		}
 	}
 }

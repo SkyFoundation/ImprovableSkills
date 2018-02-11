@@ -1,0 +1,8 @@
+{
+    "parent": "item/generated",
+    "textures": {
+		"layer0": "improvableskills:items/scroll_normal",
+        "layer1": "improvableskills:items/scroll_normal_overlay",
+        "layer2": "improvableskills:items/scroll_normal_medal"
+    }
+}

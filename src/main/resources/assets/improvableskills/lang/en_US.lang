@@ -1,6 +1,9 @@
 
+itemGroup.improvableskills=Improvable Skills
+
 #ITEMS#
 item.improvableskills:skills_book.name=Book of Skills
+item.improvableskills:scroll_normal.name=Skill Page
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Accelerated Furnace
@@ -42,6 +45,30 @@ skill.improvableskills:luck_of_the_sea.desc=Increases lure of fishing.
 skill.improvableskills:item_repair.name=Item Repairer
 skill.improvableskills:item_repair.desc=Slowly repairs items. This works for both hands and worn armor.
 
+skill.improvableskills:health.name=Extra Health
+skill.improvableskills:health.desc=This skill boosts your maximal HP up to +20 HP (10 hearts).
+
+skill.improvableskills:growth.name=Fast Growth
+skill.improvableskills:growth.desc=This skill randomly applies bone meal to surrounding plants.
+
+skill.improvableskills:alchemist.name=Alchemist
+skill.improvableskills:alchemist.desc=Boosts the speed of the brewing stand. Very good for those who do a lot of alchemy.
+
+skill.improvableskills:generic_protection.name=Dense Skin
+skill.improvableskills:generic_protection.desc=Makes your skin tougher against enemies. Try to become a dragon.
+
+skill.improvableskills:treasure_sands.name=Treasure of the Sands
+skill.improvableskills:treasure_sands.desc=Allows to find treasures from sand.
+
+skill.improvableskills:atkdmg_melee.name=Strong Fist
+skill.improvableskills:atkdmg_melee.desc=Increases melee damage dealt to any entity.
+
+skill.improvableskills:atkdmg_ranged.name=Sharp Arrow
+skill.improvableskills:atkdmg_ranged.desc=Increases ranged damage dealt to any entity.
+
+skill.improvableskills:pvp.name=PvP Protection
+skill.improvableskills:pvp.desc=Decreases damage taken from other players.
+
 skill.improvableskills:xp_bank.name=XP Bank
 
 #BUTTONS#
@@ -55,6 +82,7 @@ text.improvableskills:storeall=Store All
 text.improvableskills:draw1lvl=Take 1 Lvl.
 text.improvableskills:draw10lvls=Take 10 Lvl.
 chat.improvableskills.guide=You just made Book of Skills! Now you can boost certain skills.
+chat.improvableskills.page_unlocked=New skill (%s) unlocked!
 gui.improvableskills.locked=§4Unavaliable. Craft Book of Skills to unlock.
 
 #SUBTITLES#

@@ -1,6 +1,9 @@
 ﻿
+itemGroup.improvableskills=Improvable Skills
+
 #ITEMS#
 item.improvableskills:skills_book.name=Книга навыков
+item.improvableskills:scroll_normal.name=Страница с навыком
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Ускоренная печь
@@ -42,6 +45,30 @@ skill.improvableskills:luck_of_the_sea.desc=Повышает улов.
 skill.improvableskills:item_repair.name=Починка предметов
 skill.improvableskills:item_repair.desc=Медленно чинит предметы. Это работает для обеих рук и одетой брони.
 
+skill.improvableskills:health.name=Дополнительное здоровье
+skill.improvableskills:health.desc=Это умение увеличивает макс. здоровье до +20 HP (10 сердец).
+
+skill.improvableskills:growth.name=Быстрый рост
+skill.improvableskills:growth.desc=Этот навык рандомно применяет костную муку на окружающие растения.
+
+skill.improvableskills:alchemist.name=Алхимик
+skill.improvableskills:alchemist.desc=Ускоряет варочную стойку. Очень хорошо для тех кто занимаеться алхимией.
+
+skill.improvableskills:generic_protection.name=Плотная кожа
+skill.improvableskills:generic_protection.desc=Делает вашу кожу более надежной против врагов. Попробуйте стать драконом.
+
+skill.improvableskills:treasure_sands.name=Сокровища песков
+skill.improvableskills:treasure_sands.desc=Позволяет найти сокровища из песка.
+
+skill.improvableskills:atkdmg_melee.name=Сильная рука
+skill.improvableskills:atkdmg_melee.desc=Увеличивает урон в ближнем бою.
+
+skill.improvableskills:atkdmg_ranged.name=Острая стрела
+skill.improvableskills:atkdmg_ranged.desc=Увеличивает урон в дальнем бою.
+
+skill.improvableskills:pvp.name=PvP Защита
+skill.improvableskills:pvp.desc=Уменьшает урон наносимый другими игроками.
+
 skill.improvableskills:xp_bank.name=Хранилище опыта
 
 #BUTTONS#
@@ -55,6 +82,7 @@ text.improvableskills:storeall=Слить весь
 text.improvableskills:draw1lvl=Взять 1 ур.
 text.improvableskills:draw10lvls=Взять 10 ур.
 chat.improvableskills.guide=Вы только что сделали книгу навыков! Теперь вы можете улучшать некоторые навыки игрока.
+chat.improvableskills.page_unlocked=Новый навык (%s) разблокирован!
 gui.improvableskills.locked=§4Недоступно. Создайте книгу навыков, чтобы разблокировать.
 
 #SUBTITLES#

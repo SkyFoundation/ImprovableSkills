@@ -81,6 +81,8 @@ task deobfJar(type: Jar) {
     classifier = 'deobf'
     manifest {
         attributes 'FMLAT': "${config.mod_id}_at.cfg"
+        attributes 'FMLCorePlugin': 'com.endie.is.asm.ISCore'
+        attributes 'FMLCorePluginContainsFMLMod': 'false'
     }
 }
 
@@ -89,12 +91,16 @@ task srcJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
 	manifest {
         attributes 'FMLAT': "${config.mod_id}_at.cfg"
+        attributes 'FMLCorePlugin': 'com.endie.is.asm.ISCore'
+        attributes 'FMLCorePluginContainsFMLMod': 'false'
     }
 }
 
 jar {
 	manifest {
 		attributes 'FMLAT': "${config.mod_id}_at.cfg"
+        attributes 'FMLCorePlugin': 'com.endie.is.asm.ISCore'
+        attributes 'FMLCorePluginContainsFMLMod': 'false'
 	}
 }
 

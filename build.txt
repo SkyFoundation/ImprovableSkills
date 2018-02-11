@@ -5,12 +5,12 @@ author=APengu
 forge_version=14.23.0.2529
 minecraft_version=1.12.2
 mcp=snapshot_20170624
-hc_version=1.9.6.3
+hc_version=1.9.6.5
 
 #Mod info
 mod_id=improvableskills
 mod_id_fancy=ImprovableSkills
 mod_name=Improvable Skills
-mod_version=3.1.4r
+mod_version=3.1.5r
 cf_project=252902
 release_type=release

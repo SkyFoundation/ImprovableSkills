@@ -1,6 +1,9 @@
 ﻿
+itemGroup.improvableskills=Improvable Skills
+
 #ITEMS#
 item.improvableskills:skills_book.name=Книжка навичок
+item.improvableskills:scroll_normal.name=Сторінка з навичкою
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Прискорена піч
@@ -42,6 +45,30 @@ skill.improvableskills:luck_of_the_sea.desc=Підвищує улов.
 skill.improvableskills:item_repair.name=Починка предметів
 skill.improvableskills:item_repair.desc=Повільно лагодить предмети. Це працює для обох рук і одягненої броні.
 
+skill.improvableskills:health.name=Додаткове здоров'я
+skill.improvableskills:health.desc=Цей навик повищує макс. здоров'я до +20 HP (10 сердець).
+
+skill.improvableskills:growth.name=Швидкий ріст
+skill.improvableskills:growth.desc=Цей навик рандомно застосовує кісткову муку на навколишні рослини.
+
+skill.improvableskills:alchemist.name=Алхімик
+skill.improvableskills:alchemist.desc=Зілля варятся швидше. Дуже добре для тих хто займається алхімією.
+
+skill.improvableskills:generic_protection.name=Плотна шкіра
+skill.improvableskills:generic_protection.desc=Робить вашу шкіру більш  надійною проти ворогів. Спробуйте стати драконом.
+
+skill.improvableskills:treasure_sands.name=Скарби пісків
+skill.improvableskills:treasure_sands.desc=Дозволяє знайти скарби з піску.
+
+skill.improvableskills:atkdmg_melee.name=Сильна рука
+skill.improvableskills:atkdmg_melee.desc=Збільшує силу атаки в ближньому бою.
+
+skill.improvableskills:atkdmg_ranged.name=Острая стрела
+skill.improvableskills:atkdmg_ranged.desc=Збільшує силу атаки в дальньому бою.
+
+skill.improvableskills:pvp.name=PvP Захист
+skill.improvableskills:pvp.desc=Зменшує урон нанесений іншими гравцями.
+
 skill.improvableskills:xp_bank.name=Сховище досвіду
 
 #BUTTONS#
@@ -55,6 +82,7 @@ text.improvableskills:storeall=Злити весь
 text.improvableskills:draw1lvl=Взяти 1 рів.
 text.improvableskills:draw10lvls=Взяти 10 рів.
 chat.improvableskills.guide=Ви тільки що зробили книгу навичок! Тепер ви можете поліпшити деякi навички.
+chat.improvableskills.page_unlocked=Нову навичку (%s) розблоковано!
 gui.improvableskills.locked=§4Недоступно. Створіть книгу навичок, щоб розблокувати.
 
 #SUBTITLES#

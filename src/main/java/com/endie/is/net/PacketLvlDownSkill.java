@@ -41,10 +41,11 @@ public class PacketLvlDownSkill implements iPacket, iPacketListener<PacketLvlDow
 			PlayerSkillBase skill = GameRegistry.findRegistry(PlayerSkillBase.class).getValue(packet.skill);
 			short lvl = data.getSkillLevel(skill);
 			
-			if(skill != null && lvl > 0)
+			if(skill != null && lvl > 0 && skill.isDowngradable(data))
 			{
 				data.setSkillLevel(skill, lvl - 1);
 				skill.onUpgrade(lvl, (short) (lvl - 1), data);
+				skill.onDowngrade(data, lvl);
 				
 				HCNetwork.manager.sendTo(new PacketSyncSkillData(data), player);
 			}
