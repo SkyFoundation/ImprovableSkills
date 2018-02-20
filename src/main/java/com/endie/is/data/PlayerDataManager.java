@@ -68,7 +68,7 @@ public class PlayerDataManager
 	
 	public static boolean save(EntityPlayer player)
 	{
-		if(player == null)
+		if(player == null || player.getEntityData() == null)
 			return false;
 		PlayerSkillData data = getDataFor(player);
 		if(data == null)
