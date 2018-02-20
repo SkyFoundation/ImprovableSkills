@@ -163,12 +163,12 @@ public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void actionPerformed(GuiButton b) throws IOException
 	{
-		new OTEFadeOutButton(b, 10);
+		new OTEFadeOutButton(b, b.id == 2 ? 2 : 20);
 		
 		if(b.id == 2)
 		{
 			mc.displayGuiScreen(parent);
-			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.5, 11 * 1.5, guiLeft + (xSize - 20) / 2 + 2, guiTop + 126, 10);
+			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.5, 11 * 1.5, guiLeft + (xSize - 20) / 2 + 2, guiTop + 126, 2);
 		}
 		
 		if(b.id == 0)

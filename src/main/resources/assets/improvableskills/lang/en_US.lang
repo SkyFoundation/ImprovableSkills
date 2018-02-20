@@ -3,7 +3,10 @@ itemGroup.improvableskills=Improvable Skills
 
 #ITEMS#
 item.improvableskills:skills_book.name=Book of Skills
-item.improvableskills:scroll_normal.name=Skill Page
+item.improvableskills:scroll_normal.name=Page with Skill
+item.improvableskills:scroll_creative.name=Creative Page with Skills
+item.improvableskills:scroll_creative.tooltip0=Unlocks all hidden skills.
+item.improvableskills:scroll_creative.tooltip1=When using it, remember that you are a §kcheater§7
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Accelerated Furnace
@@ -69,6 +72,15 @@ skill.improvableskills:atkdmg_ranged.desc=Increases ranged damage dealt to any e
 skill.improvableskills:pvp.name=PvP Protection
 skill.improvableskills:pvp.desc=Decreases damage taken from other players.
 
+skill.improvableskills:enchanter.name=Enchanter
+skill.improvableskills:enchanter.desc=Decreases the minimal levels required to perform enchanting. (Effect grows each 4 levels)
+
+skill.improvableskills:ender_manipulator.name=Ender Manipulator
+skill.improvableskills:ender_manipulator.desc=Negates damage taken from ender pearl. Last level has a chance of healing the thrower.
+
+skill.improvableskills:xp+.name=Experience Harvesting
+skill.improvableskills:xp+.desc=Increases obtainable experience from mining, breeding animals, fishing and killing mobs.
+
 skill.improvableskills:xp_bank.name=XP Bank
 
 #BUTTONS#
@@ -83,7 +95,7 @@ text.improvableskills:draw1lvl=Take 1 Lvl.
 text.improvableskills:draw10lvls=Take 10 Lvl.
 chat.improvableskills.guide=You just made Book of Skills! Now you can boost certain skills.
 chat.improvableskills.page_unlocked=New skill (%s) unlocked!
-gui.improvableskills.locked=§4Unavaliable. Craft Book of Skills to unlock.
+gui.improvableskills.locked=ยง4Unavaliable. Craft Book of Skills to unlock.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Treasure Found

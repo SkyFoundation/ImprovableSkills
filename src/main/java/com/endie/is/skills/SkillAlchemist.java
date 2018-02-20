@@ -34,7 +34,7 @@ public class SkillAlchemist extends PlayerSkillBase
 		int lvl = data.getSkillLevel(this);
 		boolean acquired = lvl > 0;
 		
-		if(!acquired)
+		if(!acquired && data.player.world.isRemote)
 			return;
 		
 		List<TileEntityBrewingStand> tiles = TileHelper.collectTiles(new WorldLocation(data.player.getEntityWorld(), data.player.getPosition()), 5, TileEntityBrewingStand.class);

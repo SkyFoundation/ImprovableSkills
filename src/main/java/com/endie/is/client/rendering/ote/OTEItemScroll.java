@@ -2,31 +2,38 @@ package com.endie.is.client.rendering.ote;
 
 import org.lwjgl.opengl.GL11;
 
+import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.client.rendering.OTEffect;
+import com.endie.is.client.rendering.OnTopEffects;
 import com.endie.is.utils.Trajectory;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 
-public class OTEItemStack extends OTEffect
+public class OTEItemScroll extends OTEffect
 {
 	public ItemStack item;
 	private double tx, ty;
 	private int totTime, prevTime, time;
 	public double[] xPoints, yPoints;
+	public PlayerSkillBase[] skills;
 	
-	public OTEItemStack(double x, double y, double tx, double ty, int time, ItemStack item)
+	public OTEItemScroll(double x, double y, double tx, double ty, int time, ItemStack item, PlayerSkillBase... skills)
 	{
 		renderGui = false;
+		this.skills = skills;
 		this.totTime = time;
 		this.x = this.prevX = x;
 		this.y = this.prevY = y;
 		this.tx = tx;
 		this.ty = ty;
 		this.item = item;
-		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L));
+		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L) / 90F);
 		xPoints = path[0];
 		yPoints = path[1];
 	}
@@ -39,14 +46,29 @@ public class OTEItemStack extends OTEffect
 		
 		int tt = xPoints.length;
 		
-		int cframe = (int) Math.round(time / (float) totTime * tt);
+		int cframe = Math.min((int) Math.round(time / (float) totTime * tt), xPoints.length - 1);
 		
 		x = xPoints[cframe];
 		y = yPoints[cframe];
 		
 		time++;
 		
+		int spawnTime = 10 * skills.length;
+		
 		if(time >= totTime)
+		{
+			int cur = (time - totTime) / 10;
+			
+			if((time - totTime) % 10 == 0 && cur < skills.length)
+			{
+				Minecraft mc = Minecraft.getMinecraft();
+				ScaledResolution sr = new ScaledResolution(mc);
+				OnTopEffects.effects.add(new OTESkill(x, y, sr.getScaledWidth() - 20, sr.getScaledHeight() - 12, 40, skills[cur]));
+				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1));
+			}
+		}
+		
+		if(time >= totTime + spawnTime)
 			setExpired();
 	}
 	
@@ -64,11 +86,11 @@ public class OTEItemStack extends OTEffect
 		
 		float scale = 1F;
 		
-		if(t < 5)
-			scale *= t / 5F;
+		// if(t < 5)
+		// scale *= t / 5F;
 		
-		if(t >= totTime - 5)
-			scale *= 1 - (t - totTime + 5) / 5F;
+		if(t >= totTime + 10 * skills.length - 5)
+			scale *= 1 - (t - totTime + 5 - 10 * skills.length) / 5F;
 		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);

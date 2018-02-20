@@ -121,6 +121,7 @@ public class ItemSkillScroll extends Item
 			if(!data.stat_scrolls.contains(base.getRegistryName().toString()))
 			{
 				data.stat_scrolls.add(base.getRegistryName().toString());
+				ItemStack used = playerIn.getHeldItem(handIn).copy();
 				playerIn.getHeldItem(handIn).shrink(1);
 				HCNetwork.swingArm(playerIn, handIn);
 				SoundUtil.playSoundEffect(worldIn, "block.enchantment_table.use", playerIn.getPosition(), .5F, 1F, SoundCategory.PLAYERS);
@@ -128,7 +129,7 @@ public class ItemSkillScroll extends Item
 				int slot = handIn == EnumHand.OFF_HAND ? -2 : playerIn.inventory.currentItem;
 				
 				if(playerIn instanceof EntityPlayerMP)
-					HCNetwork.manager.sendTo(new PacketScrollUnlockedSkill(base.getRegistryName(), slot), (EntityPlayerMP) playerIn);
+					HCNetwork.manager.sendTo(new PacketScrollUnlockedSkill(slot, used, base.getRegistryName()), (EntityPlayerMP) playerIn);
 				data.sync();
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 			}

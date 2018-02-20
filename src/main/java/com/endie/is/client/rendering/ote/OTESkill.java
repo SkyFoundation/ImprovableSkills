@@ -2,6 +2,7 @@ package com.endie.is.client.rendering.ote;
 
 import org.lwjgl.opengl.GL11;
 
+import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.client.rendering.OTEffect;
 import com.endie.is.utils.Trajectory;
 
@@ -10,14 +11,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 
-public class OTEItemStack extends OTEffect
+public class OTESkill extends OTEffect
 {
-	public ItemStack item;
+	public PlayerSkillBase item;
 	private double tx, ty;
 	private int totTime, prevTime, time;
 	public double[] xPoints, yPoints;
 	
-	public OTEItemStack(double x, double y, double tx, double ty, int time, ItemStack item)
+	public OTESkill(double x, double y, double tx, double ty, int time, PlayerSkillBase item)
 	{
 		renderGui = false;
 		this.totTime = time;
@@ -72,9 +73,9 @@ public class OTEItemStack extends OTEffect
 		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glTranslated(cx - 16 * scale / 2, cy - 16 * scale / 2, 0);
+		GL11.glTranslated(cx - 24 * scale / 2, cy - 24 * scale / 2, 0);
 		GL11.glScaled(scale, scale, scale);
-		Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(item, 0, 0);
+		item.tex.toUV(false).render(0, 0, 24, 24);
 		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glPopMatrix();
 	}

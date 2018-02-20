@@ -1,21 +1,32 @@
 package com.endie.is.skills;
 
-import java.lang.reflect.Field;
+import java.util.UUID;
 
 import com.endie.is.InfoIS;
 import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.api.PlayerSkillData;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class SkillLuckOfTheSea extends PlayerSkillBase
 {
+	public static final UUID LOTS_LUCK = UUID.fromString("d489061e-0b53-4aa3-a7f4-f1a9a726ef49");
+	
 	public SkillLuckOfTheSea()
 	{
 		super(15);
 		setRegistryName(InfoIS.MOD_ID, "luck_of_the_sea");
+		
+		hasScroll = true;
+		genScroll = true;
+		
+		getLoot().chance.n = 10;
+		getLoot().setLootTable(LootTableList.GAMEPLAY_FISHING);
 	}
 	
 	@Override
@@ -30,32 +41,9 @@ public class SkillLuckOfTheSea extends PlayerSkillBase
 		EntityPlayer player = data.player;
 		EntityFishHook hook = player.fishEntity;
 		int level = data.getSkillLevel(this);
-		if(hook != null && !hook.isDead && hook.isInWater())
-		{
-			try
-			{
-				Field f = EntityFishHook.class.getDeclaredFields()[7];
-				Field tcd = EntityFishHook.class.getDeclaredFields()[8];
-				f.setAccessible(true);
-				tcd.setAccessible(true);
-				if(hook.ticksExisted > 100 && f.getInt(hook) > 0 && player.getRNG().nextInt(maxLvl - level + 1) * 10 == 0)
-				{
-					f.setInt(hook, f.getInt(hook) + 40);
-				}
-				if(hook.ticksExisted % 2 == 0 && tcd.getInt(hook) > 0 && player.getRNG().nextInt(maxLvl - level + 1) * 100 == 0)
-				{
-					tcd.setInt(hook, 1);
-				}
-			} catch(Throwable localThrowable)
-			{
-			}
-		}
+		IAttributeInstance luck = player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.LUCK);
+		luck.removeModifier(LOTS_LUCK);
 		if((hook != null) && (!hook.isDead))
-		{
-			player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.LUCK).setBaseValue(level * 5.0D);
-		} else if((hook == null) || (hook.isDead))
-		{
-			player.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.LUCK).setBaseValue(0.0D);
-		}
+			luck.applyModifier(new AttributeModifier(LOTS_LUCK, "IS3 Fishing Luck", level * 2D, 0));
 	}
 }

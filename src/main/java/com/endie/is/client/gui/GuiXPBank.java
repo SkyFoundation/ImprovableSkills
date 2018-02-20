@@ -175,14 +175,14 @@ public class GuiXPBank extends GuiCentered implements iGuiSkillDataConsumer
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
-		new OTEFadeOutButton(button, 20);
-		
 		int id = button.id;
+		
+		new OTEFadeOutButton(button, id == 0 ? 2 : 20);
 		
 		if(id == 0)
 		{
 			mc.displayGuiScreen(parent);
-			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.45, 11 * 1.45, back.x + back.width - 18, guiTop + 133.85, 20);
+			new OTEFadeOutUV(new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 195, 10, 10, 11), 10 * 1.45, 11 * 1.45, back.x + back.width - 18, guiTop + 133.85, 2);
 		}
 		
 		else if(id == 1)

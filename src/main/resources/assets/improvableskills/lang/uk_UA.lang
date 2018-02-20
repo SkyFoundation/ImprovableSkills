@@ -1,9 +1,12 @@
-﻿
+
 itemGroup.improvableskills=Improvable Skills
 
 #ITEMS#
 item.improvableskills:skills_book.name=Книжка навичок
 item.improvableskills:scroll_normal.name=Сторінка з навичкою
+item.improvableskills:scroll_creative.name=Творческая страница с навыками
+item.improvableskills:scroll_creative.tooltip0=Разблокирует все скрытые навыки.
+item.improvableskills:scroll_creative.tooltip1=Во время использование помните, что вы §kчитер§7
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Прискорена піч
@@ -68,6 +71,15 @@ skill.improvableskills:atkdmg_ranged.desc=Збільшує силу атаки �
 
 skill.improvableskills:pvp.name=PvP Захист
 skill.improvableskills:pvp.desc=Зменшує урон нанесений іншими гравцями.
+
+skill.improvableskills:enchanter.name=Чаклун
+skill.improvableskills:enchanter.desc=Зменшує мінімальний рівень щоб зачарувати предмет. (Ефект збільшується кожні 4 рівні)
+
+skill.improvableskills:ender_manipulator.name=Ендер-маніпулятор
+skill.improvableskills:ender_manipulator.desc=Зменшує урон від використовування ендер-перлин. Останній рівень має шанс вилікувати гравця.
+
+skill.improvableskills:xp+.name=Збір досвіду
+skill.improvableskills:xp+.desc=Збільшує кількість досвіду під час видобутку, розмноження тварин, риболовлі й вбивства мобів.
 
 skill.improvableskills:xp_bank.name=Сховище досвіду
 

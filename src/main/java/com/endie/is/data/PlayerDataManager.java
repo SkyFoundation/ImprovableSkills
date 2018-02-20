@@ -14,6 +14,7 @@ import com.pengu.hammercore.net.HCNetwork;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class PlayerDataManager
 {
@@ -23,7 +24,7 @@ public class PlayerDataManager
 	
 	public static PlayerSkillData getDataFor(EntityPlayer player)
 	{
-		if(player == null)
+		if(player == null || player instanceof FakePlayer)
 			return null;
 		if(player.world.isRemote)
 			return SyncSkills.CLIENT_DATA;

@@ -10,6 +10,8 @@ import com.endie.is.skills.SkillAtkDmgRanged;
 import com.endie.is.skills.SkillAttackSpeed;
 import com.endie.is.skills.SkillCutting;
 import com.endie.is.skills.SkillDigging;
+import com.endie.is.skills.SkillEnchanter;
+import com.endie.is.skills.SkillEnderManipulator;
 import com.endie.is.skills.SkillGenericProtection;
 import com.endie.is.skills.SkillGrowth;
 import com.endie.is.skills.SkillHealth;
@@ -21,6 +23,7 @@ import com.endie.is.skills.SkillObsidianSkin;
 import com.endie.is.skills.SkillPVP;
 import com.endie.is.skills.SkillSoftLanding;
 import com.endie.is.skills.SkillTreasureSands;
+import com.endie.is.skills.SkillXPPlus;
 
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -45,6 +48,9 @@ public class SkillsIS
 	public static final SkillAtkDmgMelee DAMAGE_MELEE = new SkillAtkDmgMelee();
 	public static final SkillAtkDmgRanged DAMAGE_RANGED = new SkillAtkDmgRanged();
 	public static final SkillPVP PVP = new SkillPVP();
+	public static final SkillEnchanter ENCHANTER = new SkillEnchanter();
+	public static final SkillEnderManipulator ENDER_MANIPULATOR = new SkillEnderManipulator();
+	public static final SkillXPPlus XP_PLUS = new SkillXPPlus();
 	
 	public static IForgeRegistry<PlayerSkillBase> registry;
 	
@@ -73,6 +79,9 @@ public class SkillsIS
 		register(DAMAGE_MELEE);
 		register(DAMAGE_RANGED);
 		register(PVP);
+		register(ENCHANTER);
+		register(ENDER_MANIPULATOR);
+		register(XP_PLUS);
 		
 		if(ConfigsIS.configs.hasChanged())
 			ConfigsIS.configs.save();

@@ -68,14 +68,4 @@ public class SkillTreasureSands extends PlayerSkillBase
 			}
 		}
 	}
-	
-	@SubscribeEvent
-	public void dropsEvent(BlockEvent.HarvestDropsEvent e)
-	{
-		EntityPlayer p = e.getHarvester();
-		BlockPos pos = e.getPos();
-		World w = e.getWorld();
-		List<ItemStack> drops = e.getDrops();
-		handleDropAdd(e, PlayerDataManager.getDataFor(p), drops);
-	}
 }
