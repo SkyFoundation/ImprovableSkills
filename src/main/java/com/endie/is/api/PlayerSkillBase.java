@@ -62,7 +62,7 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 	public boolean canUpgrade(PlayerSkillData data)
 	{
 		short clvl = data.getSkillLevel(this);
-		return clvl < maxLvl && XPUtil.getXPTotal(data.player) >= getXPToUpgrade(data, (short) (clvl + 1));
+		return clvl < maxLvl && (XPUtil.getXPTotal(data.player) >= getXPToUpgrade(data, (short) (clvl + 1)) || data.player.capabilities.isCreativeMode);
 	}
 	
 	public void onUpgrade(short oldLvl, short newLvl, PlayerSkillData data)

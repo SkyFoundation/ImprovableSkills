@@ -6,6 +6,11 @@ public class Trajectory
 {
 	public static double[][] makeBroken2DTrajectory(double x, double y, double tx, double ty, int coords, float timeOffset)
 	{
+		return makeBroken2DTrajectory(x, y, tx, ty, coords, timeOffset, 5F);
+	}
+	
+	public static double[][] makeBroken2DTrajectory(double x, double y, double tx, double ty, int coords, float timeOffset, float offset)
+	{
 		double d3 = x - tx;
 		double d4 = y - ty;
 		float dx = (float) (d3 / coords);
@@ -24,8 +29,8 @@ public class Trajectory
 			float mx = 0.0F;
 			float my = 0.0F;
 			float phase = (float) a / (float) coords;
-			mx = MathHelper.sin((timeOffset + a) / 7.0F) * 5.0F * (1.0F - phase);
-			my = MathHelper.sin((timeOffset + a) / 5.0F) * 5.0F * (1.0F - phase);
+			mx = MathHelper.sin((timeOffset + a) / 7.0F) * offset * (1.0F - phase);
+			my = MathHelper.sin((timeOffset + a) / 5.0F) * offset * (1.0F - phase);
 			xPoints[a] = x - dx * a + mx;
 			yPoints[a] = y - dy * a + my;
 			if(Math.abs(d3) > Math.abs(d4))

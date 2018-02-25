@@ -161,6 +161,9 @@ public class SkillEvents
 		if(die instanceof EntityPlayer || xp <= 0)
 			return;
 		EntityPlayer p = e.getAttackingPlayer();
+		/** Don't apply anything. */
+		if(p == null)
+			return;
 		PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
 		if(data == null)
 			return;

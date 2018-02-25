@@ -63,7 +63,7 @@ public class OTEItemScroll extends OTEffect
 			{
 				Minecraft mc = Minecraft.getMinecraft();
 				ScaledResolution sr = new ScaledResolution(mc);
-				OnTopEffects.effects.add(new OTESkill(x, y, sr.getScaledWidth() - 20, sr.getScaledHeight() - 12, 40, skills[cur]));
+				OnTopEffects.effects.add(new OTESkill(x, y, sr.getScaledWidth() - 12, sr.getScaledHeight() - 12, 40, skills[cur]));
 				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1));
 			}
 		}

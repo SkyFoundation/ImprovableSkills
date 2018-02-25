@@ -21,15 +21,17 @@ public class OTESkill extends OTEffect
 	public OTESkill(double x, double y, double tx, double ty, int time, PlayerSkillBase item)
 	{
 		renderGui = false;
-		this.totTime = time;
+		this.totTime = time + 5;
 		this.x = this.prevX = x;
 		this.y = this.prevY = y;
 		this.tx = tx;
 		this.ty = ty;
 		this.item = item;
-		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L));
+		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L) / 100F);
 		xPoints = path[0];
 		yPoints = path[1];
+		x = xPoints[0];
+		y = yPoints[0];
 	}
 	
 	@Override
@@ -40,10 +42,12 @@ public class OTESkill extends OTEffect
 		
 		int tt = xPoints.length;
 		
-		int cframe = (int) Math.round(time / (float) totTime * tt);
-		
-		x = xPoints[cframe];
-		y = yPoints[cframe];
+		if(time > 5)
+		{
+			int cframe = (int) Math.round((time - 5) / (float) (totTime - 5) * tt);
+			x = xPoints[cframe];
+			y = yPoints[cframe];
+		}
 		
 		time++;
 		
@@ -58,8 +62,6 @@ public class OTESkill extends OTEffect
 		double cy = prevY + (y - prevY) * partialTime;
 		float t = prevTime + partialTime;
 		
-		int tx = 64 * (int) (time / (float) totTime * 3F);
-		
 		GlStateManager.enableAlpha();
 		RenderHelper.disableStandardItemLighting();
 		
@@ -71,12 +73,11 @@ public class OTESkill extends OTEffect
 		if(t >= totTime - 5)
 			scale *= 1 - (t - totTime + 5) / 5F;
 		
+		scale *= 16;
+		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glTranslated(cx - 24 * scale / 2, cy - 24 * scale / 2, 0);
-		GL11.glScaled(scale, scale, scale);
-		item.tex.toUV(false).render(0, 0, 24, 24);
-		GL11.glColor4f(1, 1, 1, 1);
+		item.tex.toUV(false).render(x - scale / 2, y - scale / 2, scale, scale);
 		GL11.glPopMatrix();
 	}
 }
