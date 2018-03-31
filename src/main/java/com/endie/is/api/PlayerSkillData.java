@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.endie.is.ImprovableSkillsMod;
 import com.endie.is.InfoIS;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.net.PacketSyncSkillData;
@@ -51,14 +52,22 @@ public class PlayerSkillData
 	
 	public void handleTick()
 	{
+		long start = System.currentTimeMillis();
+		
 		if(player == null)
 			return;
 		
-//		stat_scrolls.clear();
+		// stat_scrolls.clear();
+		
+		Map<String, Long> updates = new HashMap<>();
 		
 		List<PlayerSkillBase> skills = GameRegistry.findRegistry(PlayerSkillBase.class).getValues();
 		for(int i = 0; i < skills.size(); ++i)
+		{
+			long start0 = System.currentTimeMillis();
 			skills.get(i).tick(this);
+			updates.put(skills.get(i).getRegistryName().toString(), System.currentTimeMillis() - start0);
+		}
 		
 		if(!player.world.isRemote && hcsbPrev != hasCraftedSkillBook && !hcsbPrev)
 		{
@@ -68,6 +77,11 @@ public class PlayerSkillData
 		}
 		
 		hcsbPrev = hasCraftedSkillBook;
+		
+		long end = System.currentTimeMillis();
+		
+		if(end - start > 100L)
+			ImprovableSkillsMod.LOG.warn("Skill tick took too long! (" + (end - start) + "ms, expected <100 ms!). Time map: " + updates);
 	}
 	
 	public void sync()
