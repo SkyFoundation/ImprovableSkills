@@ -36,19 +36,14 @@ public class LootEntryItemStack extends LootEntry
 		ItemStack itemstack = this.item.copy();
 		
 		for(LootFunction lootfunction : this.functions)
-		{
 			if(LootConditionManager.testAllConditions(lootfunction.getConditions(), rand, context))
-			{
 				itemstack = lootfunction.apply(itemstack, rand, context);
-			}
-		}
 		
 		if(!itemstack.isEmpty())
 		{
 			if(itemstack.getCount() < this.item.getItem().getItemStackLimit(itemstack))
-			{
 				stacks.add(itemstack);
-			} else
+			else
 			{
 				int i = itemstack.getCount();
 				
@@ -67,19 +62,14 @@ public class LootEntryItemStack extends LootEntry
 	protected void serialize(JsonObject json, JsonSerializationContext context)
 	{
 		if(this.functions != null && this.functions.length > 0)
-		{
 			json.add("functions", context.serialize(this.functions));
-		}
 		
 		ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(this.item.getItem());
 		
 		if(resourcelocation == null)
-		{
 			throw new IllegalArgumentException("Can't serialize unknown item " + this.item);
-		} else
-		{
+		else
 			json.addProperty("name", resourcelocation.toString());
-		}
 		
 		json.addProperty("damage", item.getItemDamage());
 		json.addProperty("count", item.getCount());

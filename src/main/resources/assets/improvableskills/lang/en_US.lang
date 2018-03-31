@@ -10,7 +10,7 @@ item.improvableskills:scroll_creative.tooltip1=When using it, remember that you 
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Accelerated Furnace
-skill.improvableskills:accelerated_furnace.desc=Increases the melting speed of furnace. To have your furnace became faster, you must to stand in a radius of 5 blocks from them.
+skill.improvableskills:accelerated_furnace.desc=Increases the melting speed of furnace. To have your furnace became faster, you must stand in a radius of 5 blocks from them.
 
 skill.improvableskills:mining.name=Mining
 skill.improvableskills:mining.desc=Increases the mining speed of the pickaxe.
@@ -93,9 +93,9 @@ text.improvableskills:totalXP=Your XP: %s XP
 text.improvableskills:storeall=Store All
 text.improvableskills:draw1lvl=Take 1 Lvl.
 text.improvableskills:draw10lvls=Take 10 Lvl.
-chat.improvableskills.guide=You just made Book of Skills! Now you can boost certain skills.
+chat.improvableskills.guide=You have just made Book of Skills! Now you can boost certain skills.
 chat.improvableskills.page_unlocked=New skill (%s) unlocked!
-gui.improvableskills.locked=ยง4Unavaliable. Craft Book of Skills to unlock.
+gui.improvableskills.locked=ยง4Unavailable. Craft Book of Skills to unlock.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Treasure Found
