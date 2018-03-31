@@ -35,6 +35,6 @@ public class LootConditionSkillScroll implements LootCondition
 			if(data != null)
 				return !data.stat_scrolls.contains(id);
 		}
-		return true;
+		return false;
 	}
 }
