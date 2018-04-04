@@ -14,9 +14,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.fml.common.Loader;
 
 public class SkillGrowth extends PlayerSkillBase
 {
@@ -75,8 +77,25 @@ public class SkillGrowth extends PlayerSkillBase
 		for(int i = 0; i < co; ++i)
 		{
 			BlockPos pos = positions.remove(0);
-			if(ItemDye.applyBonemeal(ItemStack.EMPTY, world, pos))
-				world.playEvent(2005, pos, 0);
+			try
+			{
+				if(ItemDye.applyBonemeal(ItemStack.EMPTY, world, pos))
+					world.playEvent(2005, pos, 0);
+			} catch(Throwable e)
+			{
+				if(e instanceof IllegalArgumentException && e.getMessage().equalsIgnoreCase("invalid hand null") && Loader.isModLoaded("thebetweenlands"))
+					try
+					{
+						if(world instanceof net.minecraft.world.WorldServer)
+							if(ItemDye.applyBonemeal(ItemStack.EMPTY, world, pos, net.minecraftforge.common.util.FakePlayerFactory.getMinecraft((net.minecraft.world.WorldServer) world), EnumHand.MAIN_HAND))
+								world.playEvent(2005, pos, 0);
+					} catch(Throwable err)
+					{
+						err.printStackTrace();
+					}
+				else
+					e.printStackTrace();
+			}
 		}
 	}
 }
