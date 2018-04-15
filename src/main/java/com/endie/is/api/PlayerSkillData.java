@@ -57,7 +57,7 @@ public class PlayerSkillData
 		if(player == null)
 			return;
 		
-		// stat_scrolls.clear();
+		 stat_scrolls.clear();
 		
 		Map<String, Long> updates = new HashMap<>();
 		

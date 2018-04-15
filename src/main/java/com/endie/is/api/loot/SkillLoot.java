@@ -47,7 +47,14 @@ public class SkillLoot
 			ImprovableSkillsMod.LOG.info("Injecting scroll for skill '" + skill.getRegistryName().toString() + "' into LootTable '" + table.getName() + "'!");
 			LootEntry entry = new LootEntryItemStack(ItemSkillScroll.of(skill), 2, 60, new LootFunction[0], new LootCondition[0], InfoIS.MOD_ID + ":" + skill.getRegistryName().toString() + "_scroll");
 			LootPool pool1 = new LootPool(new LootEntry[] { entry }, new LootCondition[] { new LootConditionSkillScroll(skill, chance) }, new RandomValueRange(1), new RandomValueRange(0, 1), skill.getRegistryName().toString() + "_skill_scroll");
-			table.getTable().addPool(pool1);
+			try
+			{
+				table.getTable().addPool(pool1);
+			} catch(Throwable err)
+			{
+				ImprovableSkillsMod.LOG.error("Failed to inject scroll for skill '" + skill.getRegistryName().toString() + "' into LootTable '" + table.getName() + "'!!!");
+				err.printStackTrace();
+			}
 		}
 	}
 }

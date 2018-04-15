@@ -1,11 +1,14 @@
 package com.endie.is.client.rendering.ote;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import com.endie.is.api.PlayerSkillBase;
 import com.endie.is.client.rendering.OTEffect;
 import com.endie.is.client.rendering.OnTopEffects;
 import com.endie.is.utils.Trajectory;
+import com.pengu.hammercore.client.TexturePixelGetter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -39,6 +42,16 @@ public class OTEItemScroll extends OTEffect
 	}
 	
 	@Override
+	public void resize(ScaledResolution prev, ScaledResolution nev)
+	{
+		super.resize(prev, nev);
+		tx = handleResizeXd(tx, prev, nev);
+		ty = handleResizeYd(ty, prev, nev);
+		xPoints = handleResizeXdv(xPoints, prev, nev);
+		yPoints = handleResizeYdv(yPoints, prev, nev);
+	}
+	
+	@Override
 	public void update()
 	{
 		super.update();
@@ -63,8 +76,22 @@ public class OTEItemScroll extends OTEffect
 			{
 				Minecraft mc = Minecraft.getMinecraft();
 				ScaledResolution sr = new ScaledResolution(mc);
+				
 				OnTopEffects.effects.add(new OTESkill(x, y, sr.getScaledWidth() - 12, sr.getScaledHeight() - 12, 40, skills[cur]));
 				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1));
+			}
+		} else
+		{
+			int lcf = Math.max(cframe - 10, 0);
+			
+			Random r = new Random();
+			if(r.nextBoolean())
+			{
+				int[] rgbs = TexturePixelGetter.getAllColors(skills[r.nextInt(skills.length)].tex.toUV(true).path + "");
+				int col = rgbs[r.nextInt(rgbs.length)];
+				double tx = xPoints[lcf] + (r.nextInt(16) - r.nextInt(16)) / 2F;
+				double ty = yPoints[cframe] + (r.nextInt(16) - r.nextInt(16)) / 2F;
+				OnTopEffects.effects.add(new OTESkillSparkle(x - r.nextInt(8) + r.nextInt(8), y - r.nextInt(8) + r.nextInt(8), tx, ty, 20, col));
 			}
 		}
 		

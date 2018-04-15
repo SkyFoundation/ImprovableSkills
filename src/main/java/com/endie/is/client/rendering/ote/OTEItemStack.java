@@ -6,6 +6,7 @@ import com.endie.is.client.rendering.OTEffect;
 import com.endie.is.utils.Trajectory;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,16 @@ public class OTEItemStack extends OTEffect
 		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L));
 		xPoints = path[0];
 		yPoints = path[1];
+	}
+	
+	@Override
+	public void resize(ScaledResolution prev, ScaledResolution nev)
+	{
+		super.resize(prev, nev);
+		tx = handleResizeXd(tx, prev, nev);
+		ty = handleResizeYd(ty, prev, nev);
+		xPoints = handleResizeXdv(xPoints, prev, nev);
+		yPoints = handleResizeYdv(yPoints, prev, nev);
 	}
 	
 	@Override

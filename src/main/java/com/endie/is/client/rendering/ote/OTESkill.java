@@ -7,6 +7,7 @@ import com.endie.is.client.rendering.OTEffect;
 import com.endie.is.utils.Trajectory;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
@@ -32,6 +33,16 @@ public class OTESkill extends OTEffect
 		yPoints = path[1];
 		x = xPoints[0];
 		y = yPoints[0];
+	}
+	
+	@Override
+	public void resize(ScaledResolution prev, ScaledResolution nev)
+	{
+		super.resize(prev, nev);
+		tx = handleResizeXd(tx, prev, nev);
+		ty = handleResizeYd(ty, prev, nev);
+		xPoints = handleResizeXdv(xPoints, prev, nev);
+		yPoints = handleResizeYdv(yPoints, prev, nev);
 	}
 	
 	@Override

@@ -97,7 +97,7 @@ public class SkillEvents
 				iDigSpeedAffectorSkill d = (iDigSpeedAffectorSkill) s;
 				tot.set(tot.get() + d.getDigMultiplier(item, e.getPos(), data));
 			});
-			e.setNewSpeed(e.getOriginalSpeed() * tot.get());
+			e.setNewSpeed(e.getNewSpeed() * tot.get());
 		}
 	}
 	

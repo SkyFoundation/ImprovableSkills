@@ -62,6 +62,14 @@ public class OTEBook extends OTEffect
 	}
 	
 	@Override
+	public void resize(ScaledResolution prev, ScaledResolution nev)
+	{
+		super.resize(prev, nev);
+		tx = handleResizeXd(tx, prev, nev);
+		ty = handleResizeYd(ty, prev, nev);
+	}
+	
+	@Override
 	public void update()
 	{
 		super.update();

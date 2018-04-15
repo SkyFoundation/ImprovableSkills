@@ -40,9 +40,7 @@ public class OTEFadeOutUV extends OTEffect
 		time++;
 		
 		if(time >= totTime)
-		{
 			setExpired();
-		}
 	}
 	
 	@Override

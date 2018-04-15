@@ -10,6 +10,7 @@ import com.pengu.hammercore.client.utils.RenderUtil;
 import com.pengu.hammercore.client.utils.UtilsFX;
 import com.pengu.hammercore.utils.ColorHelper;
 
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.math.MathHelper;
@@ -33,6 +34,16 @@ public class OTESparkle extends OTEffect
 		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, Math.abs(hashCode() / 25F));
 		xPoints = path[0];
 		yPoints = path[1];
+	}
+	
+	@Override
+	public void resize(ScaledResolution prev, ScaledResolution nev)
+	{
+		super.resize(prev, nev);
+		tx = handleResizeXd(tx, prev, nev);
+		ty = handleResizeYd(ty, prev, nev);
+		xPoints = handleResizeXdv(xPoints, prev, nev);
+		yPoints = handleResizeYdv(yPoints, prev, nev);
 	}
 	
 	@Override
