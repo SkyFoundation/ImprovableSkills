@@ -116,7 +116,8 @@ public class ClientProxy extends CommonProxy
 			
 			modifyBookCol = true;
 			
-			openSkills.mousePressed(inv.mc, mx, my);
+			openSkills.x = inv.guiLeft + (inv.getXSize() - 16) / 2 - 1;
+			openSkills.y = inv.guiTop + 24;
 			hovered = mx >= openSkills.x && my >= openSkills.y && mx < openSkills.x + openSkills.width && my < openSkills.y + openSkills.height;
 			
 			ItemStack book = new ItemStack(ItemsIS.SKILLS_BOOK);
