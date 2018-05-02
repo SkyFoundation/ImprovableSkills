@@ -95,7 +95,7 @@ text.improvableskills:draw1lvl=1 Lvl. nehmen
 text.improvableskills:draw10lvls=10 Lvl. nehmen
 chat.improvableskills.guide=Du hast gerade das Buch der Fähigkeiten hergestellt! Jetzt kannst du bestimmte Fähigkeiten verbessern.
 chat.improvableskills.page_unlocked=Neue Fähigkeit (%s) freigeschaltet!
-gui.improvableskills.locked=ยง4Nicht verfügbar. Stelle das Buch der Fähigkeiten her, um es freizuschalten.
+gui.improvableskills.locked=§4Nicht verfügbar. Stelle das Buch der Fähigkeiten her, um es freizuschalten.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Schatz gefunden

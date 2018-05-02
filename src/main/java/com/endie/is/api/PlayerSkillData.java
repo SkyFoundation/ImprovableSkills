@@ -13,6 +13,8 @@ import com.endie.is.ImprovableSkillsMod;
 import com.endie.is.InfoIS;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.net.PacketSyncSkillData;
+import com.endie.is.proxy.SyncSkills;
+import com.pengu.hammercore.HammerCore;
 import com.pengu.hammercore.net.HCNetwork;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +42,13 @@ public class PlayerSkillData
 	private boolean hcsbPrev = false;
 	private Map<String, Short> stats = new HashMap<>();
 	
+	public EntityPlayer getPlayer()
+	{
+		if(this == SyncSkills.CLIENT_DATA)
+			return HammerCore.renderProxy.getClientPlayer();
+		return player;
+	}
+	
 	public PlayerSkillData(EntityPlayer player)
 	{
 		this.player = player;
@@ -57,7 +66,7 @@ public class PlayerSkillData
 		if(player == null)
 			return;
 		
-//		 stat_scrolls.clear();
+		// stat_scrolls.clear();
 		
 		Map<String, Long> updates = new HashMap<>();
 		

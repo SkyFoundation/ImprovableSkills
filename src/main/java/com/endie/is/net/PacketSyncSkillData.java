@@ -5,12 +5,14 @@ import com.endie.is.api.PlayerSkillData;
 import com.endie.is.api.iGuiSkillDataConsumer;
 import com.endie.is.data.PlayerDataManager;
 import com.endie.is.proxy.SyncSkills;
+import com.pengu.hammercore.HammerCore;
 import com.pengu.hammercore.common.utils.WorldUtil;
 import com.pengu.hammercore.common.utils.XPUtil;
 import com.pengu.hammercore.net.packetAPI.iPacket;
 import com.pengu.hammercore.net.packetAPI.iPacketListener;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,10 +48,17 @@ public class PacketSyncSkillData implements iPacket, iPacketListener<PacketSyncS
 	{
 		iGuiSkillDataConsumer c = WorldUtil.cast(Minecraft.getMinecraft().currentScreen, iGuiSkillDataConsumer.class);
 		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
-		SyncSkills.CLIENT_DATA.player.getEntityData().setTag(InfoIS.NBT_DATA_TAG, nbt);
 		if(c != null)
 			c.applySkillData(SyncSkills.CLIENT_DATA);
-		XPUtil.setPlayersExpTo(Minecraft.getMinecraft().player, nbt.getInteger("PlayerLocalXP"));
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		
+		// Prevent console pollution
+		if(player == null)
+			return;
+		
+		XPUtil.setPlayersExpTo(player, nbt.getInteger("PlayerLocalXP"));
+		// This is not REQUIRED but preffered for mods that may use this tag
+		player.getEntityData().setTag(InfoIS.NBT_DATA_TAG, nbt);
 	}
 	
 	@Override

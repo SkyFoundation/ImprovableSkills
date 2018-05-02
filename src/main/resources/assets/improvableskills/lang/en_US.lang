@@ -95,7 +95,7 @@ text.improvableskills:draw1lvl=Take 1 Lvl.
 text.improvableskills:draw10lvls=Take 10 Lvl.
 chat.improvableskills.guide=You have just made Book of Skills! Now you can boost certain skills.
 chat.improvableskills.page_unlocked=New skill (%s) unlocked!
-gui.improvableskills.locked=ยง4Unavailable. Craft Book of Skills to unlock.
+gui.improvableskills.locked=§4Unavailable. Craft Book of Skills to unlock.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Treasure Found
