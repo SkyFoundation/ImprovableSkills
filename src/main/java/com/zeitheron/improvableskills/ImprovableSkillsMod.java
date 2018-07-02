@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -40,7 +41,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
-@Mod(modid = InfoIS.MOD_ID, name = InfoIS.MOD_NAME, version = InfoIS.MOD_VERSION, dependencies = "required-after:hammercore")
+@Mod(modid = InfoIS.MOD_ID, name = InfoIS.MOD_NAME, version = InfoIS.MOD_VERSION, dependencies = "required-after:hammercore", certificateFingerprint = "4d7b29cd19124e986da685107d16ce4b49bc0a97")
 public class ImprovableSkillsMod
 {
 	@Instance
@@ -58,7 +59,17 @@ public class ImprovableSkillsMod
 		}
 	};
 	
-	public static final Logger LOG = LogManager.getLogger(InfoIS.MOD_NAME);
+	public static final Logger LOG = LogManager.getLogger(InfoIS.MOD_ID);
+	
+	@EventHandler
+	public void certificateViolation(FMLFingerprintViolationEvent e)
+	{
+		LOG.warn("*****************************");
+		LOG.warn("WARNING: Somebody has been tampering with ImprovableSkills jar!");
+		LOG.warn("It is highly recommended that you redownload mod from https://minecraft.curseforge.com/projects/247401 !");
+		LOG.warn("*****************************");
+		HammerCore.invalidCertificates.put(InfoIS.MOD_ID, "https://minecraft.curseforge.com/projects/247401");
+	}
 	
 	@EventHandler
 	public void construct(FMLConstructionEvent evt)
@@ -122,7 +133,7 @@ public class ImprovableSkillsMod
 	public void lootLoad(LootTableLoadEvent e)
 	{
 		GameRegistry.findRegistry(PlayerSkillBase.class) //
-		        .getValues() //
+		        .getValuesCollection() //
 		        .stream() //
 		        .filter(s -> s.getLoot() != null) //
 		        .forEach(s -> s.getLoot().apply(e));

@@ -1,5 +1,7 @@
 #Project info
-author=APengu
+author=Zeitheron
+start_git_commit=ceb1dfec22ce9383762f33b9f6d84994ff029c8f
+git_commit=https://gitlab.com/DragonForge/ImprovableSkills/commit/{{hash}}
 
 #Runtime info
 forge_version=14.23.4.2705
