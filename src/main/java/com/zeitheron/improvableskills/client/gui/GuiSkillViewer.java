@@ -7,7 +7,7 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.bookAPI.fancy.HCFontRenderer;
-import com.zeitheron.hammercore.bookAPI.fancy.HCFontRenderer.iTooltipContext;
+import com.zeitheron.hammercore.bookAPI.fancy.HCFontRenderer.ITooltipContext;
 import com.zeitheron.hammercore.client.gui.GuiCentered;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
 import com.zeitheron.hammercore.client.utils.TexturePixelGetter;
@@ -35,7 +35,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer, iTooltipContext
+public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer, ITooltipContext
 {
 	final GuiSkillsBook parent;
 	public PlayerSkillData data;

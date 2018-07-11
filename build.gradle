@@ -86,11 +86,23 @@ processResources
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'deobf'
+    manifest {
+        attributes 'FMLAT': "${config.mod_id}_at.cfg"
+    }
 }
 
 task srcJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
     classifier = 'sources'
+	manifest {
+        attributes 'FMLAT': "${config.mod_id}_at.cfg"
+    }
+}
+
+jar {
+	manifest {
+		attributes 'FMLAT': "${config.mod_id}_at.cfg"
+	}
 }
 
 artifacts {
