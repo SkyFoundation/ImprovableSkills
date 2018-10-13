@@ -41,7 +41,7 @@ public class ItemSkillScroll extends Item
 	
 	public ItemSkillScroll()
 	{
-		setUnlocalizedName("scroll_normal");
+		setTranslationKey("scroll_normal");
 		setMaxStackSize(1);
 	}
 	

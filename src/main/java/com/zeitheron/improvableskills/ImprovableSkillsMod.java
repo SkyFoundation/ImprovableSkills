@@ -7,12 +7,16 @@ import com.zeitheron.hammercore.HammerCore;
 import com.zeitheron.hammercore.intent.IntentManager;
 import com.zeitheron.hammercore.internal.SimpleRegistration;
 import com.zeitheron.hammercore.net.HCNet;
+import com.zeitheron.improvableskills.api.Pagelet;
 import com.zeitheron.improvableskills.api.PlayerSkillBase;
+import com.zeitheron.improvableskills.cmd.CommandImprovableSkills;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.ItemsIS;
 import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.init.TreasuresIS;
 import com.zeitheron.improvableskills.net.PacketSyncSkillData;
+import com.zeitheron.improvableskills.pagelets.PageletAbilities;
+import com.zeitheron.improvableskills.pagelets.PageletSkills;
 import com.zeitheron.improvableskills.proxy.CommonProxy;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -33,6 +37,7 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -53,7 +58,7 @@ public class ImprovableSkillsMod
 	public static CreativeTabs TAB = new CreativeTabs(InfoIS.MOD_ID)
 	{
 		@Override
-		public ItemStack getTabIconItem()
+		public ItemStack createIcon()
 		{
 			return new ItemStack(ItemsIS.SKILLS_BOOK);
 		}
@@ -78,6 +83,9 @@ public class ImprovableSkillsMod
 		
 		IntentManager.registerIntentHandler(InfoIS.MOD_ID + ".getData", EntityPlayer.class, (mod, data) -> PlayerDataManager.getDataFor(data));
 		IntentManager.registerIntentHandler(InfoIS.MOD_ID + ".save", EntityPlayer.class, (mod, data) -> PlayerDataManager.save(data));
+		
+		IForgeRegistry<Pagelet> peg = new RegistryBuilder<Pagelet>().setName(new ResourceLocation(InfoIS.MOD_ID, "pagelets")).setType(Pagelet.class).create();
+		
 	}
 	
 	@EventHandler
@@ -97,6 +105,12 @@ public class ImprovableSkillsMod
 		TreasuresIS.register();
 	}
 	
+	@EventHandler
+	public void starting(FMLServerStartingEvent e)
+	{
+		e.registerServerCommand(new CommandImprovableSkills());
+	}
+	
 	@SubscribeEvent
 	public void addRecipes(RegistryEvent.Register<IRecipe> e)
 	{
@@ -111,6 +125,13 @@ public class ImprovableSkillsMod
 	{
 		LOG.info("RegistryEvent.Register<PlayerSkillBase>");
 		SkillsIS.register(e.getRegistry());
+	}
+	
+	@SubscribeEvent
+	public void addPagelet(RegistryEvent.Register<Pagelet> e)
+	{
+		e.getRegistry().register(new PageletSkills());
+		e.getRegistry().register(new PageletAbilities());
 	}
 	
 	@SubscribeEvent

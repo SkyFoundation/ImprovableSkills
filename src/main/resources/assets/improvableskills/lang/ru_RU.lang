@@ -96,8 +96,15 @@ text.improvableskills:draw10lvls=Взять 10 ур.
 chat.improvableskills.guide=Вы только что сделали книгу навыков! Теперь вы можете улучшать некоторые навыки игрока.
 chat.improvableskills.page_unlocked=Новый навык (%s) разблокирован!
 gui.improvableskills.locked=§4Недоступно. Создайте книгу навыков, чтобы разблокировать.
+chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
+chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
+chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Найдено сокровище
 subtitles.improvableskills:skill_book_open=Книга статистик открыта
 subtitles.improvableskills:skill_book_closed=Книга статистик закрыта
+
+#PAGELETS#
+pagelet.improvableskills:skills=Skills
+pagelet.improvableskills:abilities=Abitilies

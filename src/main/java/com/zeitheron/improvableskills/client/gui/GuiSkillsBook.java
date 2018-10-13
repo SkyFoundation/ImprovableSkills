@@ -10,7 +10,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.gui.GuiCentered;
+import com.zeitheron.hammercore.client.utils.RenderUtil;
 import com.zeitheron.hammercore.client.utils.UV;
+import com.zeitheron.hammercore.client.utils.texture.TextureUtils;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
@@ -19,6 +21,7 @@ import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.SkillTex;
 import com.zeitheron.improvableskills.api.iGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
 import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.items.ItemSkillScroll;
@@ -29,11 +32,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
+public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 {
 	public final UV gui1, gui2, star;
 	public double scrolledPixels;
@@ -79,9 +83,8 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 	}
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	protected void drawBack(float partialTicks, int mouseX, int mouseY)
 	{
-		drawDefaultBackground();
 		GL11.glColor4f(1, 1, 1, 1);
 		gui1.render(guiLeft, guiTop);
 		
@@ -164,12 +167,14 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		GL11.glDisable(3089);
 		
-		int rgb = GuiTheme.CURRENT_THEME.bodyColor;
-		if(GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla"))
-			GL11.glColor4f(0, 0, 1, 1);
-		else
-			GL11.glColor4f(ColorHelper.getRed(rgb), ColorHelper.getGreen(rgb), ColorHelper.getBlue(rgb), 1);
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		
+		ColorHelper.gl(255 << 24 | rgb);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, 0, 5);
 		gui2.render(guiLeft, guiTop);
+		GlStateManager.popMatrix();
+		
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		if(cHover >= 0 && chtni >= 200)
@@ -200,6 +205,12 @@ public class GuiSkillsBook extends GuiCentered implements iGuiSkillDataConsumer
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		GlStateManager.disableDepth();
+	}
+	
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+	{
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
 	}
 	
 	@Override

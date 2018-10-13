@@ -26,7 +26,7 @@ public class SkillLadderKing extends PlayerSkillBase
 		if(data.player.isOnLadder() && !data.player.isSneaking())
 		{
 			float multiplier = data.getSkillLevel(this) / (float) maxLvl;
-			if(!data.player.isCollidedHorizontally)
+			if(!data.player.collidedHorizontally)
 				multiplier *= 0.3F;
 			data.player.move(MoverType.PISTON, 0.0D, data.player.motionY * multiplier, 0.0D);
 		}

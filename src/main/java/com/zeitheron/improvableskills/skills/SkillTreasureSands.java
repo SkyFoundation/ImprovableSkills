@@ -45,7 +45,7 @@ public class SkillTreasureSands extends PlayerSkillBase
 		
 		WorldLocation l = new WorldLocation(loc.getWorld(), loc.getPos());
 		
-		if(loc.getState().getBlock() == Blocks.SAND && l.getBiome().getTemperature() >= 2F)
+		if(loc.getState().getBlock() == Blocks.SAND && l.getBiome().getDefaultTemperature() >= 2F)
 		{
 			Random rng = data.player.getRNG();
 			

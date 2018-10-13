@@ -60,7 +60,7 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 							Vec3d vec = new Vec3d(tef.getPos().offset(face));
 							
 							face = face.getOpposite();
-							vec = vec.addVector(.5 + face.getFrontOffsetX() * .5, .65 + face.getFrontOffsetY() * .5, .5 + face.getFrontOffsetZ() * .5);
+							vec = vec.add(.5 + face.getXOffset() * .5, .65 + face.getYOffset() * .5, .5 + face.getZOffset() * .5);
 							
 							HCNet.spawnParticle(tef.getWorld(), EnumParticleTypes.REDSTONE, vec.x, vec.y, vec.z, 0, 0, 0, 0xFFFF00);
 						}

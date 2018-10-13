@@ -26,7 +26,7 @@ public class ItemSkillScrollCreative extends Item
 {
 	public ItemSkillScrollCreative()
 	{
-		setUnlocalizedName("scroll_creative");
+		setTranslationKey("scroll_creative");
 		setMaxStackSize(1);
 	}
 	

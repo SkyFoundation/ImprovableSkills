@@ -40,7 +40,7 @@ public class PlayerSkillData
 	public List<String> stat_scrolls = new ArrayList<>();
 	public boolean hasCraftedSkillBook = false;
 	private boolean hcsbPrev = false;
-	private Map<String, Short> stats = new HashMap<>();
+	public Map<String, Short> stats = new HashMap<>();
 	
 	public EntityPlayer getPlayer()
 	{

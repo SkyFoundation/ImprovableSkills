@@ -18,7 +18,7 @@ public class ItemSkillsBook extends Item
 {
 	public ItemSkillsBook()
 	{
-		setUnlocalizedName("skills_book");
+		setTranslationKey("skills_book");
 		setMaxStackSize(1);
 	}
 	
@@ -36,6 +36,7 @@ public class ItemSkillsBook extends Item
 		if(entityIn instanceof EntityPlayerMP && !worldIn.isRemote)
 		{
 			PlayerSkillData d = PlayerDataManager.getDataFor((EntityPlayerMP) entityIn);
+//			d.stat_scrolls.clear();
 			if(d != null)
 				d.hasCraftedSkillBook = true;
 		}

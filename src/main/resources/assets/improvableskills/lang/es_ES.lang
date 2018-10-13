@@ -96,8 +96,15 @@ text.improvableskills:draw10lvls=Coge 10 niveles.
 chat.improvableskills.guide=¡Acabas de crear el Libro de Habilidades! Ahora puedes mejorar ciertas habilidades.
 chat.improvableskills.page_unlocked=¡Nueva habilidad (%s) desbloqueada!.
 gui.improvableskills.locked=§4No disponible. Crea el LIbro de Habilidades para desbloquear.
+chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
+chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
+chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=¡Tesoro encontrado!
 subtitles.improvableskills:skill_book_open=Libro de Habilidades abierto
 subtitles.improvableskills:skill_book_closed=Libro de Habilidades cerrado
+
+#PAGELETS#
+pagelet.improvableskills:skills=Skills
+pagelet.improvableskills:abilities=Abitilies

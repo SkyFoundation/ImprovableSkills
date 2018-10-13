@@ -96,8 +96,15 @@ text.improvableskills:draw10lvls=Взяти 10 рів.
 chat.improvableskills.guide=Ви тільки що зробили книгу навичок! Тепер ви можете поліпшити деякi навички.
 chat.improvableskills.page_unlocked=Нову навичку (%s) розблоковано!
 gui.improvableskills.locked=§4Недоступно. Створіть книгу навичок, щоб розблокувати.
+chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
+chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
+chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Знайден скарб
 subtitles.improvableskills:skill_book_open=Книжка статистик відкрита
 subtitles.improvableskills:skill_book_closed=Книжка статистик закрита
+
+#PAGELETS#
+pagelet.improvableskills:skills=Skills
+pagelet.improvableskills:abilities=Abitilies

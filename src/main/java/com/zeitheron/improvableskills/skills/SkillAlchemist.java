@@ -52,7 +52,7 @@ public class SkillAlchemist extends PlayerSkillBase
 						
 						if(tef.getWorld().rand.nextInt(9) == 0)
 						{
-							Vec3d vec = new Vec3d(tef.getPos()).addVector(.5, .85, .5);
+							Vec3d vec = new Vec3d(tef.getPos()).add(.5, .85, .5);
 							HCNet.spawnParticle(tef.getWorld(), EnumParticleTypes.REDSTONE, vec.x, vec.y, vec.z, 0, 0, 0, 0xFFFF00);
 						}
 					}

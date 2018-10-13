@@ -22,8 +22,8 @@ public class SkillTex
 		if(texHov == null || texNorm == null)
 		{
 			ResourceLocation res = skill.getRegistryName();
-			this.texNorm = new ResourceLocation(res.getResourceDomain(), "textures/skills/" + res.getResourcePath() + "_normal.png");
-			this.texHov = new ResourceLocation(res.getResourceDomain(), "textures/skills/" + res.getResourcePath() + "_hovered.png");
+			this.texNorm = new ResourceLocation(res.getNamespace(), "textures/skills/" + res.getPath() + "_normal.png");
+			this.texHov = new ResourceLocation(res.getNamespace(), "textures/skills/" + res.getPath() + "_hovered.png");
 		}
 		
 		return new UV(hovered ? texHov : texNorm, 0, 0, 256, 256);
