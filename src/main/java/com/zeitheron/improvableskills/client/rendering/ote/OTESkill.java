@@ -26,7 +26,7 @@ public class OTESkill extends OTEffect
 		this.tx = tx;
 		this.ty = ty;
 		this.item = item;
-		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L) / 100F);
+		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L) / 100F, 5F);
 		xPoints = path[0];
 		yPoints = path[1];
 		x = xPoints[0];

@@ -7,9 +7,12 @@ import com.zeitheron.hammercore.client.utils.UtilsFX;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.client.gui.GuiSkillViewer;
+import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.utils.Trajectory;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -20,6 +23,8 @@ public class OTESparkle extends OTEffect
 	private double tx, ty;
 	private int totTime, prevTime, time;
 	public double[] xPoints, yPoints;
+	
+	Class<? extends GuiScreen> screen;
 	
 	public OTESparkle(double x, double y, double tx, double ty, int time, int color)
 	{
@@ -33,6 +38,8 @@ public class OTESparkle extends OTEffect
 		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, Math.abs(hashCode() / 25F));
 		xPoints = path[0];
 		yPoints = path[1];
+		
+		screen = Minecraft.getMinecraft().currentScreen != null ? Minecraft.getMinecraft().currentScreen.getClass() : null;
 	}
 	
 	@Override
@@ -67,39 +74,40 @@ public class OTESparkle extends OTEffect
 	@Override
 	public void render(float partialTime)
 	{
-		if(!(currentGui instanceof GuiSkillViewer))
-			return;
-		
-		double cx = prevX + (x - prevX) * partialTime;
-		double cy = prevY + (y - prevY) * partialTime;
-		float t = prevTime + partialTime;
-		float r = (float) (System.currentTimeMillis() % 2000L) / 2000.0F;
-		r = r > 0.5F ? 1.0F - r : r;
-		r += 0.45F;
-		
-		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/particles/sparkle.png");
-		
-		int tx = 64 * (int) (time / (float) totTime * 3F);
-		
-		GlStateManager.enableAlpha();
-		GL11.glEnable(GL11.GL_BLEND);
-		RenderHelper.disableStandardItemLighting();
-		
-		float scale = 1 / 8F;
-		
-		if(t < 5)
-			scale *= t / 5F;
-		
-		if(t >= totTime - 5)
-			scale *= 1 - (t - totTime + 5) / 5F;
-		
-		GL11.glPushMatrix();
-		GL11.glColor4f(ColorHelper.getRed(color), ColorHelper.getGreen(color), ColorHelper.getBlue(color), 1);
-		GL11.glTranslated(cx - 64 * scale / 2, cy - 64 * scale / 2, 0);
-		GL11.glScaled(scale, scale, scale);
-		RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glPopMatrix();
-		GL11.glDisable(GL11.GL_BLEND);
+		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+		if((gui == null && screen == null) || (screen != null && gui != null && screen.isAssignableFrom(gui.getClass())))
+		{
+			double cx = prevX + (x - prevX) * partialTime;
+			double cy = prevY + (y - prevY) * partialTime;
+			float t = prevTime + partialTime;
+			float r = (float) (System.currentTimeMillis() % 2000L) / 2000.0F;
+			r = r > 0.5F ? 1.0F - r : r;
+			r += 0.45F;
+			
+			UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/particles/sparkle.png");
+			
+			int tx = 64 * (int) (time / (float) totTime * 3F);
+			
+			GlStateManager.enableAlpha();
+			GL11.glEnable(GL11.GL_BLEND);
+			RenderHelper.disableStandardItemLighting();
+			
+			float scale = 1 / 8F;
+			
+			if(t < 5)
+				scale *= t / 5F;
+			
+			if(t >= totTime - 5)
+				scale *= 1 - (t - totTime + 5) / 5F;
+			
+			GL11.glPushMatrix();
+			GL11.glColor4f(ColorHelper.getRed(color), ColorHelper.getGreen(color), ColorHelper.getBlue(color), 1);
+			GL11.glTranslated(cx - 64 * scale / 2, cy - 64 * scale / 2, 0);
+			GL11.glScaled(scale, scale, scale);
+			RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glPopMatrix();
+			GL11.glDisable(GL11.GL_BLEND);
+		}
 	}
 }

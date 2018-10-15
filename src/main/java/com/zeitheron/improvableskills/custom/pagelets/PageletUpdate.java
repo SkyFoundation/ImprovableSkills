@@ -14,8 +14,6 @@ import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.Loader;
@@ -32,6 +30,12 @@ public class PageletUpdate extends PageletBase
 	{
 		setRegistryName(InfoIS.MOD_ID, "update");
 		setTitle(new TextComponentTranslation("pagelet." + InfoIS.MOD_ID + ":update"));
+	}
+	
+	@Override
+	public boolean isRight()
+	{
+		return false;
 	}
 	
 	@Override
@@ -52,21 +56,7 @@ public class PageletUpdate extends PageletBase
 	@Override
 	public GuiTabbable createTab(PlayerSkillData data)
 	{
-		Threading.createAndStart(() ->
-		{
-			try
-			{
-				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
-				
-				changes = o.getString("changelog");
-				latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
-				level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
-			} catch(Throwable err)
-			{
-				err.printStackTrace();
-			}
-		});
-		return new GuiUpdateBook(this, changes);
+		return new GuiUpdateBook(this);
 	}
 	
 	@Override

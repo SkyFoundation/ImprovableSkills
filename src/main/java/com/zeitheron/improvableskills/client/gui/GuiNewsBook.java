@@ -9,33 +9,29 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.base.Joiner;
 import com.zeitheron.hammercore.client.utils.UV;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
-import com.zeitheron.hammercore.lib.zlib.json.JSONObject;
-import com.zeitheron.hammercore.lib.zlib.json.JSONTokener;
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.lib.zlib.web.HttpRequest;
-import com.zeitheron.hammercore.utils.Chars;
-import com.zeitheron.hammercore.utils.VersionCompareTool;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
+import com.zeitheron.hammercore.utils.color.Rainbow;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
-import com.zeitheron.improvableskills.custom.pagelets.PageletUpdate;
+import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
+import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
 import com.zeitheron.improvableskills.utils.GoogleTranslate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
 
-public class GuiUpdateBook extends GuiTabbable
+public class GuiNewsBook extends GuiTabbable
 {
 	public final UV gui1;
 	
 	public String changes, translated;
 	
-	public GuiUpdateBook(PageletBase pagelet)
+	public GuiNewsBook(PageletBase pagelet)
 	{
 		super(pagelet);
 		
@@ -54,21 +50,15 @@ public class GuiUpdateBook extends GuiTabbable
 		
 		Threading.createAndStart(() ->
 		{
-			try
-			{
-				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
-				
-				PageletUpdate.changes = changes = o.getString("changelog");
-				PageletUpdate.latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
-				PageletUpdate.level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(PageletUpdate.latest));
-			} catch(Throwable err)
-			{
-				changes = "Unable to connect!";
-			}
-			
+			changes = new String(HttpRequest.get("https://pastebin.com/raw/DUCFiYpm").connectTimeout(5000).bytes());
+			if(changes == null)
+				changes = "";
 			String ts = changes;
+			
 			try
 			{
+				Thread.sleep(250L);
+				
 				List<String> s = new ArrayList<>();
 				for(String ln : changes.split("\n"))
 				{
@@ -80,11 +70,9 @@ public class GuiUpdateBook extends GuiTabbable
 					}
 					s.add(ln);
 				}
-				String c = "\u25BA ";
-				ts = c + Joiner.on("\n" + c).join(s);
+				ts = Joiner.on("\n").join(s);
 			} catch(Throwable er)
 			{
-				er.printStackTrace();
 			}
 			this.translated = ts;
 		});
@@ -103,9 +91,8 @@ public class GuiUpdateBook extends GuiTabbable
 		GL11.glScissor((int) Math.ceil(guiLeft * sr.getScaleFactor()), (int) Math.ceil((guiTop + 5) * sr.getScaleFactor()), (int) Math.ceil(xSize * sr.getScaleFactor()), (int) Math.ceil((ySize - 10) * sr.getScaleFactor()));
 		
 		if(translated != null)
-			fontRenderer.drawSplitString(I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest + "\n" + I18n.format("gui." + InfoIS.MOD_ID + ":changes") + ": \n" + translated, (int) guiLeft + 12, (int) guiTop + 12, (int) gui1.width - 22, 0xFF_000000);
-		else
-			GuiNewsBook.spawnLoading(width, height);
+			fontRenderer.drawSplitString(translated, (int) guiLeft + 12, (int) guiTop + 12, (int) gui1.width - 22, 0xFF_000000);
+		else spawnLoading(width, height);
 		
 		GlStateManager.enableDepth();
 		
@@ -133,6 +120,31 @@ public class GuiUpdateBook extends GuiTabbable
 			mc.displayGuiScreen(parent);
 			if(mc.currentScreen == null)
 				mc.setIngameFocus();
+		}
+	}
+	
+	public static void spawnLoading(float width, float height)
+	{
+		Minecraft mc = Minecraft.getMinecraft();
+		float partialTicks = mc.getRenderPartialTicks();
+		
+		int dots = 3;
+		float angle = 360 / dots;
+		float degree = ((mc.player.ticksExisted + partialTicks) * 3) % 360F;
+		
+		float x = width / 2, y = height / 2;
+		float rad = 48;
+		
+		for(int i = 0; i < dots; ++i)
+		{
+			double ax = x + Math.sin(Math.toRadians(degree)) * rad, ay = y + Math.cos(Math.toRadians(degree)) * rad;
+			
+			double oax = x + Math.sin(Math.toRadians(degree - 30)) * rad, oay = y + Math.cos(Math.toRadians(degree - 30)) * rad;
+			
+			if(Math.random() < .25)
+				OnTopEffects.effects.add(new OTESparkle(ax, ay, oax, oay, 20, Rainbow.doIt(i * 1000 / dots, 1000L)));
+			
+			degree += angle;
 		}
 	}
 }

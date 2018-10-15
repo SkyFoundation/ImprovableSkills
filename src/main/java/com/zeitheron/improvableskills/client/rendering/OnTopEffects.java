@@ -9,6 +9,7 @@ import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -104,14 +105,24 @@ public class OnTopEffects
 			
 			resolution = sr;
 			
-			for(TwoTuple.Atomic<Float, Float> val : GuiTabbable.EXTENSIONS.values())
+			for(ResourceLocation key : GuiTabbable.EXTENSIONS.keySet())
 			{
+				TwoTuple.Atomic<Float, Float> val = GuiTabbable.EXTENSIONS.get(key);
+				
 				Float target = val.get1();
 				Float current = val.get2();
 				
 				float dif = Math.max(-.125F, Math.min(.125F, target - current));
 				
 				val.set2(current + dif);
+				
+//				if(target < .5)
+//				{
+//					float v = System.currentTimeMillis() % 10000L / 10000F;
+//					
+//					if(current < v)
+//						val.set2(v);
+//				}
 			}
 		}
 	}

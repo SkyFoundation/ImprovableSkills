@@ -16,6 +16,11 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 	
 	public ITextComponent title;
 	
+	public boolean isRight()
+	{
+		return true;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public abstract GuiTabbable createTab(PlayerSkillData data);
 	

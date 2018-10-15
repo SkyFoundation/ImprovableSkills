@@ -73,15 +73,22 @@ public class GuiTabbable extends GuiCentered
 		IForgeRegistry<PageletBase> pgreg = GameRegistry.findRegistry(PageletBase.class);
 		List<PageletBase> pagelets = new ArrayList<>(pgreg.getValuesCollection());
 		
+		selPgl = null;
+		
 		int i = 0;
 		for(int j = 0; j < pagelets.size(); ++j)
 		{
 			PageletBase let = pagelets.get(j);
 			
-			if(!let.isVisible())
+			if(!let.isVisible() || !let.isRight())
 				continue;
 			
-			boolean mouseOver = pagelet == let || (mouseX >= guiLeft + 193 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24);
+			boolean mouseOver = mouseX >= guiLeft + 195 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24;
+			
+			if(mouseOver)
+				selPgl = let;
+			
+			mouseOver |= pagelet == let;
 			
 			gui2.bindTexture();
 			
@@ -122,6 +129,71 @@ public class GuiTabbable extends GuiCentered
 			++i;
 		}
 		
+		//
+		
+		i = 0;
+		for(int j = 0; j < pagelets.size(); ++j)
+		{
+			PageletBase let = pagelets.get(j);
+			
+			if(!let.isVisible() || let.isRight())
+				continue;
+			
+			boolean mouseOver = mouseX >= guiLeft - 17 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft && mouseY < guiTop + 10 + i * 25 + 24;
+			
+			if(mouseOver)
+				selPgl = let;
+			
+			mouseOver |= pagelet == let;
+			
+			gui2.bindTexture();
+			
+			TwoTuple.Atomic<Float, Float> t = EXTENSIONS.get(let.getRegistryName());
+			if(t == null)
+				EXTENSIONS.put(let.getRegistryName(), t = new Atomic<Float, Float>(0F, 0F));
+			t.set1(mouseOver ? 1F : 0F);
+			
+			float progress = 5 * t.get2().floatValue();
+			float dif = Math.max(-.125F, Math.min(.125F, t.get1() - t.get2()));
+			progress += dif * partialTicks;
+			
+			progress = (float) (Math.sin(Math.toRadians(progress / 5D * 90)) * 5D);
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.enableDepth();
+			GlStateManager.disableLighting();
+			RenderHelper.disableStandardItemLighting();
+			ColorHelper.gl(255 << 24 | rgb);
+			GlStateManager.translate(guiLeft - 18 + 7 * ((5 - progress) / 5), guiTop + 10 + i * 25, progress >= 5F && let == pagelet ? 200 : 0);
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(10, 14, 0);
+			GlStateManager.scale(-1, -1, 1);
+			GlStateManager.translate(-10, -14, 0);
+			RenderUtil.drawTexturedModalRect(0, 4, 236, 0, 20, 24, mouseOver ? 30 : 0);
+			GlStateManager.popMatrix();
+			
+			GlStateManager.translate(0, 0, -50);
+			Object icon = let.getIcon();
+			
+			if(icon instanceof ItemStack)
+				mc.getRenderItem().renderItemIntoGUI((ItemStack) icon, 2, 4);
+			if(icon instanceof ITextureObject)
+			{
+				GlStateManager.translate(0, 0, 150);
+				
+				ColorHelper.gl(0xFF_FFFFFF);
+				
+				GlStateManager.bindTexture(((ITextureObject) icon).getGlTextureId());
+				RenderUtil.drawFullTexturedModalRect(2, 4, 16, 16);
+			}
+			
+			GlStateManager.popMatrix();
+			++i;
+		}
+		
+		//
+		
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		GlStateManager.pushMatrix();
@@ -129,29 +201,18 @@ public class GuiTabbable extends GuiCentered
 		drawBack(partialTicks, mouseX, mouseY);
 		GlStateManager.popMatrix();
 		
-		selPgl = null;
-		i = 0;
-		for(int j = 0; j < pagelets.size(); ++j)
+		//
+		
+		if(selPgl != null)
 		{
-			PageletBase let = pagelets.get(j);
-			
-			if(!let.isVisible())
-				continue;
-			
-			boolean mouseOver = mouseX >= guiLeft + 193 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24;
-			
-			if(mouseOver)
-			{
-				selPgl = let;
-				GlStateManager.pushMatrix();
-				GlStateManager.translate(0, 0, 500);
-				drawHoveringText(let.title.getUnformattedComponentText(), mouseX, mouseY);
-				GlStateManager.popMatrix();
-				GlStateManager.disableLighting();
-			}
-			
-			++i;
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, 0, 500);
+			drawHoveringText(selPgl.title.getUnformattedComponentText(), mouseX, mouseY);
+			GlStateManager.popMatrix();
+			GlStateManager.disableLighting();
 		}
+		
+		//
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		GlStateManager.disableDepth();
