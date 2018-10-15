@@ -19,9 +19,9 @@ import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.XPUtil;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
-import com.zeitheron.improvableskills.api.iGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
@@ -35,7 +35,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiSkillViewer extends GuiCentered implements iGuiSkillDataConsumer, ITooltipContext
+public class GuiSkillViewer extends GuiCentered implements IGuiSkillDataConsumer, ITooltipContext
 {
 	final GuiSkillsBook parent;
 	public PlayerSkillData data;

@@ -2,8 +2,8 @@ package com.zeitheron.improvableskills.net;
 
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 
 import net.minecraft.entity.player.EntityPlayerMP;

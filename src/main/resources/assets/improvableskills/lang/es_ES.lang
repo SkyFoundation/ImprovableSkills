@@ -99,6 +99,8 @@ gui.improvableskills.locked=§4No disponible. Crea el LIbro de Habilidades para 
 chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
 chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
 chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
+gui.improvableskills:nver=New version
+gui.improvableskills:changes=Changes
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=¡Tesoro encontrado!
@@ -106,5 +108,6 @@ subtitles.improvableskills:skill_book_open=Libro de Habilidades abierto
 subtitles.improvableskills:skill_book_closed=Libro de Habilidades cerrado
 
 #PAGELETS#
+pagelet.improvableskills:update=New Version Available!
 pagelet.improvableskills:skills=Skills
 pagelet.improvableskills:abilities=Abitilies

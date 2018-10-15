@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.SoundUtil;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.net.PacketScrollUnlockedSkill;
 

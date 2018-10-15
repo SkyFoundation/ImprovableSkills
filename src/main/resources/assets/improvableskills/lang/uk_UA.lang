@@ -99,6 +99,8 @@ gui.improvableskills.locked=§4Недоступно. Створіть книгу
 chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
 chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
 chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
+gui.improvableskills:nver=Нова версія
+gui.improvableskills:changes=Зміни
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Знайден скарб
@@ -106,5 +108,6 @@ subtitles.improvableskills:skill_book_open=Книжка статистик ві�
 subtitles.improvableskills:skill_book_closed=Книжка статистик закрита
 
 #PAGELETS#
-pagelet.improvableskills:skills=Skills
-pagelet.improvableskills:abilities=Abitilies
+pagelet.improvableskills:update=Доступна нова версія!
+pagelet.improvableskills:skills=Навички
+pagelet.improvableskills:abilities=Здібності

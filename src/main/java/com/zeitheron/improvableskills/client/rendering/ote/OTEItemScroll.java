@@ -5,7 +5,7 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.utils.TexturePixelGetter;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.utils.Trajectory;

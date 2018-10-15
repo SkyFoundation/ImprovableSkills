@@ -2,7 +2,6 @@ package com.zeitheron.improvableskills.client.gui.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,50 +11,46 @@ import org.lwjgl.opengl.GL11;
 import com.zeitheron.hammercore.client.gui.GuiCentered;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
 import com.zeitheron.hammercore.client.utils.UV;
-import com.zeitheron.hammercore.client.utils.UtilsFX;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
+import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple.Atomic;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.Pagelet;
-import com.zeitheron.improvableskills.client.gui.GuiSkillsBook;
+import com.zeitheron.improvableskills.api.registry.PageletBase;
+import com.zeitheron.improvableskills.init.PageletsIS;
+import com.zeitheron.improvableskills.proxy.SyncSkills;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class GuiTabbable extends GuiCentered
 {
-	public final UV gui1, gui2, star;
-	public double scrolledPixels;
-	public double prevScrolledPixels;
-	public int row = 6;
+	public static PageletBase lastPagelet = PageletsIS.SKILLS;
+	public static final Map<ResourceLocation, TwoTuple.Atomic<Float, Float>> EXTENSIONS = new HashMap<>();
 	
-	public Map<ResourceLocation, TwoTuple.Atomic<Integer, Integer>> hoverAnims = new HashMap<>();
-	
-	public int cHover;
-	
+	public final PageletBase pagelet;
+	protected PageletBase selPgl;
 	public GuiScreen parent;
+	public final UV gui2;
 	
-	public GuiTabbable()
+	public GuiTabbable(PageletBase pagelet)
 	{
-		this.parent = Minecraft.getMinecraft().currentScreen;
+		this.pagelet = pagelet;
 		
-		while(this.parent instanceof GuiSkillsBook)
-			this.parent = ((GuiSkillsBook) this.parent).parent;
+		lastPagelet = pagelet;
 		
 		xSize = 195;
 		ySize = 168;
 		
-		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
 		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
-		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), xSize + 1, 0, 10, 10);
 	}
 	
 	protected void drawBack(float partialTicks, int mouseX, int mouseY)
@@ -71,57 +66,91 @@ public class GuiTabbable extends GuiCentered
 		
 		GlStateManager.enableDepth();
 		
-		ScaledResolution sr = new ScaledResolution(mc);
-		
 		GL11.glEnable(GL11.GL_BLEND);
-		
-		int cht = 0, chtni = 0;
-		boolean singleHover = false;
-		
-		if(!singleHover)
-			cHover = -1;
 		
 		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
-		IForgeRegistry<Pagelet> pgreg = GameRegistry.findRegistry(Pagelet.class);
-		List<Pagelet> pagelets = new ArrayList<>(pgreg.getValuesCollection());
+		IForgeRegistry<PageletBase> pgreg = GameRegistry.findRegistry(PageletBase.class);
+		List<PageletBase> pagelets = new ArrayList<>(pgreg.getValuesCollection());
 		
-		for(int i = 0; i < pagelets.size(); ++i)
+		int i = 0;
+		for(int j = 0; j < pagelets.size(); ++j)
 		{
-			Pagelet let = pagelets.get(i);
-			boolean mouseOver = mouseX >= guiLeft + 193 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24;
+			PageletBase let = pagelets.get(j);
+			
+			if(!let.isVisible())
+				continue;
+			
+			boolean mouseOver = pagelet == let || (mouseX >= guiLeft + 193 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24);
 			
 			gui2.bindTexture();
 			
+			TwoTuple.Atomic<Float, Float> t = EXTENSIONS.get(let.getRegistryName());
+			if(t == null)
+				EXTENSIONS.put(let.getRegistryName(), t = new Atomic<Float, Float>(0F, 0F));
+			t.set1(mouseOver ? 1F : 0F);
+			
+			float progress = 5 * t.get2().floatValue();
+			float dif = Math.max(-.125F, Math.min(.125F, t.get1() - t.get2()));
+			progress += dif * partialTicks;
+			
+			progress = (float) (Math.sin(Math.toRadians(progress / 5D * 90)) * 5D);
+			
 			GlStateManager.pushMatrix();
+			GlStateManager.enableDepth();
+			GlStateManager.disableLighting();
+			RenderHelper.disableStandardItemLighting();
 			ColorHelper.gl(255 << 24 | rgb);
-			GlStateManager.translate(guiLeft + 193 - (!mouseOver ? 5 : 0), guiTop + 10 + i * 25, 0);
+			GlStateManager.translate(guiLeft + 193 - 7 * ((5 - progress) / 5), guiTop + 10 + i * 25, progress >= 5F && let == pagelet ? 200 : 0);
 			RenderUtil.drawTexturedModalRect(0, 0, 236, 0, 20, 24, mouseOver ? 30 : 0);
-			GlStateManager.translate(0, 0, -85 + (mouseOver ? 20 : 0));
-			mc.getRenderItem().renderItemIntoGUI(let.getIcon(), 2, 4);
+			GlStateManager.translate(0, 0, -50);
+			Object icon = let.getIcon();
+			
+			if(icon instanceof ItemStack)
+				mc.getRenderItem().renderItemIntoGUI((ItemStack) icon, 2, 4);
+			if(icon instanceof ITextureObject)
+			{
+				GlStateManager.translate(0, 0, 150);
+				
+				ColorHelper.gl(0xFF_FFFFFF);
+				
+				GlStateManager.bindTexture(((ITextureObject) icon).getGlTextureId());
+				RenderUtil.drawFullTexturedModalRect(2, 4, 16, 16);
+			}
+			
 			GlStateManager.popMatrix();
+			++i;
 		}
 		
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, 0, 20);
+		GlStateManager.translate(0, 0, 100);
 		drawBack(partialTicks, mouseX, mouseY);
 		GlStateManager.popMatrix();
 		
-		for(int i = 0; i < pagelets.size(); ++i)
+		selPgl = null;
+		i = 0;
+		for(int j = 0; j < pagelets.size(); ++j)
 		{
-			Pagelet let = pagelets.get(i);
+			PageletBase let = pagelets.get(j);
+			
+			if(!let.isVisible())
+				continue;
+			
 			boolean mouseOver = mouseX >= guiLeft + 193 && mouseY >= guiTop + 10 + i * 25 && mouseX < guiLeft + 193 + 20 && mouseY < guiTop + 10 + i * 25 + 24;
 			
 			if(mouseOver)
 			{
+				selPgl = let;
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0, 0, 500);
 				drawHoveringText(let.title.getUnformattedComponentText(), mouseX, mouseY);
 				GlStateManager.popMatrix();
 				GlStateManager.disableLighting();
 			}
+			
+			++i;
 		}
 		
 		GL11.glDisable(GL11.GL_BLEND);
@@ -129,17 +158,13 @@ public class GuiTabbable extends GuiCentered
 	}
 	
 	@Override
-	public void updateScreen()
-	{
-		super.updateScreen();
-		prevScrolledPixels = scrolledPixels;
-	}
-	
-	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
 	{
-		if(cHover >= 0)
+		if(selPgl != null)
 		{
+			if(pagelet != selPgl)
+				mc.displayGuiScreen(selPgl.createTab(SyncSkills.getData()));
+			
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
 		}
 		

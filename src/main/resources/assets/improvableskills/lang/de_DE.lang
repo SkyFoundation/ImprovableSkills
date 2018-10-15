@@ -99,6 +99,8 @@ gui.improvableskills.locked=§4Nicht verfügbar. Stelle das Buch der Fähigkeite
 chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
 chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
 chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
+gui.improvableskills:nver=New version
+gui.improvableskills:changes=Changes
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Schatz gefunden
@@ -106,5 +108,6 @@ subtitles.improvableskills:skill_book_open=Buch der Fähigkeiten geöffnet
 subtitles.improvableskills:skill_book_closed=Buch der Fähigkeiten geschlossen
 
 #PAGELETS#
+pagelet.improvableskills:update=New Version Available!
 pagelet.improvableskills:skills=Skills
 pagelet.improvableskills:abilities=Abitilies

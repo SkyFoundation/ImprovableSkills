@@ -51,6 +51,7 @@ public class OTEFadeOutUV extends OTEffect
 
 		GlStateManager.enableAlpha();
 		GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
 		RenderHelper.disableStandardItemLighting();
 		
 		float scale = 1F + (float) Math.sqrt(t);

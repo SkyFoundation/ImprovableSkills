@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import com.zeitheron.improvableskills.ImprovableSkillsMod;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.items.ItemSkillScroll;
 import com.zeitheron.improvableskills.utils.loot.LootConditionSkillScroll;

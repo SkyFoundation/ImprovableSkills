@@ -7,7 +7,7 @@ import com.zeitheron.hammercore.cfg.HCModConfigurations;
 import com.zeitheron.hammercore.cfg.IConfigReloadListener;
 import com.zeitheron.hammercore.cfg.fields.ModConfigPropertyBool;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.skills.SkillGrowth;
+import com.zeitheron.improvableskills.custom.skills.SkillGrowth;
 
 import net.minecraftforge.common.config.Configuration;
 

@@ -2,7 +2,7 @@ package com.zeitheron.improvableskills.client.rendering.ote;
 
 import org.lwjgl.opengl.GL11;
 
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.utils.Trajectory;
 

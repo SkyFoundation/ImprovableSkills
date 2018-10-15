@@ -6,7 +6,7 @@ import com.zeitheron.hammercore.utils.WorldUtil;
 import com.zeitheron.hammercore.utils.XPUtil;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
-import com.zeitheron.improvableskills.api.iGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
@@ -46,7 +46,7 @@ public class PacketSyncSkillData implements IPacket
 	@SideOnly(Side.CLIENT)
 	public IPacket executeOnClient(PacketContext net)
 	{
-		iGuiSkillDataConsumer c = WorldUtil.cast(Minecraft.getMinecraft().currentScreen, iGuiSkillDataConsumer.class);
+		IGuiSkillDataConsumer c = WorldUtil.cast(Minecraft.getMinecraft().currentScreen, IGuiSkillDataConsumer.class);
 		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
 		if(c != null)
 			c.applySkillData(SyncSkills.CLIENT_DATA);

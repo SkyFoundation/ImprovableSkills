@@ -2,9 +2,9 @@ package com.zeitheron.improvableskills.utils.loot;
 
 import java.util.Random;
 
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.loot.RandomBoolean;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 
 import net.minecraft.entity.Entity;

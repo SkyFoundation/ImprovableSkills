@@ -5,8 +5,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import com.zeitheron.hammercore.utils.WorldLocation;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 
 public class TreasureContext
 {

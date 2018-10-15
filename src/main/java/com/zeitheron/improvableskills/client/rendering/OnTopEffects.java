@@ -3,6 +3,9 @@ package com.zeitheron.improvableskills.client.rendering;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
+import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -100,6 +103,16 @@ public class OnTopEffects
 			}
 			
 			resolution = sr;
+			
+			for(TwoTuple.Atomic<Float, Float> val : GuiTabbable.EXTENSIONS.values())
+			{
+				Float target = val.get1();
+				Float current = val.get2();
+				
+				float dif = Math.max(-.125F, Math.min(.125F, target - current));
+				
+				val.set2(current + dif);
+			}
 		}
 	}
 }

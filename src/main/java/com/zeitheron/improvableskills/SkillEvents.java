@@ -8,10 +8,10 @@ import com.zeitheron.hammercore.lib.zlib.tuple.OneTuple.Atomic;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.WorldUtil;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
-import com.zeitheron.improvableskills.api.iDigSpeedAffectorSkill;
+import com.zeitheron.improvableskills.api.IDigSpeedAffectorSkill;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor.DamageType;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.items.ItemSkillsBook;
@@ -92,9 +92,9 @@ public class SkillEvents
 			ItemStack item = p.getHeldItemMainhand();
 			
 			OneTuple.Atomic<Float> tot = new Atomic<>(1F);
-			GameRegistry.findRegistry(PlayerSkillBase.class).getValues().stream().filter(s -> s instanceof iDigSpeedAffectorSkill).forEach(s ->
+			GameRegistry.findRegistry(PlayerSkillBase.class).getValues().stream().filter(s -> s instanceof IDigSpeedAffectorSkill).forEach(s ->
 			{
-				iDigSpeedAffectorSkill d = (iDigSpeedAffectorSkill) s;
+				IDigSpeedAffectorSkill d = (IDigSpeedAffectorSkill) s;
 				tot.set(tot.get() + d.getDigMultiplier(item, e.getPos(), data));
 			});
 			e.setNewSpeed(e.getNewSpeed() * tot.get());

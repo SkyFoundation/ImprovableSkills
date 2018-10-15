@@ -17,10 +17,11 @@ import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.SkillTex;
-import com.zeitheron.improvableskills.api.iGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.registry.PageletBase;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
 import com.zeitheron.improvableskills.init.SkillsIS;
@@ -37,28 +38,23 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
+public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 {
-	public final UV gui1, gui2, star;
+	public final UV gui1, star;
 	public double scrolledPixels;
 	public double prevScrolledPixels;
 	public int row = 6;
 	
-	public Map<SkillTex, TwoTuple.Atomic<Integer, Integer>> hoverAnims = new HashMap<>();
+	public Map<SkillTex<PlayerSkillBase>, TwoTuple.Atomic<Integer, Integer>> hoverAnims = new HashMap<>();
 	
 	public int cHover;
 	
 	public PlayerSkillData data;
-	public List<SkillTex> texes = new ArrayList<>();
+	public List<SkillTex<PlayerSkillBase>> texes = new ArrayList<>();
 	
-	public GuiScreen parent;
-	
-	public GuiSkillsBook(PlayerSkillData data)
+	public GuiSkillsBook(PageletBase pagelet, PlayerSkillData data)
 	{
-		this.parent = Minecraft.getMinecraft().currentScreen;
-		
-		while(this.parent instanceof GuiSkillsBook)
-			this.parent = ((GuiSkillsBook) this.parent).parent;
+		super(pagelet);
 		
 		this.data = data;
 		
@@ -66,7 +62,6 @@ public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 		ySize = 168;
 		
 		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
-		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
 		star = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), xSize + 1, 0, 10, 10);
 		
 		List<PlayerSkillBase> skills = new ArrayList<>(GameRegistry.findRegistry(PlayerSkillBase.class).getValues());
@@ -104,7 +99,7 @@ public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 		for(int i = 0; i < co; ++i)
 		{
 			int j = i % co;
-			SkillTex tex = texes.get(j);
+			SkillTex<PlayerSkillBase> tex = texes.get(j);
 			
 			TwoTuple.Atomic<Integer, Integer> hovt = hoverAnims.get(tex);
 			if(hovt == null)
@@ -179,7 +174,7 @@ public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 		
 		if(cHover >= 0 && chtni >= 200)
 		{
-			SkillTex tex = texes.get(cHover % co);
+			SkillTex<PlayerSkillBase> tex = texes.get(cHover % co);
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, 0, 500);
 			List<String> ls = new ArrayList<>();
@@ -236,7 +231,7 @@ public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 		for(int i = 0; i < co; ++i)
 		{
 			int j = i % co;
-			SkillTex tex = texes.get(j);
+			SkillTex<PlayerSkillBase> tex = texes.get(j);
 			
 			TwoTuple.Atomic<Integer, Integer> hovt = hoverAnims.get(tex);
 			if(hovt == null)
@@ -269,7 +264,7 @@ public class GuiSkillsBook extends GuiTabbable implements iGuiSkillDataConsumer
 			for(int i = 0; i < co; ++i)
 			{
 				int j = i % co;
-				SkillTex tex = texes.get(j);
+				SkillTex<PlayerSkillBase> tex = texes.get(j);
 				
 				double x = (i % row) * 28 + guiLeft + 16;
 				double y = (i / row) * 28 - (prevScrolledPixels + (scrolledPixels - prevScrolledPixels) * mc.getRenderPartialTicks());

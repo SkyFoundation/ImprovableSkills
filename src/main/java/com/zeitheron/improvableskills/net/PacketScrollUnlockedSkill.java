@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
-import com.zeitheron.improvableskills.api.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.rendering.ItemToBookHandler;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEBook;

@@ -13,6 +13,7 @@ import com.zeitheron.hammercore.HammerCore;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.improvableskills.ImprovableSkillsMod;
 import com.zeitheron.improvableskills.InfoIS;
+import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.net.PacketSyncSkillData;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
