@@ -6,15 +6,18 @@ import java.util.Random;
 import org.lwjgl.input.Keyboard;
 
 import com.zeitheron.hammercore.client.utils.ItemColorHelper;
-import com.zeitheron.hammercore.client.utils.TexturePixelGetter;
+import com.zeitheron.hammercore.client.utils.RenderUtil;
+import com.zeitheron.hammercore.client.utils.UtilsFX;
 import com.zeitheron.hammercore.client.utils.texture.gui.DynGuiTex;
 import com.zeitheron.hammercore.client.utils.texture.gui.GuiTexBakery;
 import com.zeitheron.hammercore.utils.WorldUtil;
+import com.zeitheron.hammercore.utils.inventory.InventoryDummy;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.client.gui.base.GuiCustomButton;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
+import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
-import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.gui.GuiButton;
@@ -22,12 +25,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -53,8 +53,8 @@ public class GuiEnchPowBook extends GuiContainer
 			b.slot(slot.xPos - 1, slot.yPos - 1);
 		tex = b.bake();
 		
-		addButton(new GuiButton(0, guiLeft + xSize / 2 - 16, guiTop + ySize / 2 - 52 - 12, 60, 20, "--> +"));
-		addButton(new GuiButton(1, guiLeft + xSize / 2 - 16, guiTop + ySize / 2 - 52 + 12, 60, 20, "Back"));
+		addButton(new GuiCustomButton(0, guiLeft + xSize / 2 - 16, guiTop + ySize / 2 - 52 - 12, 60, 20, "--> +"));
+		addButton(new GuiCustomButton(1, guiLeft + xSize / 2 - 16, guiTop + ySize / 2 - 52 + 12, 60, 20, "Back"));
 	}
 	
 	@Override
@@ -66,7 +66,13 @@ public class GuiEnchPowBook extends GuiContainer
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		renderHoveredToolTip(mouseX, mouseY);
 		
-		String ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+		Slot slot = getSlotUnderMouse();
+		if(slot != null && slot.inventory instanceof InventoryDummy && !slot.getHasStack())
+		{
+			drawHoveringText(TextFormatting.GRAY + "Slot for " + TextFormatting.BOLD + I18n.format(Items.BOOK.getTranslationKey() + ".name"), mouseX, mouseY);
+		}
+		
+		String ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 		
 		this.fontRenderer.drawString(ln, guiLeft + (xSize - fontRenderer.getStringWidth(ln)) / 2, guiTop + 3, 4210752);
 	}
@@ -75,11 +81,16 @@ public class GuiEnchPowBook extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
 		tex.render(guiLeft, guiTop);
+		
+		UtilsFX.bindTexture(OVERLAY);
+		RenderUtil.drawFullTexturedModalRect(guiLeft + 176 / 2 - 36, guiTop + 32, 16, 16);
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException
 	{
+		new OTEFadeOutButton(button, button.id == 1 ? 2 : 20);
+		
 		int id = button.id;
 		if(id == 0 && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			id = 11;
@@ -101,7 +112,7 @@ public class GuiEnchPowBook extends GuiContainer
 					Random r = new Random();
 					int col = ItemColorHelper.DEFAULT_GLINT_COLOR;
 					
-					String ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+					String ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 					
 					double tx = guiLeft + (xSize - fontRenderer.getStringWidth(ln)) / 2;
 					double ty = guiTop + 3;
@@ -122,7 +133,7 @@ public class GuiEnchPowBook extends GuiContainer
 					Random r = new Random();
 					int col = ItemColorHelper.DEFAULT_GLINT_COLOR;
 					
-					String ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+					String ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 					
 					double tx = guiLeft + (xSize - fontRenderer.getStringWidth(ln)) / 2;
 					double ty = guiTop + 3;

@@ -15,8 +15,9 @@ import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.XPUtil;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.client.gui.base.GuiCustomButton;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
@@ -53,19 +54,19 @@ public class GuiXPBank extends GuiCentered implements IGuiSkillDataConsumer
 		int guiLeft = (int) this.guiLeft;
 		int guiTop = (int) this.guiTop;
 		
-		addButton(back = new GuiButton(0, guiLeft + 20, guiTop + (int) ySize - 36, I18n.format("gui.back") + "    "));
+		addButton(back = new GuiCustomButton(0, guiLeft + 20, guiTop + (int) ySize - 36, 100, 20, I18n.format("gui.back") + "    "));
 		
 		GuiButton btn;
 		GuiButton btn1;
 		
-		addButton(btn1 = btn = new GuiButton(1, guiLeft + 30, guiTop + 39, I18n.format("text." + InfoIS.MOD_ID + ":storeall")));
+		addButton(btn1 = btn = new GuiCustomButton(1, guiLeft + 30, guiTop + 39, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":storeall")));
 		btn.width = (fontRenderer.getStringWidth(I18n.format("text." + InfoIS.MOD_ID + ":storeall")) + 8);
 		
 		GuiButton btn2;
-		addButton(btn2 = new GuiButton(3, guiLeft + btn1.width + 44, guiTop + btn.height + 30, I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")));
+		addButton(btn2 = new GuiCustomButton(3, guiLeft + btn1.width + 44, guiTop + btn.height + 30, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")));
 		btn2.width = (fontRenderer.getStringWidth(I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")) + 12);
 		
-		addButton(btn = new GuiButton(2, guiLeft + btn1.width + 44, guiTop + 28, I18n.format("text." + InfoIS.MOD_ID + ":draw1lvl") + ' '));
+		addButton(btn = new GuiCustomButton(2, guiLeft + btn1.width + 44, guiTop + 28, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw1lvl") + ' '));
 		btn.width = btn2.width;
 		
 		back.width = btn.width;

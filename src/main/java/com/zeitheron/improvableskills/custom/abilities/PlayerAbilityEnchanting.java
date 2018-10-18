@@ -37,20 +37,7 @@ public class PlayerAbilityEnchanting extends PlayerAbilityBase
 					this.texHov = new ResourceLocation(res.getNamespace(), "textures/abilities/" + res.getPath() + "_hovered.png");
 				}
 				
-				return new UV(hovered ? texHov : texNorm, 0, 0, 256, 256)
-				{
-					@Override
-					public void render(double x, double y)
-					{
-						super.render(x, y);
-						
-						GlStateManager.pushMatrix();
-						GlStateManager.translate(x + 16, y + 4, 0);
-						GlStateManager.scale(width / 18, height / 18, 1);
-						Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(table, 0, 0);
-						GlStateManager.popMatrix();
-					}
-				};
+				return new UV(hovered ? texHov : texNorm, 0, 0, 256, 256);
 			}
 		};
 	}

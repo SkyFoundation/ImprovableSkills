@@ -7,8 +7,8 @@ item.improvableskills:scroll_normal.name=Сторінка з навичкою
 item.improvableskills:scroll_creative.name=Творча сторінка з навичками
 item.improvableskills:scroll_creative.tooltip0=Розблокує всі заховані навички.
 item.improvableskills:scroll_creative.tooltip1=Під час використання пам'ятайте, що ви §kжульнік§7
-item.improvableskills:parchment_fragment.name=Parchment Fragment
-item.improvableskills:scroll_ability.name=Page with Ability
+item.improvableskills:parchment_fragment.name=Фрагмент пергаменту
+item.improvableskills:scroll_ability.name=Сторінка з вмінням
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Прискорена піч
@@ -98,6 +98,7 @@ text.improvableskills:totalXP=Ваш досвід: %s XP
 text.improvableskills:storeall=Злити весь
 text.improvableskills:draw1lvl=Взяти 1 рів.
 text.improvableskills:draw10lvls=Взяти 10 рів.
+text.improvableskills:enchpower=Рівень чарів: %,d
 chat.improvableskills.guide=Ви тільки що зробили книгу навичок! Тепер ви можете поліпшити деякi навички.
 chat.improvableskills.page_unlocked=Нову навичку (%s) розблоковано!
 gui.improvableskills.locked=§4Недоступно. Створіть книгу навичок, щоб розблокувати.

@@ -93,7 +93,7 @@ public class GuiPortableEnchantment extends GuiContainer
 		String ln = I18n.format("container.enchant");
 		this.fontRenderer.drawString(ln, 12, 4, 4210752);
 		
-		ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+		ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 		
 		boolean mouseOverChant = mouseX >= 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 && mouseY > 3 && mouseX < 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 + fontRenderer.getStringWidth(ln) && mouseY < 3 + fontRenderer.FONT_HEIGHT;
 		
@@ -130,7 +130,7 @@ public class GuiPortableEnchantment extends GuiContainer
 			mouseX -= guiLeft;
 			mouseY -= guiTop;
 			
-			String ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+			String ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 			boolean mouseOverChant = mouseX >= 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 && mouseY > 3 && mouseX < 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 + fontRenderer.getStringWidth(ln) && mouseY < 3 + fontRenderer.FONT_HEIGHT;
 			if(mouseOverChant)
 			{
@@ -305,7 +305,7 @@ public class GuiPortableEnchantment extends GuiContainer
 						
 						if(random.nextInt(120) == 0)
 						{
-							String ln = I18n.format("container.enchant.level.many", (int) SyncSkills.getData().enchantPower);
+							String ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 							
 							float w = random.nextFloat();
 							float x2 = i1 + w * 108;

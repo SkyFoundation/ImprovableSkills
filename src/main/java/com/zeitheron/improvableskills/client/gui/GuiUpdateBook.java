@@ -88,7 +88,8 @@ public class GuiUpdateBook extends GuiTabbable
 			{
 				try
 				{
-					ln = GoogleTranslate.translate(lng, ln);
+					if(!lng.equals("en"))
+						ln = GoogleTranslate.translate(lng, ln);
 				} catch(IOException ioe)
 				{
 				}
@@ -123,7 +124,7 @@ public class GuiUpdateBook extends GuiTabbable
 		String t = nbt.getString("ImprovableSkillsUpdateTranslated");
 		try
 		{
-			t = URLDecoder.decode(t, "UTF-8");
+			t = URLDecoder.decode(t, "UTF-8").replaceAll("\r", "");
 		} catch(UnsupportedEncodingException e)
 		{
 			e.printStackTrace();

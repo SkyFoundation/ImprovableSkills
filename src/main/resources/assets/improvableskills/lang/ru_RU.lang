@@ -7,8 +7,8 @@ item.improvableskills:scroll_normal.name=Страница с навыком
 item.improvableskills:scroll_creative.name=Творческая страница с навыками
 item.improvableskills:scroll_creative.tooltip0=Разблокирует все скрытые навыки.
 item.improvableskills:scroll_creative.tooltip1=Во время использование помните, что вы §kжульник§7
-item.improvableskills:parchment_fragment.name=Parchment Fragment
-item.improvableskills:scroll_ability.name=Page with Ability
+item.improvableskills:parchment_fragment.name=Фрагмент пергамента
+item.improvableskills:scroll_ability.name=Страница с способностью
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Ускоренная печь
@@ -98,6 +98,7 @@ text.improvableskills:totalXP=Ваш опыт: %s XP
 text.improvableskills:storeall=Слить весь
 text.improvableskills:draw1lvl=Взять 1 ур.
 text.improvableskills:draw10lvls=Взять 10 ур.
+text.improvableskills:enchpower=Уровень чаров: %,d
 chat.improvableskills.guide=Вы только что сделали книгу навыков! Теперь вы можете улучшать некоторые навыки игрока.
 chat.improvableskills.page_unlocked=Новый навык (%s) разблокирован!
 gui.improvableskills.locked=§4Недоступно. Создайте книгу навыков, чтобы разблокировать.

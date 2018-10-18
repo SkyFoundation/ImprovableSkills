@@ -19,9 +19,10 @@ import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.XPUtil;
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
+import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
+import com.zeitheron.improvableskills.client.gui.base.GuiCustomButton;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
@@ -74,9 +75,9 @@ public class GuiSkillViewer extends GuiCentered implements IGuiSkillDataConsumer
 		
 		int gl = (int) guiLeft, gt = (int) guiTop;
 		
-		buttonList.add(new GuiButton(0, gl + 10, gt + 124, 75, 20, I18n.format("button.improvableskills:upgrade")));
-		buttonList.add(new GuiButton(1, gl + 116, gt + 124, 75, 20, I18n.format("button.improvableskills:degrade")));
-		buttonList.add(new GuiButton(2, gl + (int) (xSize - 20) / 2, gt + 124, 20, 20, " "));
+		buttonList.add(new GuiCustomButton(0, gl + 10, gt + 124, 75, 20, I18n.format("button.improvableskills:upgrade")));
+		buttonList.add(new GuiCustomButton(1, gl + 116, gt + 124, 75, 20, I18n.format("button.improvableskills:degrade")));
+		buttonList.add(new GuiCustomButton(2, gl + (int) (xSize - 20) / 2, gt + 124, 20, 20, " "));
 	}
 	
 	@Override

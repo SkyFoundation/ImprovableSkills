@@ -5,7 +5,10 @@ import java.util.List;
 
 import com.zeitheron.improvableskills.ImprovableSkillsMod;
 import com.zeitheron.improvableskills.InfoIS;
+import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
+import com.zeitheron.improvableskills.client.gui.GuiDiscord;
+import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiConfirmOpenLink;
@@ -37,6 +40,13 @@ public class PageletDiscord extends PageletBase
 	
 	@Override
 	@SideOnly(Side.CLIENT)
+	public GuiTabbable createTab(PlayerSkillData data)
+	{
+		return new GuiDiscord();
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
 	public Object getIcon()
 	{
 		Object o = staticIcon;
@@ -62,40 +72,6 @@ public class PageletDiscord extends PageletBase
 	public boolean isRight()
 	{
 		return false;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean hasTab()
-	{
-		return false;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void onClick()
-	{
-		GuiScreen parent = Minecraft.getMinecraft().currentScreen;
-		
-		String url = "https://discord.gg/" + PageletUpdate.discord;
-		
-		Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmOpenLink((result, id) ->
-		{
-			if(result)
-			{
-				try
-				{
-					Class<?> oclass = Class.forName("java.awt.Desktop");
-					Object object = oclass.getMethod("getDesktop").invoke(null);
-					oclass.getMethod("browse", URI.class).invoke(object, new URI(url));
-				} catch(Throwable throwable)
-				{
-					ImprovableSkillsMod.LOG.error("Couldn't open link", throwable);
-				}
-			}
-			
-			Minecraft.getMinecraft().displayGuiScreen(parent);
-		}, url, 0, true));
 	}
 	
 	@Override

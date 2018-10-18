@@ -98,6 +98,7 @@ text.improvableskills:totalXP=Tu EXP.: %s XP
 text.improvableskills:storeall=Guardar toda.
 text.improvableskills:draw1lvl=Coge 1 nivel.
 text.improvableskills:draw10lvls=Coge 10 niveles.
+text.improvableskills:enchpower=Enchant Power: %,d
 chat.improvableskills.guide=¡Acabas de crear el Libro de Habilidades! Ahora puedes mejorar ciertas habilidades.
 chat.improvableskills.page_unlocked=¡Nueva habilidad (%s) desbloqueada!.
 gui.improvableskills.locked=§4No disponible. Crea el LIbro de Habilidades para desbloquear.

@@ -82,7 +82,8 @@ public class GuiNewsBook extends GuiTabbable
 			{
 				try
 				{
-					ln = GoogleTranslate.translate(lng, ln);
+					if(!lng.equals("en"))
+						ln = GoogleTranslate.translate(lng, ln);
 				} catch(IOException ioe)
 				{
 				}
@@ -118,7 +119,7 @@ public class GuiNewsBook extends GuiTabbable
 		String t = nbt.getString("ImprovableSkillsNewsTranslated");
 		try
 		{
-			t = URLDecoder.decode(t, "UTF-8");
+			t = URLDecoder.decode(t, "UTF-8").replaceAll("\r", "");
 		} catch(UnsupportedEncodingException e)
 		{
 			e.printStackTrace();
@@ -205,7 +206,7 @@ public class GuiNewsBook extends GuiTabbable
 			double oax = x + Math.sin(Math.toRadians(degree - 30)) * rad, oay = y + Math.cos(Math.toRadians(degree - 30)) * rad;
 			
 			if(Math.random() < .25)
-				OnTopEffects.effects.add(new OTESparkle(ax, ay, oax, oay, 20, Rainbow.doIt(i * 1000 / dots, 1000L)));
+				OnTopEffects.effects.add(new OTESparkle(ax, ay, oax, oay, 20, 255 << 24 | Rainbow.doIt(i * 1000 / dots, 1000L)));
 			
 			degree += angle;
 		}
