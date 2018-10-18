@@ -1,14 +1,20 @@
 package com.zeitheron.improvableskills.client.gui;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Joiner;
+import com.zeitheron.hammercore.client.HCClientOptions;
 import com.zeitheron.hammercore.client.utils.UV;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
+import com.zeitheron.hammercore.lib.zlib.utils.MD5;
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.lib.zlib.web.HttpRequest;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
@@ -18,11 +24,14 @@ import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
+import com.zeitheron.improvableskills.custom.pagelets.PageletNews;
+import com.zeitheron.improvableskills.init.PageletsIS;
 import com.zeitheron.improvableskills.utils.GoogleTranslate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiNewsBook extends GuiTabbable
@@ -43,6 +52,80 @@ public class GuiNewsBook extends GuiTabbable
 		reload();
 	}
 	
+	public String getOrTranslate(String changes)
+	{
+		String md5 = MD5.encrypt(changes);
+		HCClientOptions opts = HCClientOptions.getOptions();
+		NBTTagCompound nbt = opts.getCustomData();
+		String stored = nbt.getString("ImprovableSkillsNewsMD5");
+		String olng = nbt.getString("ImprovableSkillsNewsLang");
+		String lng = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().getLanguage();
+		
+		try
+		{
+			Thread.sleep(500L);
+		} catch(InterruptedException e1)
+		{
+		}
+		
+		if(!md5.equalsIgnoreCase(stored) || !lng.equalsIgnoreCase(olng))
+		{
+			try
+			{
+				Thread.sleep(2000L);
+			} catch(InterruptedException e1)
+			{
+			}
+			
+			List<String> s = new ArrayList<>();
+			for(String ln : changes.split("\n"))
+			{
+				try
+				{
+					ln = GoogleTranslate.translate(lng, ln);
+				} catch(IOException ioe)
+				{
+				}
+				s.add(ln);
+			}
+			
+			String ts = Joiner.on("\n").join(s);
+			
+			nbt.setString("ImprovableSkillsNewsMD5", md5);
+			nbt.setString("ImprovableSkillsNewsLang", lng);
+			try
+			{
+				nbt.setString("ImprovableSkillsNewsTranslated", URLEncoder.encode(ts, "UTF-8"));
+			} catch(UnsupportedEncodingException e1)
+			{
+				e1.printStackTrace();
+			}
+			
+			opts.save();
+			
+			try
+			{
+				Field f = PageletNews.class.getDeclaredField("popping");
+				f.setAccessible(true);
+				f.setBoolean(PageletsIS.NEWS, false);
+			} catch(ReflectiveOperationException e)
+			{
+			}
+			
+			return ts;
+		}
+		
+		String t = nbt.getString("ImprovableSkillsNewsTranslated");
+		try
+		{
+			t = URLDecoder.decode(t, "UTF-8");
+		} catch(UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+		}
+		return t;
+	}
+	
 	public void reload()
 	{
 		changes = null;
@@ -53,28 +136,7 @@ public class GuiNewsBook extends GuiTabbable
 			changes = new String(HttpRequest.get("https://pastebin.com/raw/DUCFiYpm").connectTimeout(5000).bytes());
 			if(changes == null)
 				changes = "";
-			String ts = changes;
-			
-			try
-			{
-				Thread.sleep(250L);
-				
-				List<String> s = new ArrayList<>();
-				for(String ln : changes.split("\n"))
-				{
-					try
-					{
-						ln = GoogleTranslate.translate(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().getLanguage(), ln);
-					} catch(IOException ioe)
-					{
-					}
-					s.add(ln);
-				}
-				ts = Joiner.on("\n").join(s);
-			} catch(Throwable er)
-			{
-			}
-			this.translated = ts;
+			this.translated = getOrTranslate(changes);
 		});
 	}
 	
@@ -92,7 +154,8 @@ public class GuiNewsBook extends GuiTabbable
 		
 		if(translated != null)
 			fontRenderer.drawSplitString(translated, (int) guiLeft + 12, (int) guiTop + 12, (int) gui1.width - 22, 0xFF_000000);
-		else spawnLoading(width, height);
+		else
+			spawnLoading(width, height);
 		
 		GlStateManager.enableDepth();
 		

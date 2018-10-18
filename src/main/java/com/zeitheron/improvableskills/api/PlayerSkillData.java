@@ -39,9 +39,12 @@ public class PlayerSkillData
 	public NBTTagCompound persistedData = new NBTTagCompound();
 	/** The array of scrolls that have been used */
 	public List<String> stat_scrolls = new ArrayList<>();
+	public List<String> abilities = new ArrayList<>();
 	public boolean hasCraftedSkillBook = false;
 	private boolean hcsbPrev = false;
 	public Map<String, Short> stats = new HashMap<>();
+	
+	public float enchantPower = 0;
 	
 	public EntityPlayer getPlayer()
 	{
@@ -97,7 +100,16 @@ public class PlayerSkillData
 	public void sync()
 	{
 		if(player instanceof EntityPlayerMP && !player.world.isRemote)
+		{
 			HCNet.INSTANCE.sendTo(new PacketSyncSkillData(this), (EntityPlayerMP) player);
+			save();
+		}
+	}
+	
+	public void save()
+	{
+		if(player != null)
+			PlayerDataManager.save(player);
 	}
 	
 	public void setSkillLevel(PlayerSkillBase stat, Number lvl)
@@ -142,6 +154,13 @@ public class PlayerSkillData
 		NBTTagList list = nbt.getTagList("Scrolls", NBT.TAG_STRING);
 		for(int i = 0; i < list.tagCount(); ++i)
 			data.stat_scrolls.add(list.getStringTagAt(i));
+		
+		list = nbt.getTagList("Abilities", NBT.TAG_STRING);
+		for(int i = 0; i < list.tagCount(); ++i)
+			data.abilities.add(list.getStringTagAt(i));
+		
+		data.enchantPower = nbt.getFloat("EnchantPower");
+		
 		data.persistedData = nbt.getCompoundTag("Persisted");
 		if(data.persistedData.hasKey("BankXP", NBT.TAG_STRING))
 			try
@@ -168,6 +187,7 @@ public class PlayerSkillData
 		
 		IForgeRegistry<PlayerSkillBase> reg = GameRegistry.findRegistry(PlayerSkillBase.class);
 		nbt.setTag("Persisted", persistedData);
+		nbt.setFloat("EnchantPower", enchantPower);
 		NBTTagList list = new NBTTagList();
 		for(String sstat : stats.keySet())
 		{
@@ -190,6 +210,11 @@ public class PlayerSkillData
 		for(String scroll : stat_scrolls)
 			list.appendTag(new NBTTagString(scroll));
 		nbt.setTag("Scrolls", list);
+		
+		list = new NBTTagList();
+		for(String scroll : abilities)
+			list.appendTag(new NBTTagString(scroll));
+		nbt.setTag("Abilities", list);
 		
 		return nbt;
 	}

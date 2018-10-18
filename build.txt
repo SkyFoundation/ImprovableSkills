@@ -7,7 +7,7 @@ git_commit=https://gitlab.com/DragonForge/ImprovableSkills/commit/{{hash}}
 forge_version=14.23.4.2705
 minecraft_version=1.12.2
 mcp=snapshot_20180803
-hc_version=2.0.2.3
+hc_version=2.0.3.1
 jei_version=4.8.5.159
 
 #Mod info

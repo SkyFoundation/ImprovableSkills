@@ -2,6 +2,7 @@ package com.zeitheron.improvableskills.init;
 
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.custom.pagelets.PageletAbilities;
+import com.zeitheron.improvableskills.custom.pagelets.PageletDiscord;
 import com.zeitheron.improvableskills.custom.pagelets.PageletNews;
 import com.zeitheron.improvableskills.custom.pagelets.PageletSkills;
 import com.zeitheron.improvableskills.custom.pagelets.PageletUpdate;
@@ -14,6 +15,7 @@ public class PageletsIS
 	public static final PageletAbilities ABILITIES = new PageletAbilities();
 	public static final PageletUpdate UPDATE = new PageletUpdate();
 	public static final PageletNews NEWS = new PageletNews();
+	public static final PageletDiscord DISCORD = new PageletDiscord();
 	
 	public static IForgeRegistry<PageletBase> registry;
 	
@@ -25,5 +27,6 @@ public class PageletsIS
 		reg.register(ABILITIES);
 		reg.register(UPDATE);
 		reg.register(NEWS);
+		reg.register(DISCORD);
 	}
 }

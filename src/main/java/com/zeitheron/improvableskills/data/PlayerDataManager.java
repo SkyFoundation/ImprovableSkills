@@ -27,7 +27,7 @@ public class PlayerDataManager
 		if(player == null || player instanceof FakePlayer)
 			return null;
 		if(player.world.isRemote)
-			return SyncSkills.CLIENT_DATA;
+			return SyncSkills.getData();
 		LPLAYER.set(player);
 		return getDataFor(player.getGameProfile());
 	}

@@ -1,9 +1,11 @@
 package com.zeitheron.improvableskills.custom.abilities;
 
 import com.zeitheron.hammercore.client.utils.UV;
+import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.SkillTex;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
+import com.zeitheron.improvableskills.net.PacketOpenPortableEnch;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -55,8 +57,8 @@ public class PlayerAbilityEnchanting extends PlayerAbilityBase
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void onClickClient(EntityPlayer player)
+	public void onClickClient(EntityPlayer player, int mouseButton)
 	{
-		
+		HCNet.INSTANCE.sendToServer(new PacketOpenPortableEnch());
 	}
 }

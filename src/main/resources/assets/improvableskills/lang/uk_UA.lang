@@ -4,9 +4,11 @@ itemGroup.improvableskills=Improvable Skills
 #ITEMS#
 item.improvableskills:skills_book.name=Книжка навичок
 item.improvableskills:scroll_normal.name=Сторінка з навичкою
-item.improvableskills:scroll_creative.name=Творческая страница с навыками
-item.improvableskills:scroll_creative.tooltip0=Разблокирует все скрытые навыки.
-item.improvableskills:scroll_creative.tooltip1=Во время использование помните, что вы §kчитер§7
+item.improvableskills:scroll_creative.name=Творча сторінка з навичками
+item.improvableskills:scroll_creative.tooltip0=Розблокує всі заховані навички.
+item.improvableskills:scroll_creative.tooltip1=Під час використання пам'ятайте, що ви §kжульнік§7
+item.improvableskills:parchment_fragment.name=Parchment Fragment
+item.improvableskills:scroll_ability.name=Page with Ability
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Прискорена піч
@@ -83,6 +85,9 @@ skill.improvableskills:xp+.desc=Збільшує кількість досвід
 
 skill.improvableskills:xp_bank.name=Сховище досвіду
 
+#ABILITIES#
+ability.improvableskills:enchanting.name=Зачаровування
+
 #BUTTONS#
 button.improvableskills:upgrade=Поліпшити
 button.improvableskills:degrade=Погіршити
@@ -96,9 +101,9 @@ text.improvableskills:draw10lvls=Взяти 10 рів.
 chat.improvableskills.guide=Ви тільки що зробили книгу навичок! Тепер ви можете поліпшити деякi навички.
 chat.improvableskills.page_unlocked=Нову навичку (%s) розблоковано!
 gui.improvableskills.locked=§4Недоступно. Створіть книгу навичок, щоб розблокувати.
-chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
-chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
-chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
+chat.improvableskills:skill_reset_self=Ваші досягнення навичок були скинуті.
+chat.improvableskills:skill_reset_tother=Ви скинули досягнення навичок гравця %s.
+chat.improvableskills:skill_reset_fother=%s скинув вам досягнення в навичках.
 gui.improvableskills:nver=Нова версія
 gui.improvableskills:changes=Зміни
 
@@ -110,5 +115,7 @@ subtitles.improvableskills:skill_book_closed=Книжка статистик з�
 #PAGELETS#
 pagelet.improvableskills:update=Доступна нова версія!
 pagelet.improvableskills:news=Новини
+pagelet.improvableskills:discord1=Discord
+pagelet.improvableskills:discord2=Потрібна допомога? Є чудові ідеї? Тоді приєднуйся до нашого discord сервера!
 pagelet.improvableskills:skills=Навички
 pagelet.improvableskills:abilities=Здібності

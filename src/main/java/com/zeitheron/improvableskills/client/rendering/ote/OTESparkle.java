@@ -100,13 +100,22 @@ public class OTESparkle extends OTEffect
 			if(t >= totTime - 5)
 				scale *= 1 - (t - totTime + 5) / 5F;
 			
-			GL11.glPushMatrix();
-			GL11.glColor4f(ColorHelper.getRed(color), ColorHelper.getGreen(color), ColorHelper.getBlue(color), 1);
-			GL11.glTranslated(cx - 64 * scale / 2, cy - 64 * scale / 2, 0);
-			GL11.glScaled(scale, scale, scale);
-			RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
+			GL11.glColor4f(ColorHelper.getRed(color), ColorHelper.getGreen(color), ColorHelper.getBlue(color), .9F * ColorHelper.getAlpha(color));
+			
+			for(int i = 0; i < 3; ++i)
+			{
+				float ps = i == 0 ? scale : i == 2 ? (float) ((Math.sin(hashCode() % 90 + t / 2) + 1) / 2.5 * scale) : scale / 2;
+				
+				GL11.glPushMatrix();
+				GL11.glBlendFunc(770, i == 0 ? 771 : 772);
+				GL11.glTranslated(cx - 64 * ps / 2, cy - 64 * ps / 2, 0);
+				GL11.glScaled(ps, ps, ps);
+				RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
+				GL11.glPopMatrix();
+			}
+			
+			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glPopMatrix();
 			GL11.glDisable(GL11.GL_BLEND);
 		}
 	}

@@ -2,10 +2,7 @@ package com.zeitheron.improvableskills.client.rendering.ote;
 
 import org.lwjgl.opengl.GL11;
 
-import com.zeitheron.hammercore.client.utils.RenderUtil;
-import com.zeitheron.hammercore.client.utils.UtilsFX;
-import com.zeitheron.hammercore.utils.color.ColorHelper;
-import com.zeitheron.improvableskills.InfoIS;
+import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.utils.Trajectory;
 
@@ -13,24 +10,27 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 
-public class OTESkillSparkle extends OTEffect
+public class OTEAbility extends OTEffect
 {
-	private int color;
+	public PlayerAbilityBase item;
 	private double tx, ty;
 	private int totTime, prevTime, time;
 	public double[] xPoints, yPoints;
 	
-	public OTESkillSparkle(double x, double y, double tx, double ty, int time, int color)
+	public OTEAbility(double x, double y, double tx, double ty, int time, PlayerAbilityBase item)
 	{
-		this.totTime = time;
+		renderGui = false;
+		this.totTime = time + 5;
 		this.x = this.prevX = x;
 		this.y = this.prevY = y;
 		this.tx = tx;
 		this.ty = ty;
-		this.color = color;
-		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, Math.abs(hashCode() / 25F));
+		this.item = item;
+		double[][] path = Trajectory.makeBroken2DTrajectory(x, y, tx, ty, time, (float) (System.currentTimeMillis() % 1000000L) / 100F, 5F);
 		xPoints = path[0];
 		yPoints = path[1];
+		x = xPoints[0];
+		y = yPoints[0];
 	}
 	
 	@Override
@@ -51,10 +51,12 @@ public class OTESkillSparkle extends OTEffect
 		
 		int tt = xPoints.length;
 		
-		int cframe = (int) Math.round(time / (float) totTime * tt);
-		
-		x = xPoints[cframe];
-		y = yPoints[cframe];
+		if(time > 5)
+		{
+			int cframe = (int) Math.round((time - 5) / (float) (totTime - 5) * tt);
+			x = xPoints[cframe];
+			y = yPoints[cframe];
+		}
 		
 		time++;
 		
@@ -68,19 +70,11 @@ public class OTESkillSparkle extends OTEffect
 		double cx = prevX + (x - prevX) * partialTime;
 		double cy = prevY + (y - prevY) * partialTime;
 		float t = prevTime + partialTime;
-		float r = (float) (System.currentTimeMillis() % 2000L) / 2000.0F;
-		r = r > 0.5F ? 1.0F - r : r;
-		r += 0.45F;
-		
-		UtilsFX.bindTexture(InfoIS.MOD_ID, "textures/particles/sparkle.png");
-		
-		int tx = 64 * (int) (time / (float) totTime * 3F);
 		
 		GlStateManager.enableAlpha();
-		GlStateManager.enableBlend();
 		RenderHelper.disableStandardItemLighting();
 		
-		float scale = 1 / 8F;
+		float scale = 1F;
 		
 		if(t < 5)
 			scale *= t / 5F;
@@ -88,21 +82,11 @@ public class OTESkillSparkle extends OTEffect
 		if(t >= totTime - 5)
 			scale *= 1 - (t - totTime + 5) / 5F;
 		
-		GL11.glColor4f(ColorHelper.getRed(color), ColorHelper.getGreen(color), ColorHelper.getBlue(color), 1);
+		scale *= 16;
 		
-		for(int i = 0; i < 3; ++i)
-		{
-			float ps = i == 0 ? scale : i == 2 ? (float) ((Math.sin(hashCode() % 90 + t / 2) + 1) / 2.5 * scale) : scale / 2;
-			
-			GL11.glPushMatrix();
-			GL11.glBlendFunc(770, i == 0 ? 771 : 772);
-			GL11.glTranslated(cx - 64 * ps / 2, cy - 64 * ps / 2, 0);
-			GL11.glScaled(ps, ps, ps);
-			RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
-			GL11.glPopMatrix();
-		}
-		
-		GL11.glBlendFunc(770, 771);
+		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);
+		item.tex.toUV(false).render(x - scale / 2, y - scale / 2, scale, scale);
+		GL11.glPopMatrix();
 	}
 }

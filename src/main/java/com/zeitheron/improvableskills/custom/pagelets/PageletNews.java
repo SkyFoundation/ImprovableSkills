@@ -1,5 +1,9 @@
 package com.zeitheron.improvableskills.custom.pagelets;
 
+import com.zeitheron.hammercore.client.HCClientOptions;
+import com.zeitheron.hammercore.lib.zlib.utils.MD5;
+import com.zeitheron.hammercore.lib.zlib.web.HttpRequest;
+import com.zeitheron.hammercore.lib.zlib.web.HttpRequest.HttpRequestException;
 import com.zeitheron.hammercore.utils.VersionCompareTool.EnumVersionLevel;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
@@ -9,6 +13,7 @@ import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,9 +22,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PageletNews extends PageletBase
 {
 	public final ResourceLocation texture = new ResourceLocation(InfoIS.MOD_ID, "textures/gui/news.png");
-	
-	public static EnumVersionLevel level;
-	public static String changes, latest;
 	
 	{
 		setRegistryName(InfoIS.MOD_ID, "news");
@@ -45,6 +47,36 @@ public class PageletNews extends PageletBase
 		}
 		
 		return o;
+	}
+	
+	boolean popping = true;
+	
+	@Override
+	public void reload()
+	{
+		popping = true;
+		
+		try
+		{
+			String changes = new String(HttpRequest.get("https://pastebin.com/raw/DUCFiYpm").connectTimeout(5000).bytes());
+			String rem = MD5.encrypt(changes);
+			
+			HCClientOptions opts = HCClientOptions.getOptions();
+			NBTTagCompound nbt = opts.getCustomData();
+			String stored = nbt.getString("ImprovableSkillsNewsMD5");
+			
+			if(stored.equalsIgnoreCase(rem))
+				popping = false;
+		} catch(HttpRequestException er)
+		{
+		}
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean doesPop()
+	{
+		return popping;
 	}
 	
 	@Override

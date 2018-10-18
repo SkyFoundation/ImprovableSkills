@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.gui.GuiCentered;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
+import com.zeitheron.hammercore.client.utils.TexturePixelGetter;
 import com.zeitheron.hammercore.client.utils.UV;
 import com.zeitheron.hammercore.client.utils.texture.TextureUtils;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
@@ -23,7 +25,9 @@ import com.zeitheron.improvableskills.api.IGuiSkillDataConsumer;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
+import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
+import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
 import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.items.ItemSkillScroll;
 
@@ -127,6 +131,17 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 				singleHover = true;
 				
 				chtni = cHoverTime;
+				
+				Random r = new Random();
+				
+				if(r.nextInt(15) == 0)
+				{
+					int[] rgbs = TexturePixelGetter.getAllColors(tex.skill.tex.toUV(true).path + "");
+					int col = rgbs[r.nextInt(rgbs.length)];
+					double tx = x + 2 + r.nextFloat() * 20F;
+					double ty = y + 2 + r.nextFloat() * 20F;
+					OnTopEffects.effects.add(new OTESparkle(tx, ty, tx, ty, 11, col));
+				}
 			}
 			
 			if(cHoverTime > 0)
@@ -138,7 +153,7 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 				
 				norm.render(x, y, 24, 24);
 				
-				GL11.glColor4f(1, 1, 1, cht / 255F);
+				GL11.glColor4f(1, 1, 1, (float) Math.sin(Math.toRadians(cht / 255F * 90)));
 				hov.render(x, y, 24, 24);
 				GL11.glColor4f(1, 1, 1, 1);
 			} else
@@ -241,9 +256,9 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 			int pht = cHoverTime;
 			
 			if(cHover == i)
-				cHoverTime = Math.min(cHoverTime + 55, 255);
+				cHoverTime = Math.min(cHoverTime + 25, 255);
 			else
-				cHoverTime = Math.max(cHoverTime - 15, 0);
+				cHoverTime = Math.max(cHoverTime - 10, 0);
 			
 			hovt.set(cHoverTime, pht);
 		}

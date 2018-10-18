@@ -7,6 +7,8 @@ item.improvableskills:scroll_normal.name=Página con habilidad
 item.improvableskills:scroll_creative.name=Página con habilidad (Creativo)
 item.improvableskills:scroll_creative.tooltip0=Desbloquea todas las habilidades ocultas.
 item.improvableskills:scroll_creative.tooltip1=Al usarlo, recuerda que eres un §ktramposo§7
+item.improvableskills:parchment_fragment.name=Parchment Fragment
+item.improvableskills:scroll_ability.name=Page with Ability
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Horno acelerado
@@ -83,6 +85,9 @@ skill.improvableskills:xp+.desc=Aumenta la experiencia obtenible de la minería,
 
 skill.improvableskills:xp_bank.name=Banco de EXP.
 
+#ABILITIES#
+ability.improvableskills:enchanting.name=Enchantment
+
 #BUTTONS#
 button.improvableskills:upgrade=Mejorar
 button.improvableskills:degrade=Degradar
@@ -110,5 +115,7 @@ subtitles.improvableskills:skill_book_closed=Libro de Habilidades cerrado
 #PAGELETS#
 pagelet.improvableskills:update=New Version Available!
 pagelet.improvableskills:news=News
+pagelet.improvableskills:discord1=Discord
+pagelet.improvableskills:discord2=Need help? Have a blazing idea? Then join our discord now!
 pagelet.improvableskills:skills=Skills
 pagelet.improvableskills:abilities=Abitilies

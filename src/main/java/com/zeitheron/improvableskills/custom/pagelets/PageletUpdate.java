@@ -25,7 +25,7 @@ public class PageletUpdate extends PageletBase
 	public final ResourceLocation texture = new ResourceLocation(InfoIS.MOD_ID, "textures/gui/update.png");
 	
 	public static EnumVersionLevel level;
-	public static String changes, latest;
+	public static String changes, latest, discord;
 	
 	{
 		setRegistryName(InfoIS.MOD_ID, "update");
@@ -36,6 +36,13 @@ public class PageletUpdate extends PageletBase
 	public boolean isRight()
 	{
 		return false;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean doesPop()
+	{
+		return true;
 	}
 	
 	@Override
@@ -60,23 +67,28 @@ public class PageletUpdate extends PageletBase
 	}
 	
 	@Override
+	public void reload()
+	{
+		Threading.createAndStart(() ->
+		{
+			try
+			{
+				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
+				
+				changes = o.getString("changelog");
+				discord = o.getString("discord");
+				latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
+				level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
+			} catch(Throwable err)
+			{
+				err.printStackTrace();
+			}
+		});
+	}
+	
+	@Override
 	public boolean isVisible()
 	{
-		if(level == null)
-			Threading.createAndStart(() ->
-			{
-				try
-				{
-					JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
-					
-					changes = o.getString("changelog");
-					latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
-					level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
-				} catch(Throwable err)
-				{
-					err.printStackTrace();
-				}
-			});
 		return level == EnumVersionLevel.OLDER;
 	}
 }

@@ -1,14 +1,17 @@
 package com.zeitheron.improvableskills.net;
 
+import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -44,6 +47,7 @@ public class PacketOpenSkillsBook implements IPacket
 		Minecraft mc = Minecraft.getMinecraft();
 		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
 		mc.addScheduledTask(() -> mc.displayGuiScreen(GuiTabbable.lastPagelet.createTab(SyncSkills.getData())));
+		Threading.createAndStart(() -> GameRegistry.findRegistry(PageletBase.class).getValuesCollection().forEach(PageletBase::reload));
 		return null;
 	}
 	

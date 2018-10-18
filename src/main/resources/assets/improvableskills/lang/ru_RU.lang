@@ -6,7 +6,9 @@ item.improvableskills:skills_book.name=Книга навыков
 item.improvableskills:scroll_normal.name=Страница с навыком
 item.improvableskills:scroll_creative.name=Творческая страница с навыками
 item.improvableskills:scroll_creative.tooltip0=Разблокирует все скрытые навыки.
-item.improvableskills:scroll_creative.tooltip1=Во время использование помните, что вы §kчитер§7
+item.improvableskills:scroll_creative.tooltip1=Во время использование помните, что вы §kжульник§7
+item.improvableskills:parchment_fragment.name=Parchment Fragment
+item.improvableskills:scroll_ability.name=Page with Ability
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Ускоренная печь
@@ -83,6 +85,9 @@ skill.improvableskills:xp+.desc=Увеличивает получаемый оп
 
 skill.improvableskills:xp_bank.name=Хранилище опыта
 
+#ABILITIES#
+ability.improvableskills:enchanting.name=Зачарование
+
 #BUTTONS#
 button.improvableskills:upgrade=Улучшить
 button.improvableskills:degrade=Ухудшить
@@ -96,9 +101,9 @@ text.improvableskills:draw10lvls=Взять 10 ур.
 chat.improvableskills.guide=Вы только что сделали книгу навыков! Теперь вы можете улучшать некоторые навыки игрока.
 chat.improvableskills.page_unlocked=Новый навык (%s) разблокирован!
 gui.improvableskills.locked=§4Недоступно. Создайте книгу навыков, чтобы разблокировать.
-chat.improvableskills:skill_reset_self=Your skill levels and scrolls were reset.
-chat.improvableskills:skill_reset_tother=You reset skill levels and scrolls for %s.
-chat.improvableskills:skill_reset_fother=%s has reset your skill levels and scrolls.
+chat.improvableskills:skill_reset_self=Ваши достижения навыков были сброшены.
+chat.improvableskills:skill_reset_tother=Вы сбросили достижения навыков игрока %s.
+chat.improvableskills:skill_reset_fother=%s сбросил вам достижения в навыках.
 gui.improvableskills:nver=Новая версия
 gui.improvableskills:changes=Изменения
 
@@ -110,5 +115,7 @@ subtitles.improvableskills:skill_book_closed=Книга статистик за�
 #PAGELETS#
 pagelet.improvableskills:update=Доступна новая версия!
 pagelet.improvableskills:news=Новости
+pagelet.improvableskills:discord1=Discord
+pagelet.improvableskills:discord2=Нужна помощь? Есть отличные идеи? Тогда присоединяйся к нашему discord серверу!
 pagelet.improvableskills:skills=Навыки
 pagelet.improvableskills:abilities=Умения

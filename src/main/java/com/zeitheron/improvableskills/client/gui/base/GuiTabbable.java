@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 import com.zeitheron.hammercore.client.gui.GuiCentered;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
 import com.zeitheron.hammercore.client.utils.UV;
+import com.zeitheron.hammercore.client.utils.texture.ITexBindable;
+import com.zeitheron.hammercore.client.utils.texture.def.IBindableImage;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple.Atomic;
@@ -40,6 +42,8 @@ public class GuiTabbable extends GuiCentered
 	protected PageletBase selPgl;
 	public GuiScreen parent;
 	public final UV gui2;
+	
+	List<String> pageletTooltip = new ArrayList<>();
 	
 	public GuiTabbable(PageletBase pagelet)
 	{
@@ -115,13 +119,19 @@ public class GuiTabbable extends GuiCentered
 			
 			if(icon instanceof ItemStack)
 				mc.getRenderItem().renderItemIntoGUI((ItemStack) icon, 2, 4);
-			if(icon instanceof ITextureObject)
+			if(icon instanceof ITextureObject || icon instanceof ITexBindable || icon instanceof IBindableImage)
 			{
 				GlStateManager.translate(0, 0, 150);
 				
 				ColorHelper.gl(0xFF_FFFFFF);
 				
-				GlStateManager.bindTexture(((ITextureObject) icon).getGlTextureId());
+				if(icon instanceof ITextureObject)
+					GlStateManager.bindTexture(((ITextureObject) icon).getGlTextureId());
+				else if(icon instanceof ITexBindable)
+					((ITexBindable) icon).bind();
+				else if(icon instanceof IBindableImage)
+					((IBindableImage) icon).glBind(mc.player.ticksExisted + partialTicks);
+				
 				RenderUtil.drawFullTexturedModalRect(2, 4, 16, 16);
 			}
 			
@@ -205,9 +215,13 @@ public class GuiTabbable extends GuiCentered
 		
 		if(selPgl != null)
 		{
+			pageletTooltip.clear();
+			
+			selPgl.addTitle(pageletTooltip);
+			
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, 0, 500);
-			drawHoveringText(selPgl.title.getUnformattedComponentText(), mouseX, mouseY);
+			drawHoveringText(pageletTooltip, mouseX, mouseY);
 			GlStateManager.popMatrix();
 			GlStateManager.disableLighting();
 		}
@@ -223,8 +237,12 @@ public class GuiTabbable extends GuiCentered
 	{
 		if(selPgl != null)
 		{
-			if(pagelet != selPgl)
-				mc.displayGuiScreen(selPgl.createTab(SyncSkills.getData()));
+			if(selPgl.hasTab())
+			{
+				if(pagelet != selPgl)
+					mc.displayGuiScreen(selPgl.createTab(SyncSkills.getData()));
+			} else
+				selPgl.onClick();
 			
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
 		}

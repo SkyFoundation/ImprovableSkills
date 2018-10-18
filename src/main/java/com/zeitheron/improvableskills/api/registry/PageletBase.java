@@ -1,5 +1,7 @@
 package com.zeitheron.improvableskills.api.registry;
 
+import java.util.List;
+
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
@@ -22,9 +24,17 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public abstract GuiTabbable createTab(PlayerSkillData data);
+	public GuiTabbable createTab(PlayerSkillData data)
+	{
+		return null;
+	}
 	
 	private Object defaultInstance;
+	
+	public void reload()
+	{
+		
+	}
 	
 	@SideOnly(Side.CLIENT)
 	public Class<? extends GuiTabbable> getTabType()
@@ -38,6 +48,25 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 	public GuiTabbable getTab()
 	{
 		return createTab(SyncSkills.getData());
+	}
+	
+	/**
+	 * Determines whether this pagelet should perform click even or open another
+	 * tab
+	 */
+	@SideOnly(Side.CLIENT)
+	public boolean hasTab()
+	{
+		return true;
+	}
+	
+	/**
+	 * Called if {@link #hasTab()} returns false. Otherwise creates new GUI
+	 */
+	@SideOnly(Side.CLIENT)
+	public void onClick()
+	{
+		
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -61,6 +90,14 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 		return this.icon;
 	}
 	
+	public void addTitle(List<String> text)
+	{
+		if(getTitle() != null)
+			text.add(getTitle().getFormattedText());
+		else
+			text.add("Unnamed!");
+	}
+	
 	public ITextComponent getTitle()
 	{
 		return title;
@@ -70,5 +107,11 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 	public boolean isVisible()
 	{
 		return true;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean doesPop()
+	{
+		return false;
 	}
 }

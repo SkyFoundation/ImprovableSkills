@@ -5,7 +5,7 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.utils.TexturePixelGetter;
-import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.utils.Trajectory;
@@ -18,18 +18,18 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 
-public class OTEItemScroll extends OTEffect
+public class OTEItemAbilityScroll extends OTEffect
 {
 	public ItemStack item;
 	private double tx, ty;
 	private int totTime, prevTime, time;
 	public double[] xPoints, yPoints;
-	public PlayerSkillBase[] skills;
+	public PlayerAbilityBase[] abilities;
 	
-	public OTEItemScroll(double x, double y, double tx, double ty, int time, ItemStack item, PlayerSkillBase... skills)
+	public OTEItemAbilityScroll(double x, double y, double tx, double ty, int time, ItemStack item, PlayerAbilityBase... skills)
 	{
 		renderGui = false;
-		this.skills = skills;
+		this.abilities = skills;
 		this.totTime = time;
 		this.x = this.prevX = x;
 		this.y = this.prevY = y;
@@ -66,18 +66,18 @@ public class OTEItemScroll extends OTEffect
 		
 		time++;
 		
-		int spawnTime = 10 * skills.length;
+		int spawnTime = 10 * abilities.length;
 		
 		if(time >= totTime)
 		{
 			int cur = (time - totTime) / 10;
 			
-			if((time - totTime) % 10 == 0 && cur < skills.length)
+			if((time - totTime) % 10 == 0 && cur < abilities.length)
 			{
 				Minecraft mc = Minecraft.getMinecraft();
 				ScaledResolution sr = new ScaledResolution(mc);
 				
-				OnTopEffects.effects.add(new OTESkill(x, y, sr.getScaledWidth() - 12, sr.getScaledHeight() - 12, 40, skills[cur]));
+				OnTopEffects.effects.add(new OTEAbility(x, y, sr.getScaledWidth() - 12, sr.getScaledHeight() - 12, 40, abilities[cur]));
 				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1));
 			}
 		} else
@@ -87,7 +87,7 @@ public class OTEItemScroll extends OTEffect
 			Random r = new Random();
 			if(r.nextBoolean())
 			{
-				int[] rgbs = TexturePixelGetter.getAllColors(skills[r.nextInt(skills.length)].tex.toUV(true).path + "");
+				int[] rgbs = TexturePixelGetter.getAllColors(abilities[r.nextInt(abilities.length)].tex.toUV(true).path + "");
 				int col = rgbs[r.nextInt(rgbs.length)];
 				double tx = xPoints[lcf] + (r.nextInt(16) - r.nextInt(16)) / 2F;
 				double ty = yPoints[cframe] + (r.nextInt(16) - r.nextInt(16)) / 2F;
@@ -116,8 +116,8 @@ public class OTEItemScroll extends OTEffect
 		// if(t < 5)
 		// scale *= t / 5F;
 		
-		if(t >= totTime + 10 * skills.length - 5)
-			scale *= 1 - (t - totTime + 5 - 10 * skills.length) / 5F;
+		if(t >= totTime + 10 * abilities.length - 5)
+			scale *= 1 - (t - totTime + 5 - 10 * abilities.length) / 5F;
 		
 		GL11.glPushMatrix();
 		GL11.glColor4f(1, 1, 1, 1);

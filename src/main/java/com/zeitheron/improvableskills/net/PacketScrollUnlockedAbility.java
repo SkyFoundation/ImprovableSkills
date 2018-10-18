@@ -6,11 +6,11 @@ import java.util.Random;
 
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
-import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.client.rendering.ItemToBookHandler;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEBook;
-import com.zeitheron.improvableskills.client.rendering.ote.OTEItemSkillScroll;
+import com.zeitheron.improvableskills.client.rendering.ote.OTEItemAbilityScroll;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketScrollUnlockedSkill implements IPacket
+public class PacketScrollUnlockedAbility implements IPacket
 {
 	private ResourceLocation[] skills;
 	private ItemStack used;
@@ -37,17 +37,17 @@ public class PacketScrollUnlockedSkill implements IPacket
 	
 	static
 	{
-		IPacket.handle(PacketScrollUnlockedSkill.class, PacketScrollUnlockedSkill::new);
+		IPacket.handle(PacketScrollUnlockedAbility.class, PacketScrollUnlockedAbility::new);
 	}
 	
-	public PacketScrollUnlockedSkill(int slot, ItemStack used, ResourceLocation... skills)
+	public PacketScrollUnlockedAbility(int slot, ItemStack used, ResourceLocation... skills)
 	{
 		this.skills = skills;
 		this.used = used;
 		this.slot = slot;
 	}
 	
-	public PacketScrollUnlockedSkill()
+	public PacketScrollUnlockedAbility()
 	{
 	}
 	
@@ -79,11 +79,11 @@ public class PacketScrollUnlockedSkill implements IPacket
 	{
 		EntityPlayerSP sp = Minecraft.getMinecraft().player;
 		
-		List<PlayerSkillBase> base = new ArrayList<>();
+		List<PlayerAbilityBase> base = new ArrayList<>();
 		
 		for(ResourceLocation skill : skills)
 		{
-			PlayerSkillBase sk = GameRegistry.findRegistry(PlayerSkillBase.class).getValue(skill);
+			PlayerAbilityBase sk = GameRegistry.findRegistry(PlayerAbilityBase.class).getValue(skill);
 			base.add(sk);
 			sp.sendMessage(new TextComponentTranslation("chat.improvableskills.page_unlocked", sk.getLocalizedName(SyncSkills.getData())));
 		}
@@ -93,7 +93,7 @@ public class PacketScrollUnlockedSkill implements IPacket
 		ScaledResolution sr = new ScaledResolution(mc);
 		Vec2f v = ItemToBookHandler.getPosOfHandSlot(slot == -2 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, sr);
 		OTEBook.show(100 + 10 + 40 + 10 * base.size());
-		OnTopEffects.effects.add(new OTEItemSkillScroll(v.x, v.y, sr.getScaledWidth() - 20 - 48 + rand.nextFloat() * 32, sr.getScaledHeight() - 12 - 24 - rand.nextFloat() * 32, 100, used, base.toArray(new PlayerSkillBase[0])));
+		OnTopEffects.effects.add(new OTEItemAbilityScroll(v.x, v.y, sr.getScaledWidth() - 20 - 48 + rand.nextFloat() * 32, sr.getScaledHeight() - 12 - 24 - rand.nextFloat() * 32, 100, used, base.toArray(new PlayerAbilityBase[0])));
 		
 		return null;
 	}

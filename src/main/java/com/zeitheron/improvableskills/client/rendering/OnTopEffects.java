@@ -4,20 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
+import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Type;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @SideOnly(Side.CLIENT)
 public class OnTopEffects
@@ -54,6 +57,8 @@ public class OnTopEffects
 		int mx = e.getMouseX(), my = e.getMouseY();
 		float pt = Minecraft.getMinecraft().getRenderPartialTicks();
 		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, 0, 300);
 		for(int i = 0; i < effects.size(); ++i)
 		{
 			OTEffect eff = effects.get(i);
@@ -67,6 +72,7 @@ public class OnTopEffects
 			
 			eff.render(pt);
 		}
+		GlStateManager.popMatrix();
 	}
 	
 	public ScaledResolution resolution;
@@ -105,6 +111,8 @@ public class OnTopEffects
 			
 			resolution = sr;
 			
+			IForgeRegistry<PageletBase> pagelets = GameRegistry.findRegistry(PageletBase.class);
+			
 			for(ResourceLocation key : GuiTabbable.EXTENSIONS.keySet())
 			{
 				TwoTuple.Atomic<Float, Float> val = GuiTabbable.EXTENSIONS.get(key);
@@ -116,13 +124,14 @@ public class OnTopEffects
 				
 				val.set2(current + dif);
 				
-//				if(target < .5)
-//				{
-//					float v = System.currentTimeMillis() % 10000L / 10000F;
-//					
-//					if(current < v)
-//						val.set2(v);
-//				}
+				PageletBase base = pagelets.getValue(key);
+				if(target < .5 && base != null && base.doesPop())
+				{
+					float v = (System.currentTimeMillis() + Math.abs(key.hashCode())) % 5000L / 5000F;
+					
+					if(current < v)
+						val.set2(v);
+				}
 			}
 		}
 	}

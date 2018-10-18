@@ -7,6 +7,8 @@ item.improvableskills:scroll_normal.name=Seite mit Fähigkeit
 item.improvableskills:scroll_creative.name=Kreativ-Seite mit Fähigkeit
 item.improvableskills:scroll_creative.tooltip0=Schaltet alle versteckten Fähigkeiten frei.
 item.improvableskills:scroll_creative.tooltip1=Beachte bei der Verwendung, dass du ein §kCheater§7 bist
+item.improvableskills:parchment_fragment.name=Parchment Fragment
+item.improvableskills:scroll_ability.name=Page with Ability
 
 #SKILLS#
 skill.improvableskills:accelerated_furnace.name=Beschleunigter Ofen
@@ -83,6 +85,9 @@ skill.improvableskills:xp+.desc=Erhöht die erlangbare Erfahrung durch Bergbau, 
 
 skill.improvableskills:xp_bank.name=XP-Bank
 
+#ABILITIES#
+ability.improvableskills:enchanting.name=Enchantment
+
 #BUTTONS#
 button.improvableskills:upgrade=Hochstufen
 button.improvableskills:degrade=Runterstufen
@@ -110,5 +115,7 @@ subtitles.improvableskills:skill_book_closed=Buch der Fähigkeiten geschlossen
 #PAGELETS#
 pagelet.improvableskills:update=New Version Available!
 pagelet.improvableskills:news=News
+pagelet.improvableskills:discord1=Discord
+pagelet.improvableskills:discord2=Need help? Have a blazing idea? Then join our discord now!
 pagelet.improvableskills:skills=Skills
 pagelet.improvableskills:abilities=Abitilies

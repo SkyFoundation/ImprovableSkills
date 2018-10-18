@@ -5,15 +5,19 @@ import java.util.List;
 
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.net.HCNet;
+import com.zeitheron.hammercore.proxy.ParticleProxy_Client;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.ImprovableSkillsMod;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase.EnumScrollState;
 import com.zeitheron.improvableskills.cfg.ConfigsIS;
+import com.zeitheron.improvableskills.client.particle.FXSparkle;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.init.ItemsIS;
+import com.zeitheron.improvableskills.items.ItemAbilityScroll;
 import com.zeitheron.improvableskills.items.ItemSkillScroll;
 import com.zeitheron.improvableskills.net.PacketOpenSkillsBook;
 
@@ -24,6 +28,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -54,15 +59,34 @@ public class ClientProxy extends CommonProxy
 				return 255 << 24 | b.getColor();
 			
 			return 0xFF_FFFFFF;
-		}, ItemsIS.SCROLL);
+		}, ItemsIS.SKILL_SCROLL);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, layer) ->
+		{
+			PlayerAbilityBase b = ItemAbilityScroll.getSkillFromScroll(stack);
+			
+			if(layer == 1 && b != null)
+				return 255 << 24 | b.getColor();
+			
+			return 0xFF_FFFFFF;
+		}, ItemsIS.ABILITY_SCROLL);
 		
 		ModelResourceLocation[] scrolls = new ModelResourceLocation[] { new ModelResourceLocation(InfoIS.MOD_ID + ":scroll_normal", "inventory"), new ModelResourceLocation(InfoIS.MOD_ID + ":scroll_special", "inventory") };
 		
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(ItemsIS.SCROLL, stack ->
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(ItemsIS.SKILL_SCROLL, stack ->
 		{
 			PlayerSkillBase base = ItemSkillScroll.getSkillFromScroll(stack);
 			return base != null && base.getScrollState() == EnumScrollState.SPECIAL ? scrolls[1] : scrolls[0];
 		});
+	}
+	
+	@Override
+	public void sparkle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int color, int maxAge)
+	{
+		if(worldIn.isRemote)
+			ParticleProxy_Client.queueParticleSpawn(new FXSparkle(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, color, maxAge));
+		else
+			super.sparkle(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, color, maxAge);
 	}
 	
 	private GuiButton openSkills;

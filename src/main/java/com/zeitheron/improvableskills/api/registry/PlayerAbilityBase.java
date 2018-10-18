@@ -14,7 +14,7 @@ public class PlayerAbilityBase extends IForgeRegistryEntry.Impl<PlayerAbilityBas
 	public SkillTex<PlayerAbilityBase> tex = new SkillTex<PlayerAbilityBase>(this);
 	
 	@SideOnly(Side.CLIENT)
-	public void onClickClient(EntityPlayer player)
+	public void onClickClient(EntityPlayer player, int mouseButton)
 	{
 	}
 	
@@ -48,8 +48,13 @@ public class PlayerAbilityBase extends IForgeRegistryEntry.Impl<PlayerAbilityBas
 		return I18n.format(getUnlocalizedDesc(data) + ".desc");
 	}
 	
+	public int getColor()
+	{
+		return getRegistryName().toString().hashCode();
+	}
+	
 	public boolean isVisible(PlayerSkillData data)
 	{
-		return true;
+		return data.abilities.contains(getRegistryName().toString());
 	}
 }

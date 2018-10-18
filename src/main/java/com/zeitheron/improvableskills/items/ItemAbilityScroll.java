@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.SoundUtil;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
-import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
+import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.ItemsIS;
-import com.zeitheron.improvableskills.net.PacketScrollUnlockedSkill;
+import com.zeitheron.improvableskills.net.PacketScrollUnlockedAbility;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -35,55 +35,50 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSkillScroll extends Item
+public class ItemAbilityScroll extends Item
 {
-	private static final Map<String, PlayerSkillBase> SKILL_MAP = new HashMap<>();
+	private static final Map<String, PlayerAbilityBase> ABILITY_MAP = new HashMap<>();
 	
-	public ItemSkillScroll()
+	public ItemAbilityScroll()
 	{
-		setTranslationKey("scroll_normal");
+		setTranslationKey("scroll_ability");
 		setMaxStackSize(1);
 	}
 	
 	@Nullable
-	public static PlayerSkillBase getSkillFromScroll(ItemStack stack)
+	public static PlayerAbilityBase getSkillFromScroll(ItemStack stack)
 	{
-		if(!stack.isEmpty() && stack.getItem() instanceof ItemSkillScroll && stack.hasTagCompound() && stack.getTagCompound().hasKey("Skill", NBT.TAG_STRING))
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemAbilityScroll && stack.hasTagCompound() && stack.getTagCompound().hasKey("Ability", NBT.TAG_STRING))
 		{
-			String skill = stack.getTagCompound().getString("Skill");
+			String skill = stack.getTagCompound().getString("Ability");
 			
-			if(SKILL_MAP.containsKey(skill))
-				return SKILL_MAP.get(skill);
+			if(ABILITY_MAP.containsKey(skill))
+				return ABILITY_MAP.get(skill);
 			
-			PlayerSkillBase b = GameRegistry.findRegistry(PlayerSkillBase.class).getValue(new ResourceLocation(stack.getTagCompound().getString("Skill")));
+			PlayerAbilityBase b = GameRegistry.findRegistry(PlayerAbilityBase.class).getValue(new ResourceLocation(stack.getTagCompound().getString("Ability")));
 			
-			SKILL_MAP.put(skill, b);
+			ABILITY_MAP.put(skill, b);
 			
 			return b;
 		}
 		return null;
 	}
 	
-	public static ItemStack of(PlayerSkillBase base)
+	public static ItemStack of(PlayerAbilityBase base)
 	{
-		if(base.getScrollState().hasScroll())
-		{
-			ItemStack stack = new ItemStack(ItemsIS.SKILL_SCROLL);
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setString("Skill", base.getRegistryName().toString());
-			stack.setTagCompound(tag);
-			return stack;
-		}
-		return ItemStack.EMPTY;
+		ItemStack stack = new ItemStack(ItemsIS.ABILITY_SCROLL);
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setString("Ability", base.getRegistryName().toString());
+		stack.setTagCompound(tag);
+		return stack;
 	}
 	
 	public static void getItems(NonNullList<ItemStack> items)
 	{
-		GameRegistry.findRegistry(PlayerSkillBase.class) //
+		GameRegistry.findRegistry(PlayerAbilityBase.class) //
 		        .getValues() //
 		        .stream() //
-		        .filter(skill -> skill.getScrollState().hasScroll()) //
-		        .forEach(skill -> items.add(ItemSkillScroll.of(skill)));
+		        .forEach(skill -> items.add(ItemAbilityScroll.of(skill)));
 	}
 	
 	@Override
@@ -103,7 +98,7 @@ public class ItemSkillScroll extends Item
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn)
 	{
-		PlayerSkillBase base = getSkillFromScroll(stack);
+		PlayerAbilityBase base = getSkillFromScroll(stack);
 		if(base == null)
 			return;
 		tooltip.add(TextFormatting.GRAY + base.getLocalizedName(SyncSkills.getData()));
@@ -117,11 +112,11 @@ public class ItemSkillScroll extends Item
 		if(!worldIn.isRemote)
 		{
 			PlayerSkillData data = PlayerDataManager.getDataFor(playerIn);
-			PlayerSkillBase base = getSkillFromScroll(playerIn.getHeldItem(handIn));
+			PlayerAbilityBase base = getSkillFromScroll(playerIn.getHeldItem(handIn));
 			
-			if(!data.stat_scrolls.contains(base.getRegistryName().toString()))
+			if(!data.abilities.contains(base.getRegistryName().toString()))
 			{
-				data.stat_scrolls.add(base.getRegistryName().toString());
+				data.abilities.add(base.getRegistryName().toString());
 				ItemStack used = playerIn.getHeldItem(handIn).copy();
 				playerIn.getHeldItem(handIn).shrink(1);
 				HCNet.swingArm(playerIn, handIn);
@@ -130,7 +125,7 @@ public class ItemSkillScroll extends Item
 				int slot = handIn == EnumHand.OFF_HAND ? -2 : playerIn.inventory.currentItem;
 				
 				if(playerIn instanceof EntityPlayerMP)
-					HCNet.INSTANCE.sendTo(new PacketScrollUnlockedSkill(slot, used, base.getRegistryName()), (EntityPlayerMP) playerIn);
+					HCNet.INSTANCE.sendTo(new PacketScrollUnlockedAbility(slot, used, base.getRegistryName()), (EntityPlayerMP) playerIn);
 				data.sync();
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 			}

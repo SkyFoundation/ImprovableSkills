@@ -225,7 +225,7 @@ public class GuiAbilityBook extends GuiTabbable implements IGuiSkillDataConsumer
 		{
 			PlayerAbilityBase skill = texes.get(cHover % texes.size()).skill;
 			
-			skill.onClickClient(mc.player);
+			skill.onClickClient(mc.player, mouseButton);
 			
 			int co = texes.size();
 			for(int i = 0; i < co; ++i)
