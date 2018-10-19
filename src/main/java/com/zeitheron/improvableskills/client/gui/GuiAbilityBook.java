@@ -64,9 +64,14 @@ public class GuiAbilityBook extends GuiTabbable implements IGuiSkillDataConsumer
 		        .forEach(skill -> texes.add(skill.tex));
 	}
 	
+	String[] warn = { "Note: This tab is under heavy development!", "More abilities will come soon!" };
+	
 	@Override
 	protected void drawBack(float partialTicks, int mouseX, int mouseY)
 	{
+		for(int i = 0; i < warn.length; ++i)
+			drawCenteredString(fontRenderer, warn[i], (int) (guiLeft + xSize / 2), (int) (guiTop + ySize + 4) + (fontRenderer.FONT_HEIGHT + 2) * i, 0x55FFFFFF);
+		
 		GL11.glColor4f(1, 1, 1, 1);
 		gui1.render(guiLeft, guiTop);
 		

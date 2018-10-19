@@ -26,7 +26,6 @@ import com.zeitheron.improvableskills.init.SoundsIS;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +33,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiDiscord extends GuiTabbable
 {
 	public static final Integer DISCORD_SERVER_ID_TEXTURE = null;
+	public static boolean texureLoaded = false;
 	private static long lastReload;
 	private static boolean requested;
 	
@@ -68,7 +68,12 @@ public class GuiDiscord extends GuiTabbable
 							{
 								BufferedImage img = ImageIO.read(in);
 								if(img != null)
-									Minecraft.getMinecraft().addScheduledTask(() -> GLImageManager.loadTexture(img, DISCORD_SERVER_ID_TEXTURE, false));
+									Minecraft.getMinecraft().addScheduledTask(() ->
+									{
+										GLImageManager.loadTexture(img, DISCORD_SERVER_ID_TEXTURE, false);
+										if(!texureLoaded)
+											texureLoaded = true;
+									});
 							} catch(Throwable err)
 							{
 								err.printStackTrace();
@@ -117,10 +122,15 @@ public class GuiDiscord extends GuiTabbable
 		boolean mouse = hovered = mouseX >= guiLeft + (xSize - 3 * xSize / 3.5) / 2 && mouseY >= guiTop + (ySize - xSize / 3.5) - 22 && mouseX < guiLeft + (xSize - 3 * xSize / 3.5) / 2 + 3 * xSize / 3.5 && mouseY < guiTop + (ySize - xSize / 3.5) - 22 + xSize / 3.5;
 		
 		GlStateManager.bindTexture(DISCORD_SERVER_ID_TEXTURE != null ? DISCORD_SERVER_ID_TEXTURE.intValue() : 0);
-		float m = .67F + .33F * OTEConfetti.sineF(hoverTime / 10F);
-		GlStateManager.color(m, m, m);
-		RenderUtil.drawFullTexturedModalRect(guiLeft + (xSize - 3 * xSize / 3.5) / 2, guiTop + (ySize - xSize / 3.5) - 22, 3 * xSize / 3.5, xSize / 3.5);
-		fontRenderer.drawSplitString(I18n.format("pagelet." + InfoIS.MOD_ID + ":discord2"), (int) guiLeft + 13, (int) guiTop + 12, (int) xSize - 21, 0);
+		
+		if(texureLoaded)
+		{
+			float m = .67F + .33F * OTEConfetti.sineF(hoverTime / 10F);
+			GlStateManager.color(m, m, m);
+			RenderUtil.drawFullTexturedModalRect(guiLeft + (xSize - 3 * xSize / 3.5) / 2, guiTop + (ySize - xSize / 3.5) - 22, 3 * xSize / 3.5, xSize / 3.5);
+			fontRenderer.drawSplitString(I18n.format("pagelet." + InfoIS.MOD_ID + ":discord2"), (int) guiLeft + 13, (int) guiTop + 12, (int) xSize - 21, 0);
+		} else
+			GuiNewsBook.spawnLoading(width, height);
 		
 		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		ColorHelper.gl(255 << 24 | rgb);
@@ -146,10 +156,6 @@ public class GuiDiscord extends GuiTabbable
 	
 	public static void openInviteLink(String inviteCode)
 	{
-		GuiScreen parent = Minecraft.getMinecraft().currentScreen;
-		
-		String url = "https://discord.gg/" + inviteCode;
-		
-		Sys.openURL(url);
+		Sys.openURL("https://discord.gg/" + inviteCode);
 	}
 }
