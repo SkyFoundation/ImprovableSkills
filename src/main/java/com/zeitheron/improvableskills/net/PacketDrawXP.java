@@ -10,6 +10,7 @@ import com.zeitheron.improvableskills.data.PlayerDataManager;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketSetExperience;
 
 public class PacketDrawXP implements IPacket
 {
@@ -44,6 +45,8 @@ public class PacketDrawXP implements IPacket
 		int xp = Math.max(bi.intValue(), 0);
 		
 		XPUtil.setPlayersExpTo(player, cxp + xp);
+		
+		player.connection.sendPacket(new SPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
 		
 		data.storageXp = data.storageXp.subtract(new BigInteger(xp + ""));
 		
