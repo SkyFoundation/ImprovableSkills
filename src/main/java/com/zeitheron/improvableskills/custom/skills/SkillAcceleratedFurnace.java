@@ -7,10 +7,14 @@ import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 
 import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class SkillAcceleratedFurnace extends PlayerSkillBase
 {
@@ -27,15 +31,19 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 		int lvl = data.getSkillLevel(this);
 		boolean acquired = lvl > 0;
 		
-		if(!acquired && data.player.world.isRemote)
+		if(!acquired || data.player.world.isRemote)
 			return;
+		
+		World w = data.player.world;
 		
 		int rad = 3;
 		for(int x = -rad; x <= rad; ++x)
 			for(int y = -rad; y <= rad; ++y)
 				for(int z = -rad; z <= rad; ++z)
 				{
-					TileEntityFurnace tef = WorldUtil.cast(data.player.world.getTileEntity(data.player.getPosition().add(x, y, z)), TileEntityFurnace.class);
+					BlockPos pos = data.player.getPosition().add(x, y, z);
+					
+					TileEntityFurnace tef = WorldUtil.cast(w.getTileEntity(pos), TileEntityFurnace.class);
 					if(tef != null)
 					{
 						int burnTime = tef.getField(0);
@@ -43,13 +51,28 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 						
 						if(burnTime > 0)
 						{
-							int add = 2 * (int) Math.sqrt(lvl * 2);
+							int add = 2 * (int) Math.round(Math.sqrt(lvl));
 							tef.setField(2, progress + add);
-							tef.setField(0, (int) Math.max(0, burnTime - add * .8));
+							tef.setField(0, (int) Math.max(0, burnTime - add * .8F));
 							if(tef.getField(2) >= tef.getField(3))
 							{
 								tef.smeltItem();
 								tef.setField(2, 0);
+							}
+						} else if(tef.getField(2) < 1)
+						{
+							IBlockState state = w.getBlockState(pos);
+							if(state.getBlock() == Blocks.LIT_FURNACE)
+							{
+								int meta = state.getBlock().getMetaFromState(state);
+								state = Blocks.FURNACE.getStateFromMeta(meta);
+								
+								w.removeTileEntity(pos);
+								
+								w.setBlockState(pos, state);
+								
+								tef.validate();
+								w.setTileEntity(pos, tef);
 							}
 						}
 						
