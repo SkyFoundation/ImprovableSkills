@@ -190,37 +190,7 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		if(cHover >= 0 && chtni >= 200)
-		{
-			SkillTex<PlayerSkillBase> tex = texes.get(cHover % co);
-			GL11.glPushMatrix();
-			GlStateManager.disableDepth();
-			GL11.glTranslatef(0, 0, 500);
-			List<String> ls = new ArrayList<>();
-			boolean maxLvl = tex.skill != SkillsIS.XP_STORAGE && data.getSkillLevel(tex.skill) >= tex.skill.maxLvl;
-			ls.add(tex.skill.getLocalizedName(data) + (maxLvl ? "  " : ""));
-			
-//			OTETooltip.showTooltip(ls);
-			drawHoveringText(ls, mouseX, mouseY);
-			
-			if(maxLvl)
-			{
-				GL11.glPushMatrix();
-				
-				RenderHelper.disableStandardItemLighting();
-				GL11.glColor4f(1, 1, 1, 1);
-				
-				int sw = fontRenderer.getStringWidth(ls.get(0));
-				int l1 = mouseX + 12;
-				if(l1 + sw + 4 > this.width)
-					l1 = mouseX - 16 - sw;
-				
-				star.render(l1 + sw - 7, mouseY - 14, 10, 10);
-				
-				GL11.glPopMatrix();
-			}
-			
-			GL11.glPopMatrix();
-		}
+			OTETooltip.showTooltip(texes.get(cHover % co).skill.getLocalizedName(data));
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		GlStateManager.disableDepth();
