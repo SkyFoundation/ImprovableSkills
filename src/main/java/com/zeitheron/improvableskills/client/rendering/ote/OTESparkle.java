@@ -108,7 +108,7 @@ public class OTESparkle extends OTEffect
 				
 				GL11.glPushMatrix();
 				GL11.glBlendFunc(770, i == 0 ? 771 : 772);
-				GL11.glTranslated(cx - 64 * ps / 2, cy - 64 * ps / 2, 0);
+				GL11.glTranslated(cx - 64 * ps / 2, cy - 64 * ps / 2, 5);
 				GL11.glScaled(ps, ps, ps);
 				RenderUtil.drawTexturedModalRect(0, 0, tx, 0, 64, 64);
 				GL11.glPopMatrix();

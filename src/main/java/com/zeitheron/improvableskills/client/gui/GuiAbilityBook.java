@@ -21,12 +21,11 @@ import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
+import com.zeitheron.improvableskills.init.SoundsIS;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -148,7 +147,7 @@ public class GuiAbilityBook extends GuiTabbable implements IGuiSkillDataConsumer
 		
 		GL11.glDisable(3089);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
 		ColorHelper.gl(255 << 24 | rgb);
 		GlStateManager.pushMatrix();
@@ -240,7 +239,7 @@ public class GuiAbilityBook extends GuiTabbable implements IGuiSkillDataConsumer
 					new OTEFadeOutUV(tex.toUV(true), 24, 24, x, y + guiTop + 9, 2);
 			}
 			
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.PAGE_TURNS, 1F));
 		}
 		
 		super.mouseClicked(mouseX, mouseY, mouseButton);

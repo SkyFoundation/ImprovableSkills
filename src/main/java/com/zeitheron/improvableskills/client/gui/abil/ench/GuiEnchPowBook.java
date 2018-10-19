@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import com.zeitheron.hammercore.client.utils.ItemColorHelper;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
@@ -142,6 +143,19 @@ public class GuiEnchPowBook extends GuiContainer
 						OnTopEffects.effects.add(new OTESparkle(guiLeft + sl.xPos + r.nextInt(16), guiTop + sl.yPos + r.nextInt(16), tx + r.nextFloat() * fontRenderer.getStringWidth(ln), ty + r.nextFloat() * fontRenderer.FONT_HEIGHT, 30, col));
 				}
 			}
+		}
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(mc.currentScreen == null)
+		{
+			int xx = Mouse.getX();
+			int yy = Mouse.getY();
+			mc.displayGuiScreen(new GuiPortableEnchantment(mc.player.inventory, mc.world));
+			Mouse.setCursorPosition(xx, yy);
 		}
 	}
 }

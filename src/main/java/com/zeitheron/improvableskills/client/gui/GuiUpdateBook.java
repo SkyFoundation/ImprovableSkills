@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Joiner;
@@ -30,14 +31,19 @@ import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.custom.pagelets.PageletNews;
 import com.zeitheron.improvableskills.custom.pagelets.PageletUpdate;
 import com.zeitheron.improvableskills.init.PageletsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.utils.GoogleTranslate;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
 
 public class GuiUpdateBook extends GuiTabbable
@@ -144,6 +150,7 @@ public class GuiUpdateBook extends GuiTabbable
 				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
 				
 				PageletUpdate.changes = changes = o.getString("changelog");
+				PageletUpdate.homepage = o.getString("homepage");
 				PageletUpdate.latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
 				PageletUpdate.level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(PageletUpdate.latest));
 			} catch(Throwable err)
@@ -176,8 +183,14 @@ public class GuiUpdateBook extends GuiTabbable
 		GL11.glEnable(3089);
 		GL11.glScissor((int) Math.ceil(guiLeft * sr.getScaleFactor()), (int) Math.ceil((guiTop + 5) * sr.getScaleFactor()), (int) Math.ceil(xSize * sr.getScaleFactor()), (int) Math.ceil((ySize - 10) * sr.getScaleFactor()));
 		
+		String upd = I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest;
+		boolean dwnHover = mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 + fontRenderer.FONT_HEIGHT;
+		
 		if(translated != null)
-			fontRenderer.drawSplitString(I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest + "\n" + I18n.format("gui." + InfoIS.MOD_ID + ":changes") + ": \n" + translated, (int) guiLeft + 12, (int) guiTop + 12, (int) gui1.width - 22, 0xFF_000000);
+		{
+			fontRenderer.drawSplitString((dwnHover ? (TextFormatting.BLUE + TextFormatting.UNDERLINE.toString()) : TextFormatting.RESET) + upd, (int) guiLeft + 16, (int) guiTop + 11, (int) gui1.width - 22, 0xFF_000000);
+			fontRenderer.drawSplitString(I18n.format("gui." + InfoIS.MOD_ID + ":changes") + ": \n" + translated, (int) guiLeft + 12, (int) guiTop + 12 + fontRenderer.FONT_HEIGHT, (int) gui1.width - 22, 0xFF_000000);
+		}
 		else
 			GuiNewsBook.spawnLoading(width, height);
 		
@@ -185,7 +198,7 @@ public class GuiUpdateBook extends GuiTabbable
 		
 		GL11.glDisable(3089);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
 		ColorHelper.gl(255 << 24 | rgb);
 		GlStateManager.pushMatrix();
@@ -197,6 +210,22 @@ public class GuiUpdateBook extends GuiTabbable
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		GlStateManager.disableDepth();
+	}
+	
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+	{
+		String upd = I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest;
+		boolean dwnHover = mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 + fontRenderer.FONT_HEIGHT;
+		
+		if(dwnHover)
+		{
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ENTITY_SLIME_SQUISH, 1F));
+			Sys.openURL(PageletUpdate.homepage + "/files");
+			return;
+		}
+		
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
 	@Override

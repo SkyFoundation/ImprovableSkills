@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.glu.Project;
 
 import com.google.common.collect.Lists;
 import com.zeitheron.hammercore.client.utils.ItemColorHelper;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
+import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
+import com.zeitheron.improvableskills.client.rendering.ote.OTETooltip;
 import com.zeitheron.improvableskills.init.ItemsIS;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
@@ -390,7 +393,7 @@ public class GuiPortableEnchantment extends GuiContainer
 					}
 				}
 				
-				this.drawHoveringText(list, mouseX, mouseY);
+				OTETooltip.showTooltip(list);
 				break;
 			}
 		}
@@ -442,5 +445,18 @@ public class GuiPortableEnchantment extends GuiContainer
 		f1 = MathHelper.clamp(f1, -0.2F, 0.2F);
 		this.flipA += (f1 - this.flipA) * 0.9F;
 		this.flip += this.flipA;
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
+		super.keyTyped(typedChar, keyCode);
+		if(mc.currentScreen == null)
+		{
+			int xx = Mouse.getX();
+			int yy = Mouse.getY();
+			mc.displayGuiScreen(GuiTabbable.lastPagelet.createTab(SyncSkills.getData()));
+			Mouse.setCursorPosition(xx, yy);
+		}
 	}
 }

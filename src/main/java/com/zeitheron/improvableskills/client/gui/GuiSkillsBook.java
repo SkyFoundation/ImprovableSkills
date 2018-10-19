@@ -28,7 +28,9 @@ import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
 import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
+import com.zeitheron.improvableskills.client.rendering.ote.OTETooltip;
 import com.zeitheron.improvableskills.init.SkillsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.items.ItemSkillScroll;
 
 import net.minecraft.client.Minecraft;
@@ -177,7 +179,7 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 		
 		GL11.glDisable(3089);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
 		ColorHelper.gl(255 << 24 | rgb);
 		GlStateManager.pushMatrix();
@@ -191,14 +193,19 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 		{
 			SkillTex<PlayerSkillBase> tex = texes.get(cHover % co);
 			GL11.glPushMatrix();
+			GlStateManager.disableDepth();
 			GL11.glTranslatef(0, 0, 500);
 			List<String> ls = new ArrayList<>();
 			boolean maxLvl = tex.skill != SkillsIS.XP_STORAGE && data.getSkillLevel(tex.skill) >= tex.skill.maxLvl;
 			ls.add(tex.skill.getLocalizedName(data) + (maxLvl ? "  " : ""));
+			
+//			OTETooltip.showTooltip(ls);
 			drawHoveringText(ls, mouseX, mouseY);
+			
 			if(maxLvl)
 			{
 				GL11.glPushMatrix();
+				
 				RenderHelper.disableStandardItemLighting();
 				GL11.glColor4f(1, 1, 1, 1);
 				
@@ -208,8 +215,10 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 					l1 = mouseX - 16 - sw;
 				
 				star.render(l1 + sw - 7, mouseY - 14, 10, 10);
+				
 				GL11.glPopMatrix();
 			}
+			
 			GL11.glPopMatrix();
 		}
 		
@@ -288,7 +297,7 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 					new OTEFadeOutUV(tex.toUV(true), 24, 24, x, y + guiTop + 9, 2);
 			}
 			
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.PAGE_TURNS, 1F));
 		}
 		
 		super.mouseClicked(mouseX, mouseY, mouseButton);

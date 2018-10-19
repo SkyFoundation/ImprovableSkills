@@ -10,7 +10,6 @@ import com.zeitheron.hammercore.internal.SimpleRegistration;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.improvableskills.api.RecipesParchmentFragment;
 import com.zeitheron.improvableskills.api.loot.RandomBoolean;
-import com.zeitheron.improvableskills.api.loot.SkillLoot;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
@@ -21,13 +20,12 @@ import com.zeitheron.improvableskills.init.GuiHooksIS;
 import com.zeitheron.improvableskills.init.ItemsIS;
 import com.zeitheron.improvableskills.init.PageletsIS;
 import com.zeitheron.improvableskills.init.SkillsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.init.TreasuresIS;
 import com.zeitheron.improvableskills.items.ItemAbilityScroll;
-import com.zeitheron.improvableskills.items.ItemSkillScroll;
 import com.zeitheron.improvableskills.net.PacketSyncSkillData;
 import com.zeitheron.improvableskills.proxy.CommonProxy;
 import com.zeitheron.improvableskills.utils.loot.LootConditionRandom;
-import com.zeitheron.improvableskills.utils.loot.LootConditionSkillScroll;
 import com.zeitheron.improvableskills.utils.loot.LootEntryItemStack;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,9 +35,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
@@ -57,7 +55,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -141,6 +138,15 @@ public class ImprovableSkillsMod
 		
 		LOG.info("RegistryEvent.Register<IRecipe>");
 		reg.register(SimpleRegistration.parseShapedRecipe(new ItemStack(ItemsIS.SKILLS_BOOK), "lbl", "pgp", "lbl", 'l', "leather", 'b', Items.BOOK, 'p', "paper", 'g', "ingotGold").setRegistryName(InfoIS.MOD_ID, "skills_book"));
+	}
+	
+	@SubscribeEvent
+	public void addSounds(RegistryEvent.Register<SoundEvent> e)
+	{
+		IForgeRegistry<SoundEvent> reg = e.getRegistry();
+		
+		LOG.info("RegistryEvent.Register<SoundEvent>");
+		SoundsIS.register(reg);
 	}
 	
 	@SubscribeEvent

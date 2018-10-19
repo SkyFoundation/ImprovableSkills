@@ -2,10 +2,12 @@ package com.zeitheron.improvableskills.client.gui.base;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.gui.GuiCentered;
@@ -16,18 +18,22 @@ import com.zeitheron.hammercore.client.utils.texture.def.IBindableImage;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple.Atomic;
+import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
+import com.zeitheron.improvableskills.client.rendering.ote.OTEConfetti;
+import com.zeitheron.improvableskills.client.rendering.ote.OTETooltip;
 import com.zeitheron.improvableskills.init.PageletsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -45,6 +51,8 @@ public class GuiTabbable extends GuiCentered
 	
 	List<String> pageletTooltip = new ArrayList<>();
 	
+	protected boolean zeithBDay = false;
+	
 	public GuiTabbable(PageletBase pagelet)
 	{
 		this.pagelet = pagelet;
@@ -55,11 +63,43 @@ public class GuiTabbable extends GuiCentered
 		ySize = 168;
 		
 		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
+		
+		if(GuiCustomButton.ZEITH_AVATAR == null)
+			Threading.createAndStart(() -> GuiCustomButton.ZEITH_AVATAR = IBindableImage.probe("https://drive.google.com/uc?export=download&id=1PyBHV2Iu_0arH1_yG7a5SbQ4LWDL7ITV"));
 	}
 	
 	protected void drawBack(float partialTicks, int mouseX, int mouseY)
 	{
 		
+	}
+	
+	@Override
+	public void updateScreen()
+	{
+		super.updateScreen();
+		
+		final ScaledResolution scaledresolution = new ScaledResolution(this.mc);
+		int i1 = scaledresolution.getScaledWidth();
+		int j1 = scaledresolution.getScaledHeight();
+		final int mouseX = Mouse.getX() * i1 / this.mc.displayWidth;
+		final int mouseY = j1 - Mouse.getY() * j1 / this.mc.displayHeight - 1;
+		
+		zeithBDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 10 && Calendar.getInstance().get(Calendar.MONTH) == 10;
+		
+		if(zeithBDay)
+		{
+			int[] colors = { 0xFF_FF0000, 0xFF_FF6600, 0xFF_FFFF00, 0xFF_00FF00, 0xFF_0000FF, 0xFF_FF00FF };
+			int color = colors[colors.length - 1 - (int) ((System.currentTimeMillis() % (colors.length * 3000L)) / 3000L) % colors.length];
+			
+			if(mouseX > width / 2 - 16 && mouseY > guiTop - 36 && mouseX < width / 2 + 16 && mouseY < guiTop - 4)
+				for(int i = 0; i < 4; ++i)
+				{
+					OTEConfetti cft = new OTEConfetti(width / 2, guiTop - 36 + OTEConfetti.random.nextFloat() * 32);
+					cft.motionY = -1.25F;
+					cft.motionX = (OTEConfetti.random.nextFloat() - OTEConfetti.random.nextFloat()) * 6F;
+					cft.color = color;
+				}
+		}
 	}
 	
 	@Override
@@ -72,7 +112,21 @@ public class GuiTabbable extends GuiCentered
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		IBindableImage z = GuiCustomButton.ZEITH_AVATAR;
+		if(z != null && zeithBDay)
+		{
+			z.glBind(0);
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(width / 2 - 16, guiTop - 36, 350);
+			GlStateManager.translate(16, 16, 0);
+			GlStateManager.rotate(10 * OTEConfetti.sineF(System.currentTimeMillis() % 4000L / 1000F), 0, 0, 1);
+			GlStateManager.translate(-16, -16, 0);
+			RenderUtil.drawFullTexturedModalRect(0, 0, 32, 32);
+			GlStateManager.popMatrix();
+		}
+		
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
 		IForgeRegistry<PageletBase> pgreg = GameRegistry.findRegistry(PageletBase.class);
 		List<PageletBase> pagelets = new ArrayList<>(pgreg.getValuesCollection());
@@ -219,14 +273,18 @@ public class GuiTabbable extends GuiCentered
 			
 			selPgl.addTitle(pageletTooltip);
 			
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, 0, 500);
-			drawHoveringText(pageletTooltip, mouseX, mouseY);
-			GlStateManager.popMatrix();
-			GlStateManager.disableLighting();
+			OTETooltip.showTooltip(pageletTooltip);
 		}
 		
 		//
+		
+		if(zeithBDay && mouseX > width / 2 - 16 && mouseY > guiTop - 36 && mouseX < width / 2 + 16 && mouseY < guiTop - 4)
+		{
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, 0, 700);
+			OTETooltip.showTooltip("Happy hatchday, Zeitheron!");
+			GlStateManager.popMatrix();
+		}
 		
 		GL11.glDisable(GL11.GL_BLEND);
 		GlStateManager.disableDepth();
@@ -244,7 +302,7 @@ public class GuiTabbable extends GuiCentered
 			} else
 				selPgl.onClick();
 			
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.PAGE_TURNS, 1F));
 		}
 		
 		super.mouseClicked(mouseX, mouseY, mouseButton);

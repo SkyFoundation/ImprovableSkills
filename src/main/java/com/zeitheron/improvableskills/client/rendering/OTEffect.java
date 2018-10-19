@@ -1,5 +1,6 @@
 package com.zeitheron.improvableskills.client.rendering;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,8 +20,14 @@ public class OTEffect
 	
 	public double x, y;
 	public double prevX, prevY;
+	public double width, height;
 	
 	public boolean expired = false;
+	
+	{
+		width = Minecraft.getMinecraft().displayWidth;
+		height = Minecraft.getMinecraft().displayHeight;
+	}
 	
 	public void render(float partialTime)
 	{
@@ -45,6 +52,9 @@ public class OTEffect
 		
 		y = handleResizeYd(y, prev, nev);
 		prevY = handleResizeYd(prevY, prev, nev);
+		
+		width = Minecraft.getMinecraft().displayWidth;
+		height = Minecraft.getMinecraft().displayHeight;
 	}
 	
 	protected static double handleResizeXd(double x, ScaledResolution prev, ScaledResolution nev)

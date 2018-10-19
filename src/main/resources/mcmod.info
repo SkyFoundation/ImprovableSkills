@@ -2,7 +2,7 @@
 	{
 		"modid": "improvableskills",
 		"name": "Improvable Skills",
-		"description": "Boost player's abilities using single book and your XP",
+		"description": "Boost player's abilities as well as granting useful abilities using single book and your XP. (And more)",
 		"authorList": ["Zeitheron"],
 		"logoFile": "assets/improvableskills/logo.png"
 	}

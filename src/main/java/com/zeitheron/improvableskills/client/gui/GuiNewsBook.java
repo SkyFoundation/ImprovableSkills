@@ -162,7 +162,7 @@ public class GuiNewsBook extends GuiTabbable
 		
 		GL11.glDisable(3089);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		
 		ColorHelper.gl(255 << 24 | rgb);
 		GlStateManager.pushMatrix();

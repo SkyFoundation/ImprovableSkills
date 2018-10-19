@@ -88,8 +88,13 @@ public class ItemParchmentFragment extends Item
 			
 			int time = v * 5 / mv;
 			
+			float prog = v / (float) (mv + 40);
+			
 			if(v % Math.max(1, 5 - time) == 0)
-				e.world.playSound(null, e.getPosition(), SoundEvents.UI_TOAST_IN, SoundCategory.AMBIENT, 2F, .25F + 1.75F * (v / (float) (mv + 40)));
+				e.world.playSound(null, e.getPosition(), SoundEvents.UI_TOAST_IN, SoundCategory.AMBIENT, 2F, .25F + 1.75F * prog);
+			
+			nbt.setFloat("IS3ParchDegree", nbt.getFloat("IS3ParchDegree") + (prog + .25F) * 4F);
+			nbt.setFloat("IS3ParchThrowback", prog);
 			
 			add = Math.round((v / (mv + 40F)) * 10);
 			
@@ -143,14 +148,15 @@ public class ItemParchmentFragment extends Item
 			int num = recipe.itemsIn.size() + 3 + add;
 			float deg = 360F / num;
 			
-			float coff = (e.ticksExisted * 4) % 360;
+			float coff = nbt.getFloat("IS3ParchDegree") % 360F;
+			float throwb = .75F + nbt.getFloat("IS3ParchThrowback");
 			
 			for(int i = 0; i < num; ++i)
 			{
 				double sin = Math.sin(Math.toRadians(coff));
 				double cos = Math.cos(Math.toRadians(coff));
 				
-				ImprovableSkillsMod.proxy.sparkle(e.world, e.posX, e.posY + e.height * 1.5, e.posZ, sin * .05, f1 * .2, cos * .05, 0x31425E, 90);
+				ImprovableSkillsMod.proxy.sparkle(e.world, e.posX + (itemRand.nextFloat() - itemRand.nextFloat()) * .05F, e.posY + (itemRand.nextFloat() - itemRand.nextFloat()) * .1F + e.height * 1.5, e.posZ + (itemRand.nextFloat() - itemRand.nextFloat()) * .05F, sin * .05 * throwb, f1 * .1, cos * .05 * throwb, 0x31425E, 90);
 				
 				coff += deg;
 			}

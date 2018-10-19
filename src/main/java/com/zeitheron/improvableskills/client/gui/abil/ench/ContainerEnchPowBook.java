@@ -2,6 +2,7 @@ package com.zeitheron.improvableskills.client.gui.abil.ench;
 
 import com.zeitheron.hammercore.client.gui.impl.container.ItemTransferHelper.TransferableContainer;
 import com.zeitheron.hammercore.internal.GuiManager;
+import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.utils.inventory.InventoryDummy;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
@@ -110,5 +111,9 @@ public class ContainerEnchPowBook extends TransferableContainer<World>
 	{
 		clearContainer(playerIn, t, inventory);
 		super.onContainerClosed(playerIn);
+		
+		// Magic
+		if(playerIn.getServer() != null)
+			Threading.createAndStart(() -> playerIn.getServer().addScheduledTask(() -> GuiManager.openGuiCallback(GuiHooksIS.ENCHANTMENT, playerIn, playerIn.world, playerIn.getPosition())));
 	}
 }

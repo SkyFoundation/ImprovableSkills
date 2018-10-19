@@ -3,10 +3,10 @@ package com.zeitheron.improvableskills.client.gui;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.utils.GLImageManager;
@@ -17,31 +17,31 @@ import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.lib.zlib.web.HttpRequest;
 import com.zeitheron.hammercore.utils.FinalFieldHelper;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
-import com.zeitheron.improvableskills.ImprovableSkillsMod;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
+import com.zeitheron.improvableskills.client.rendering.ote.OTEConfetti;
 import com.zeitheron.improvableskills.custom.pagelets.PageletUpdate;
 import com.zeitheron.improvableskills.init.PageletsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiConfirmOpenLink;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiDiscord extends GuiTabbable
 {
 	public static final Integer DISCORD_SERVER_ID_TEXTURE = null;
 	private static long lastReload;
-	private static long lastRequest;
+	private static boolean requested;
 	
 	public final UV gui1;
 	
 	public static int getDiscordServerIdTexture()
 	{
-		lastRequest = System.currentTimeMillis();
+		requested = true;
 		
 		if(DISCORD_SERVER_ID_TEXTURE == null)
 		{
@@ -62,13 +62,7 @@ public class GuiDiscord extends GuiTabbable
 						
 						long now = System.currentTimeMillis();
 						
-						if(now - lastRequest < 5000L)
-						{
-							lastRequest = 0;
-							lastReload -= 15000L;
-						}
-						
-						if(now - lastReload >= 15000L)
+						if(now - lastReload >= 180_000L || requested)
 						{
 							try(InputStream in = HttpRequest.get("https://drive.google.com/uc?export=download&id=1DX-Npc2mu6tz6gBXoMsRtypfYTjbRt4q").userAgent("ImprovableSkills3").connectTimeout(10000).stream())
 							{
@@ -81,6 +75,7 @@ public class GuiDiscord extends GuiTabbable
 							}
 							
 							lastReload = now;
+							requested = false;
 						}
 					}
 				});
@@ -100,38 +95,50 @@ public class GuiDiscord extends GuiTabbable
 		getDiscordServerIdTexture();
 	}
 	
+	public int hoverTime;
+	public boolean hovered;
+	
+	@Override
+	public void updateScreen()
+	{
+		super.updateScreen();
+		if(hovered && hoverTime < 10)
+			++hoverTime;
+		if(!hovered && hoverTime > 0)
+			--hoverTime;
+	}
+	
 	@Override
 	protected void drawBack(float partialTicks, int mouseX, int mouseY)
 	{
 		GL11.glColor4f(1, 1, 1, 1);
 		gui1.render(guiLeft, guiTop);
 		
-		boolean mouse = mouseX >= guiLeft + (xSize - 3 * xSize / 3.5) / 2 && mouseY >= guiTop + (ySize - xSize / 3.5) / 2 && mouseX < guiLeft + (xSize - 3 * xSize / 3.5) / 2 + 3 * xSize / 3.5 && mouseY < guiTop + (ySize - xSize / 3.5) / 2 + xSize / 3.5;
+		boolean mouse = hovered = mouseX >= guiLeft + (xSize - 3 * xSize / 3.5) / 2 && mouseY >= guiTop + (ySize - xSize / 3.5) - 22 && mouseX < guiLeft + (xSize - 3 * xSize / 3.5) / 2 + 3 * xSize / 3.5 && mouseY < guiTop + (ySize - xSize / 3.5) - 22 + xSize / 3.5;
 		
 		GlStateManager.bindTexture(DISCORD_SERVER_ID_TEXTURE != null ? DISCORD_SERVER_ID_TEXTURE.intValue() : 0);
-		GlStateManager.color(mouse ? .9F : 1, mouse ? .9F : 1, 1, 1);
-		RenderUtil.drawFullTexturedModalRect(guiLeft + (xSize - 3 * xSize / 3.5) / 2, guiTop + (ySize - xSize / 3.5) / 2, 3 * xSize / 3.5, xSize / 3.5);
+		float m = .67F + .33F * OTEConfetti.sineF(hoverTime / 10F);
+		GlStateManager.color(m, m, m);
+		RenderUtil.drawFullTexturedModalRect(guiLeft + (xSize - 3 * xSize / 3.5) / 2, guiTop + (ySize - xSize / 3.5) - 22, 3 * xSize / 3.5, xSize / 3.5);
+		fontRenderer.drawSplitString(I18n.format("pagelet." + InfoIS.MOD_ID + ":discord2"), (int) guiLeft + 13, (int) guiTop + 12, (int) xSize - 21, 0);
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0000FF : GuiTheme.CURRENT_THEME.bodyColor;
+		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
 		ColorHelper.gl(255 << 24 | rgb);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 5);
 		gui2.render(guiLeft, guiTop);
 		GlStateManager.popMatrix();
-		
-		if(System.currentTimeMillis() - lastRequest > 120_000L)
-			lastRequest = System.currentTimeMillis();
 	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
 	{
-		boolean mouse = mouseX >= guiLeft + (xSize - 3 * xSize / 3.5) / 2 && mouseY >= guiTop + (ySize - xSize / 3.5) / 2 && mouseX < guiLeft + (xSize - 3 * xSize / 3.5) / 2 + 3 * xSize / 3.5 && mouseY < guiTop + (ySize - xSize / 3.5) / 2 + xSize / 3.5;
+		boolean mouse = mouseX >= guiLeft + (xSize - 3 * xSize / 3.5) / 2 && mouseY >= guiTop + (ySize - xSize / 3.5) - 22 && mouseX < guiLeft + (xSize - 3 * xSize / 3.5) / 2 + 3 * xSize / 3.5 && mouseY < guiTop + (ySize - xSize / 3.5) - 22 + xSize / 3.5;
 		
 		if(mouse)
 		{
 			openInviteLink(PageletUpdate.discord);
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.CONNECT, 1.0F));
 		}
 		
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -143,22 +150,6 @@ public class GuiDiscord extends GuiTabbable
 		
 		String url = "https://discord.gg/" + inviteCode;
 		
-		Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmOpenLink((result, id) ->
-		{
-			if(result)
-			{
-				try
-				{
-					Class<?> oclass = Class.forName("java.awt.Desktop");
-					Object object = oclass.getMethod("getDesktop").invoke(null);
-					oclass.getMethod("browse", URI.class).invoke(object, new URI(url));
-				} catch(Throwable throwable)
-				{
-					ImprovableSkillsMod.LOG.error("Couldn't open link", throwable);
-				}
-			}
-			
-			Minecraft.getMinecraft().displayGuiScreen(parent);
-		}, url, 0, true));
+		Sys.openURL(url);
 	}
 }

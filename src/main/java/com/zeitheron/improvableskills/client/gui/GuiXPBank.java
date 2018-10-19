@@ -23,12 +23,14 @@ import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEXpOrb;
 import com.zeitheron.improvableskills.init.SkillsIS;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.net.PacketDrawXP;
 import com.zeitheron.improvableskills.net.PacketStoreXP;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
@@ -54,19 +56,19 @@ public class GuiXPBank extends GuiCentered implements IGuiSkillDataConsumer
 		int guiLeft = (int) this.guiLeft;
 		int guiTop = (int) this.guiTop;
 		
-		addButton(back = new GuiCustomButton(0, guiLeft + 20, guiTop + (int) ySize - 36, 100, 20, I18n.format("gui.back") + "    "));
+		addButton(back = new GuiCustomButton(0, guiLeft + 20, guiTop + (int) ySize - 36, 100, 20, I18n.format("gui.back") + "    ").setCustomClickSound(SoundsIS.PAGE_TURNS));
 		
 		GuiButton btn;
 		GuiButton btn1;
 		
-		addButton(btn1 = btn = new GuiCustomButton(1, guiLeft + 30, guiTop + 39, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":storeall")));
+		addButton(btn1 = btn = new GuiCustomButton(1, guiLeft + 30, guiTop + 39, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":storeall")).setCustomClickSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP));
 		btn.width = (fontRenderer.getStringWidth(I18n.format("text." + InfoIS.MOD_ID + ":storeall")) + 8);
 		
 		GuiButton btn2;
-		addButton(btn2 = new GuiCustomButton(3, guiLeft + btn1.width + 44, guiTop + btn.height + 30, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")));
+		addButton(btn2 = new GuiCustomButton(3, guiLeft + btn1.width + 44, guiTop + btn.height + 30, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")).setCustomClickSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP));
 		btn2.width = (fontRenderer.getStringWidth(I18n.format("text." + InfoIS.MOD_ID + ":draw10lvls")) + 12);
 		
-		addButton(btn = new GuiCustomButton(2, guiLeft + btn1.width + 44, guiTop + 28, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw1lvl") + ' '));
+		addButton(btn = new GuiCustomButton(2, guiLeft + btn1.width + 44, guiTop + 28, 100, 20, I18n.format("text." + InfoIS.MOD_ID + ":draw1lvl") + ' ').setCustomClickSound(SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP));
 		btn.width = btn2.width;
 		
 		back.width = btn.width;

@@ -28,6 +28,7 @@ import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutButton;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEFadeOutUV;
 import com.zeitheron.improvableskills.client.rendering.ote.OTESparkle;
 import com.zeitheron.improvableskills.client.rendering.ote.OTETooltip;
+import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.net.PacketLvlDownSkill;
 import com.zeitheron.improvableskills.net.PacketLvlUpSkill;
 
@@ -77,7 +78,7 @@ public class GuiSkillViewer extends GuiCentered implements IGuiSkillDataConsumer
 		
 		buttonList.add(new GuiCustomButton(0, gl + 10, gt + 124, 75, 20, I18n.format("button.improvableskills:upgrade")));
 		buttonList.add(new GuiCustomButton(1, gl + 116, gt + 124, 75, 20, I18n.format("button.improvableskills:degrade")));
-		buttonList.add(new GuiCustomButton(2, gl + (int) (xSize - 20) / 2, gt + 124, 20, 20, " "));
+		buttonList.add(new GuiCustomButton(2, gl + (int) (xSize - 20) / 2, gt + 124, 20, 20, " ").setCustomClickSound(SoundsIS.PAGE_TURNS));
 	}
 	
 	@Override

@@ -5,11 +5,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.zeitheron.hammercore.client.utils.UtilsFX;
 import com.zeitheron.improvableskills.client.rendering.OTEffect;
 import com.zeitheron.improvableskills.client.rendering.OnTopEffects;
-
-import net.minecraft.client.Minecraft;
 
 public class OTETooltip extends OTEffect
 {
@@ -85,7 +82,7 @@ public class OTETooltip extends OTEffect
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslated(0, 0, 200);
-			UtilsFX.drawCustomTooltip(currentGui, Minecraft.getMinecraft().getRenderItem(), Minecraft.getMinecraft().fontRenderer, tooltip, mouseX, mouseY, 15);
+			currentGui.drawHoveringText(tooltip, mouseX, mouseY);
 			GL11.glPopMatrix();
 			tooltip.clear();
 		}

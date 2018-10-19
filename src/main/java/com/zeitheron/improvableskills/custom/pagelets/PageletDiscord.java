@@ -27,15 +27,11 @@ public class PageletDiscord extends PageletBase
 {
 	public final ResourceLocation texture = new ResourceLocation(InfoIS.MOD_ID, "textures/gui/discord.png");
 	
-	ITextComponent discord2;
-	
 	Object staticIcon;
 	
 	{
 		setRegistryName(InfoIS.MOD_ID, "discord");
 		setTitle(new TextComponentTranslation("pagelet." + InfoIS.MOD_ID + ":discord1"));
-		discord2 = new TextComponentTranslation("pagelet." + InfoIS.MOD_ID + ":discord2");
-		discord2.getStyle().setColor(TextFormatting.GRAY);
 	}
 	
 	@Override
@@ -72,12 +68,5 @@ public class PageletDiscord extends PageletBase
 	public boolean isRight()
 	{
 		return false;
-	}
-	
-	@Override
-	public void addTitle(List<String> text)
-	{
-		super.addTitle(text);
-		text.add(discord2.getFormattedText());
 	}
 }

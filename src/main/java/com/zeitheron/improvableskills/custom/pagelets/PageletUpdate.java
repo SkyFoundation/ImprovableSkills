@@ -25,7 +25,7 @@ public class PageletUpdate extends PageletBase
 	public final ResourceLocation texture = new ResourceLocation(InfoIS.MOD_ID, "textures/gui/update.png");
 	
 	public static EnumVersionLevel level;
-	public static String changes, latest, discord;
+	public static String changes, latest, discord, homepage;
 	
 	{
 		setRegistryName(InfoIS.MOD_ID, "update");
@@ -77,6 +77,7 @@ public class PageletUpdate extends PageletBase
 				
 				changes = o.getString("changelog");
 				discord = o.getString("discord");
+				homepage = o.getString("homepage");
 				latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
 				level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
 			} catch(Throwable err)
