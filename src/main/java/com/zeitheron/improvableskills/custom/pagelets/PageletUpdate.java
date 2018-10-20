@@ -61,6 +61,7 @@ public class PageletUpdate extends PageletBase
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public GuiTabbable createTab(PlayerSkillData data)
 	{
 		return new GuiUpdateBook(this);

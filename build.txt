@@ -14,6 +14,6 @@ jei_version=4.8.5.159
 mod_id=improvableskills
 mod_id_fancy=ImprovableSkills
 mod_name=Improvable Skills
-mod_version=3.5.5r
+mod_version=3.5.7r
 cf_project=252902
 release_type=release
