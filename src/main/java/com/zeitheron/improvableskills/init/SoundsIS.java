@@ -24,7 +24,7 @@ public class SoundsIS
 				try
 				{
 					SoundEvent se = (SoundEvent) f.get(null);
-					se.setRegistryName(se.getSoundName());
+					se.setRegistryName(se.soundName);
 					r.register(se);
 				} catch(ReflectiveOperationException e)
 				{
