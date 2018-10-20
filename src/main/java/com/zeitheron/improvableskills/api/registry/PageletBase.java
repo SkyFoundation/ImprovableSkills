@@ -69,7 +69,6 @@ public abstract class PageletBase extends IForgeRegistryEntry.Impl<PageletBase>
 		
 	}
 	
-	@SideOnly(Side.CLIENT)
 	public PageletBase setIcon(Object icon)
 	{
 		this.icon = icon;
