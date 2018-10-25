@@ -33,7 +33,7 @@ public class ItemParchmentFragment extends Item
 	@Override
 	public boolean onEntityItemUpdate(EntityItem e)
 	{
-		float f1 = MathHelper.sin(((float) e.getAge()) / 10.0F + e.hoverStart) * 0.1F + 0.1F;
+		float f1 = MathHelper.sin(((float) e.age) / 10.0F + e.hoverStart) * 0.1F + 0.1F;
 		
 		NBTTagCompound nbt = e.getEntityData();
 		
