@@ -138,7 +138,7 @@ public class GuiPortableEnchantment extends GuiContainer
 			if(mouseOverChant)
 			{
 				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, .7F + random.nextFloat() * .1F));
-				this.mc.playerController.sendEnchantPacket(this.container.windowId, 667);
+				this.mc.playerController.sendEnchantPacket(this.container.windowId, 122);
 				return;
 			}
 			
@@ -156,7 +156,7 @@ public class GuiPortableEnchantment extends GuiContainer
 				int col = getThemeColor();
 				
 				// Send color first
-				this.mc.playerController.sendEnchantPacket(this.container.windowId, 666);
+				this.mc.playerController.sendEnchantPacket(this.container.windowId, 121);
 				this.mc.playerController.sendEnchantPacket(this.container.windowId, Math.round(ColorHelper.getRed(col) * 255F));
 				this.mc.playerController.sendEnchantPacket(this.container.windowId, Math.round(ColorHelper.getGreen(col) * 255F));
 				this.mc.playerController.sendEnchantPacket(this.container.windowId, Math.round(ColorHelper.getBlue(col) * 255F));

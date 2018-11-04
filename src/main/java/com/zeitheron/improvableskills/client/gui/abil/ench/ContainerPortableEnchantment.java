@@ -132,22 +132,6 @@ public class ContainerPortableEnchantment extends ContainerEnchantment
 	@Override
 	public boolean enchantItem(EntityPlayer playerIn, int id)
 	{
-		if(id == 666)
-		{
-			capturing = 3;
-			return true;
-		}
-		
-		if(id == 667)
-		{
-			if(!worldIn.isRemote)
-			{
-				GuiManager.openGuiCallback(GuiHooksIS.ENCH_POWER_BOOK_IO, playerIn, playerIn.world, playerIn.getPosition());
-			}
-			
-			return true;
-		}
-		
 		if(capturing > 0)
 		{
 			capture.add(id);
@@ -157,6 +141,19 @@ public class ContainerPortableEnchantment extends ContainerEnchantment
 			if(capture.size() == 3 && capturing == 0)
 				color = capture.getInt(0) << 16 | capture.getInt(1) << 8 | capture.getInt(2);
 			
+			return true;
+		}
+		
+		if(id == 121)
+		{
+			capturing = 3;
+			return true;
+		}
+		
+		if(id == 122)
+		{
+			if(!worldIn.isRemote)
+				GuiManager.openGuiCallback(GuiHooksIS.ENCH_POWER_BOOK_IO, playerIn, playerIn.world, playerIn.getPosition());
 			return true;
 		}
 		
