@@ -1,6 +1,7 @@
 package com.zeitheron.improvableskills.init;
 
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
+import com.zeitheron.improvableskills.custom.abilities.PlayerAbilityCrafter;
 import com.zeitheron.improvableskills.custom.abilities.PlayerAbilityEnchanting;
 
 import net.minecraftforge.registries.IForgeRegistry;
@@ -8,6 +9,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class AbilitiesIS
 {
 	public static final PlayerAbilityEnchanting ENCHANTING = new PlayerAbilityEnchanting();
+	public static final PlayerAbilityCrafter CRAFTER = new PlayerAbilityCrafter();
 	
 	public static IForgeRegistry<PlayerAbilityBase> registry;
 	
@@ -16,5 +18,6 @@ public class AbilitiesIS
 		registry = reg;
 		
 		reg.register(ENCHANTING);
+		reg.register(CRAFTER);
 	}
 }

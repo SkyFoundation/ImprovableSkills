@@ -64,7 +64,7 @@ public class GuiDiscord extends GuiTabbable
 						
 						if(now - lastReload >= 180_000L || requested)
 						{
-							try(InputStream in = HttpRequest.get("https://drive.google.com/uc?export=download&id=1DX-Npc2mu6tz6gBXoMsRtypfYTjbRt4q").userAgent("ImprovableSkills3").connectTimeout(10000).stream())
+							try(InputStream in = HttpRequest.get("http://dccg.herokuapp.com/zmc").userAgent("ImprovableSkills3").connectTimeout(10000).stream())
 							{
 								BufferedImage img = ImageIO.read(in);
 								if(img != null)

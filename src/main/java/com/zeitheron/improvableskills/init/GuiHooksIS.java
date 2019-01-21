@@ -1,6 +1,8 @@
 package com.zeitheron.improvableskills.init;
 
 import com.zeitheron.hammercore.client.gui.IGuiCallback;
+import com.zeitheron.improvableskills.client.gui.abil.crafter.ContainerCrafter;
+import com.zeitheron.improvableskills.client.gui.abil.crafter.GuiCrafter;
 import com.zeitheron.improvableskills.client.gui.abil.ench.ContainerEnchPowBook;
 import com.zeitheron.improvableskills.client.gui.abil.ench.ContainerPortableEnchantment;
 import com.zeitheron.improvableskills.client.gui.abil.ench.GuiEnchPowBook;
@@ -24,6 +26,21 @@ public class GuiHooksIS
 		public Object getClientGuiElement(EntityPlayer player, World world, BlockPos pos)
 		{
 			return new GuiPortableEnchantment(player.inventory, world);
+		}
+	};
+	
+	public static final IGuiCallback CRAFTING = new IGuiCallback()
+	{
+		@Override
+		public Object getServerGuiElement(EntityPlayer player, World world, BlockPos pos)
+		{
+			return new ContainerCrafter(player.inventory);
+		}
+		
+		@Override
+		public Object getClientGuiElement(EntityPlayer player, World world, BlockPos pos)
+		{
+			return new GuiCrafter(player.inventory);
 		}
 	};
 	

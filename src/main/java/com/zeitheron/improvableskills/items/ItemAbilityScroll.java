@@ -6,8 +6,13 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.input.Keyboard;
+
 import com.zeitheron.hammercore.net.HCNet;
+import com.zeitheron.hammercore.utils.CharacterFilteringUtil;
+import com.zeitheron.hammercore.utils.Chars;
 import com.zeitheron.hammercore.utils.SoundUtil;
+import com.zeitheron.hammercore.utils.Symbols;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
@@ -15,6 +20,8 @@ import com.zeitheron.improvableskills.init.ItemsIS;
 import com.zeitheron.improvableskills.net.PacketScrollUnlockedAbility;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -104,6 +111,10 @@ public class ItemAbilityScroll extends Item
 		tooltip.add(TextFormatting.GRAY + base.getLocalizedName(SyncSkills.getData()));
 		if(flagIn.isAdvanced())
 			tooltip.add(TextFormatting.DARK_GRAY + " - " + base.getRegistryName());
+		if(GuiScreen.isShiftKeyDown())
+			tooltip.add(I18n.format("recipe." + base.getRegistryName().getNamespace() + ":ability." + base.getRegistryName().getPath()).replace('&', Chars.SECTION_SIGN));
+		else
+			tooltip.add(I18n.format("text.improvableskills:shiftfrecipe").replace('&', Chars.SECTION_SIGN));
 	}
 	
 	@Override

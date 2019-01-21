@@ -87,6 +87,7 @@ skill.improvableskills:xp_bank.name=Хранилище опыта
 
 #ABILITIES#
 ability.improvableskills:enchanting.name=Зачарование
+ability.improvableskills:crafter.name=Крафтер
 
 #BUTTONS#
 button.improvableskills:upgrade=Улучшить
@@ -107,6 +108,7 @@ chat.improvableskills:skill_reset_tother=Вы сбросили достижен�
 chat.improvableskills:skill_reset_fother=%s сбросил вам достижения в навыках.
 gui.improvableskills:nver=Новая версия
 gui.improvableskills:changes=Изменения
+text.improvableskills:shiftfrecipe=Нажмите &6&lSHIFT&r&7 что бы посмотреть рецепт.
 
 #SUBTITLES#
 subtitles.improvableskills:treasure_found=Найдено сокровище
@@ -120,3 +122,19 @@ pagelet.improvableskills:discord1=Discord
 pagelet.improvableskills:discord2=Нужна помощь? Есть отличная идея? Не стесняйся, заходи на наш Дискорд сейчас! Нам важно ваше мнение по моду, и идеи, т.к. наже воображение не безграничное. Самые лучшие умения и/или способности будут выбраны надобавление голосованием. (Художники очень приветствуются!)
 pagelet.improvableskills:skills=Навыки
 pagelet.improvableskills:abilities=Умения
+
+#RECIPES#
+recipe.improvableskills:skill.luck_of_the_sea=Drops while &bfishing&7 with &410%%&7
+recipe.improvableskills:skill.obsidian_skin=Found in &bnether fortresses&7 with &433,[3]%%&7
+recipe.improvableskills:skill.atkdmg_ranged=Drops from &bSkeletons&7 with &42,5%%&7
+recipe.improvableskills:skill.alchemist=Drops from &bWitches&7 with &410%%&7
+recipe.improvableskills:skill.growth=Found in &bjungle temples&7 with &425%%&7
+recipe.improvableskills:skill.ender_manipulator=Drops from &bEndermen&7 with &45%%&7
+recipe.improvableskills:skill.generic_protection=Found in &bunderground spawner rooms&7 with &425%%&7
+recipe.improvableskills:skill.health=Found in &bend cities&7 with &411,[1]%%&7
+recipe.improvableskills:skill.enchanter=Found in &bend fortresses&7 with &425%%&7
+recipe.improvableskills:skill.treasure_sands=Found in &bdesert temples&7 with &412,5%%&7
+recipe.improvableskills:skill.xp+=Drops from &belder guardian&7 with &433,[3]%%&7
+
+recipe.improvableskills:ability.enchanting=Drop &bParchment Fragment&7, &2Enchantment Table&7 and a &2Bookshelf&7 close to eachother and wait.
+recipe.improvableskills:ability.crafter=Drop &bParchment Fragment&7, &2Crafting Table&7 and an &2Ender Pearl&7 close to eachother and wait.

@@ -63,6 +63,8 @@ public class PlayerSkillData
 		return stats.getOrDefault(stat.getRegistryName().toString(), (short) 0);
 	}
 	
+	public int prevDim;
+	
 	public void handleTick()
 	{
 		long start = System.currentTimeMillis();
@@ -80,6 +82,12 @@ public class PlayerSkillData
 			long start0 = System.currentTimeMillis();
 			skills.get(i).tick(this);
 			updates.put(skills.get(i).getRegistryName().toString(), System.currentTimeMillis() - start0);
+		}
+		
+		if(!player.world.isRemote && prevDim != player.world.provider.getDimension())
+		{
+			prevDim = player.world.provider.getDimension();
+			sync();
 		}
 		
 		if(!player.world.isRemote && hcsbPrev != hasCraftedSkillBook && !hcsbPrev)
