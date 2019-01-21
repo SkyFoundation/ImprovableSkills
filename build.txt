@@ -7,13 +7,13 @@ git_commit=https://gitlab.com/DragonForge/ImprovableSkills/commit/{{hash}}
 forge_version=14.23.4.2705
 minecraft_version=1.12.2
 mcp=stable_39
-hc_version=2.0.3.5
+hc_version=2.0.4.1
 jei_version=4.8.5.159
 
 #Mod info
 mod_id=improvableskills
 mod_id_fancy=ImprovableSkills
 mod_name=Improvable Skills
-mod_version=3.5.9r
+mod_version=3.6.0r
 cf_project=252902
 release_type=release
