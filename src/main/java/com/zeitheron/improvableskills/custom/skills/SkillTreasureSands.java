@@ -11,6 +11,7 @@ import com.zeitheron.improvableskills.api.treasures.DropUtil;
 import com.zeitheron.improvableskills.api.treasures.TreasureContext;
 import com.zeitheron.improvableskills.api.treasures.TreasureDropBase;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
@@ -45,7 +46,7 @@ public class SkillTreasureSands extends PlayerSkillBase
 		
 		WorldLocation l = new WorldLocation(loc.getWorld(), loc.getPos());
 		
-		if(loc.getState().getBlock() == Blocks.SAND && l.getBiome().getDefaultTemperature() >= 2F)
+		if(loc.getState().getMaterial() == Material.SAND && l.getBiome().getDefaultTemperature() >= 2F)
 		{
 			Random rng = data.player.getRNG();
 			
