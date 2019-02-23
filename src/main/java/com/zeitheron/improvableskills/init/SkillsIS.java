@@ -29,7 +29,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class SkillsIS
 {
-	public static final PlayerSkillBase XP_STORAGE = new PlayerSkillBase(0).setRegistryName("xp_bank");
+//	public static final PlayerSkillBase XP_STORAGE = new PlayerSkillBase(0).setRegistryName("xp_bank");
 	public static final SkillAcceleratedFurnace ACCELERATED_FURNACE = new SkillAcceleratedFurnace();
 	public static final SkillLeaper LEAPER = new SkillLeaper();
 	public static final SkillLadderKing LADDER_KING = new SkillLadderKing();
@@ -58,8 +58,8 @@ public class SkillsIS
 	{
 		registry = reg;
 		
-		if(ConfigsIS.configs.getBoolean("XP Storage", "Misc", true, "Should XP Bank be active in the book? Disabling this only hides the skill from the player."))
-			reg.register(XP_STORAGE);
+//		if(ConfigsIS.configs.getBoolean("XP Storage", "Misc", true, "Should XP Bank be active in the book? Disabling this only hides the skill from the player."))
+//			reg.register(XP_STORAGE);
 		
 		register(ACCELERATED_FURNACE);
 		register(LEAPER);

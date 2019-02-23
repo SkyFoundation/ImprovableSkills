@@ -48,8 +48,6 @@ import net.minecraftforge.fml.common.Loader;
 
 public class GuiUpdateBook extends GuiTabbable
 {
-	public final UV gui1;
-	
 	public String changes, translated;
 	
 	public GuiUpdateBook(PageletBase pagelet)
@@ -58,8 +56,6 @@ public class GuiUpdateBook extends GuiTabbable
 		
 		xSize = 195;
 		ySize = 168;
-		
-		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
 		
 		reload();
 	}
@@ -188,7 +184,7 @@ public class GuiUpdateBook extends GuiTabbable
 		
 		if(translated != null)
 		{
-			fontRenderer.drawSplitString((dwnHover ? (TextFormatting.BLUE + TextFormatting.UNDERLINE.toString()) : TextFormatting.RESET) + upd, (int) guiLeft + 16, (int) guiTop + 11, (int) gui1.width - 22, 0xFF_000000);
+			fontRenderer.drawSplitString((dwnHover ? TextFormatting.BLUE : TextFormatting.RESET) + TextFormatting.UNDERLINE.toString() + upd, (int) guiLeft + 16, (int) guiTop + 11, (int) gui1.width - 22, 0xFF_000000);
 			fontRenderer.drawSplitString(I18n.format("gui." + InfoIS.MOD_ID + ":changes") + ": \n" + translated, (int) guiLeft + 12, (int) guiTop + 12 + fontRenderer.FONT_HEIGHT, (int) gui1.width - 22, 0xFF_000000);
 		}
 		else

@@ -1,5 +1,7 @@
 package com.zeitheron.improvableskills.custom.pagelets;
 
+import java.io.FileOutputStream;
+
 import com.zeitheron.hammercore.lib.zlib.json.JSONObject;
 import com.zeitheron.hammercore.lib.zlib.json.JSONTokener;
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
@@ -19,6 +21,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.sys.process.ProcessBuilderImpl.FileOutput;
 
 public class PageletUpdate extends PageletBase
 {
@@ -26,6 +29,7 @@ public class PageletUpdate extends PageletBase
 	
 	public static EnumVersionLevel level;
 	public static String changes, latest, discord, homepage;
+	public static String liveURL, liveTitle;
 	
 	{
 		setRegistryName(InfoIS.MOD_ID, "update");
@@ -74,13 +78,30 @@ public class PageletUpdate extends PageletBase
 		{
 			try
 			{
-				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
+				JSONObject o = (JSONObject) new JSONTokener(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").body()).nextValue();
 				
 				changes = o.getString("changelog");
-				discord = o.getString("discord");
+				discord = o.getString("discordURL");
 				homepage = o.getString("homepage");
 				latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
 				level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
+				
+				liveURL = null;
+				liveTitle = null;
+				
+				JSONObject dev = o.getJSONObject("dev");
+				if(dev.getBoolean("live"))
+				{
+					liveURL = dev.getString("url");
+					
+					// Get the livestream title
+					String txt = HttpRequest.get(liveURL).body();
+					txt = txt.substring(txt.indexOf("<title>") + 7);
+					txt = txt.substring(0, txt.indexOf("</title>"));
+					if(txt.toLowerCase().endsWith(" - youtube"))
+						txt = txt.substring(0, txt.length() - 10);
+					liveTitle = txt;
+				}
 			} catch(Throwable err)
 			{
 				err.printStackTrace();

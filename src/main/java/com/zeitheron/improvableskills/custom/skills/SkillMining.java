@@ -26,6 +26,8 @@ public class SkillMining extends PlayerSkillBase implements IDigSpeedAffectorSki
 	@Override
 	public float getDigMultiplier(ItemStack stack, BlockPos pos, PlayerSkillData data)
 	{
+		if(pos == null)
+			return 0F;
 		Block b = data.player.world.getBlockState(pos).getBlock();
 		String obj = b.getHarvestTool(data.player.world.getBlockState(pos));
 		if(stack.isEmpty() || obj == null)

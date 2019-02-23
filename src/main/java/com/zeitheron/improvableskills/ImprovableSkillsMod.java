@@ -106,6 +106,7 @@ public class ImprovableSkillsMod
 		
 		GuiManager.registerGuiCallback(GuiHooksIS.ENCHANTMENT);
 		GuiManager.registerGuiCallback(GuiHooksIS.CRAFTING);
+		GuiManager.registerGuiCallback(GuiHooksIS.ANVIL);
 		GuiManager.registerGuiCallback(GuiHooksIS.ENCH_POWER_BOOK_IO);
 	}
 	
@@ -115,8 +116,9 @@ public class ImprovableSkillsMod
 		proxy.init();
 		TreasuresIS.register();
 		
-		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.ENCHANTING), Blocks.ENCHANTING_TABLE, Blocks.BOOKSHELF);
-		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.CRAFTER), Blocks.CRAFTING_TABLE, Items.ENDER_PEARL);
+		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.ENCHANTING), Blocks.ENCHANTING_TABLE, Blocks.BOOKSHELF, Items.ENDER_PEARL);
+		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.CRAFTER), Blocks.CRAFTING_TABLE, Items.IRON_INGOT, Items.ENDER_PEARL);
+		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.ANVIL), Blocks.ANVIL, Items.EMERALD, Items.ENDER_PEARL);
 	}
 	
 	@EventHandler

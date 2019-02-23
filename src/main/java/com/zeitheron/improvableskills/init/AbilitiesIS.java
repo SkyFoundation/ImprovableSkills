@@ -1,6 +1,7 @@
 package com.zeitheron.improvableskills.init;
 
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
+import com.zeitheron.improvableskills.custom.abilities.PlayerAbilityAnvil;
 import com.zeitheron.improvableskills.custom.abilities.PlayerAbilityCrafter;
 import com.zeitheron.improvableskills.custom.abilities.PlayerAbilityEnchanting;
 
@@ -10,6 +11,7 @@ public class AbilitiesIS
 {
 	public static final PlayerAbilityEnchanting ENCHANTING = new PlayerAbilityEnchanting();
 	public static final PlayerAbilityCrafter CRAFTER = new PlayerAbilityCrafter();
+	public static final PlayerAbilityAnvil ANVIL = new PlayerAbilityAnvil();
 	
 	public static IForgeRegistry<PlayerAbilityBase> registry;
 	
@@ -19,5 +21,6 @@ public class AbilitiesIS
 		
 		reg.register(ENCHANTING);
 		reg.register(CRAFTER);
+		reg.register(ANVIL);
 	}
 }

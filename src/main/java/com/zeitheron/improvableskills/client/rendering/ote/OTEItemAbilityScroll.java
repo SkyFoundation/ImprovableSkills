@@ -88,10 +88,13 @@ public class OTEItemAbilityScroll extends OTEffect
 			if(r.nextBoolean())
 			{
 				int[] rgbs = TexturePixelGetter.getAllColors(abilities[r.nextInt(abilities.length)].tex.toUV(true).path + "");
-				int col = rgbs[r.nextInt(rgbs.length)];
-				double tx = xPoints[lcf] + (r.nextInt(16) - r.nextInt(16)) / 2F;
-				double ty = yPoints[cframe] + (r.nextInt(16) - r.nextInt(16)) / 2F;
-				OnTopEffects.effects.add(new OTESkillSparkle(x - r.nextInt(8) + r.nextInt(8), y - r.nextInt(8) + r.nextInt(8), tx, ty, 20, col));
+				if(rgbs.length > 0)
+				{
+					int col = rgbs[r.nextInt(rgbs.length)];
+					double tx = xPoints[lcf] + (r.nextInt(16) - r.nextInt(16)) / 2F;
+					double ty = yPoints[cframe] + (r.nextInt(16) - r.nextInt(16)) / 2F;
+					OnTopEffects.effects.add(new OTESkillSparkle(x - r.nextInt(8) + r.nextInt(8), y - r.nextInt(8) + r.nextInt(8), tx, ty, 20, col));
+				}
 			}
 		}
 		

@@ -305,18 +305,21 @@ public class SkillEvents
 		List<EntityPlayerMP> players = e.getWorld().getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(e.getPos()).grow(9));
 		for(EntityPlayerMP p : players)
 		{
-			ContainerEnchantment enc = (ContainerEnchantment) p.openContainer;
-			
-			/* Check that the item is absolutely equal. Allows to see who is
-			 * actually calling the event. Little hack ;) */
-			if(e.getItem() == enc.tableInventory.getStackInSlot(0))
+			if(p.openContainer instanceof ContainerEnchantment)
 			{
-				int enchanter = PlayerDataManager.getDataFor(p).getSkillLevel(SkillsIS.ENCHANTER);
+				ContainerEnchantment enc = (ContainerEnchantment) p.openContainer;
 				
-				if(enchanter > 0 && e.getLevel() != 0)
-					e.setLevel(Math.max(1, e.getLevel() - enchanter / 4));
-				
-				return;
+				/* Check that the item is absolutely equal. Allows to see who is
+				 * actually calling the event. Little hack ;) */
+				if(e.getItem() == enc.tableInventory.getStackInSlot(0))
+				{
+					int enchanter = PlayerDataManager.getDataFor(p).getSkillLevel(SkillsIS.ENCHANTER);
+					
+					if(enchanter > 0 && e.getLevel() != 0)
+						e.setLevel(Math.max(1, e.getLevel() - enchanter / 4));
+					
+					return;
+				}
 			}
 		}
 	}

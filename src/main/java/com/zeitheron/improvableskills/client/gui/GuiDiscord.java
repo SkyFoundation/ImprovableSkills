@@ -147,7 +147,7 @@ public class GuiDiscord extends GuiTabbable
 		
 		if(mouse)
 		{
-			openInviteLink(PageletUpdate.discord);
+			Sys.openURL(PageletUpdate.discord);
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.CONNECT, 1.0F));
 		}
 		

@@ -7,23 +7,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.zeitheron.hammercore.client.gui.GuiCentered;
 import com.zeitheron.hammercore.client.utils.RenderUtil;
 import com.zeitheron.hammercore.client.utils.UV;
+import com.zeitheron.hammercore.client.utils.UtilsFX;
 import com.zeitheron.hammercore.client.utils.texture.ITexBindable;
 import com.zeitheron.hammercore.client.utils.texture.def.IBindableImage;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple;
 import com.zeitheron.hammercore.lib.zlib.tuple.TwoTuple.Atomic;
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
+import com.zeitheron.hammercore.utils.HolidayTrigger;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.client.rendering.ote.OTEConfetti;
 import com.zeitheron.improvableskills.client.rendering.ote.OTETooltip;
+import com.zeitheron.improvableskills.custom.pagelets.PageletUpdate;
 import com.zeitheron.improvableskills.init.PageletsIS;
 import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
@@ -34,6 +38,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -47,10 +52,11 @@ public class GuiTabbable extends GuiCentered
 	public final PageletBase pagelet;
 	protected PageletBase selPgl;
 	public GuiScreen parent;
-	public final UV gui2;
+	public final UV gui1, gui2;
 	
 	List<String> pageletTooltip = new ArrayList<>();
 	
+	protected int liveAnimationTime;
 	protected boolean zeithBDay = false;
 	
 	public GuiTabbable(PageletBase pagelet)
@@ -62,10 +68,11 @@ public class GuiTabbable extends GuiCentered
 		xSize = 195;
 		ySize = 168;
 		
+		gui1 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_paper.png"), 0, 0, xSize, ySize);
 		gui2 = new UV(new ResourceLocation(InfoIS.MOD_ID, "textures/gui/skills_gui_overlay.png"), 0, 0, xSize, ySize);
 		
 		if(GuiCustomButton.ZEITH_AVATAR == null)
-			Threading.createAndStart(() -> GuiCustomButton.ZEITH_AVATAR = IBindableImage.probe("https://drive.google.com/uc?export=download&id=1PyBHV2Iu_0arH1_yG7a5SbQ4LWDL7ITV"));
+			Threading.createAndStart(() -> GuiCustomButton.ZEITH_AVATAR = IBindableImage.probe("https://dccg.herokuapp.com/cfmember/Zeitheron/avatar/128"));
 	}
 	
 	protected void drawBack(float partialTicks, int mouseX, int mouseY)
@@ -84,7 +91,7 @@ public class GuiTabbable extends GuiCentered
 		final int mouseX = Mouse.getX() * i1 / this.mc.displayWidth;
 		final int mouseY = j1 - Mouse.getY() * j1 / this.mc.displayHeight - 1;
 		
-		zeithBDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 10 && Calendar.getInstance().get(Calendar.MONTH) == 10;
+		zeithBDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 10 && Calendar.getInstance().get(Calendar.MONTH) == Calendar.NOVEMBER;
 		
 		if(zeithBDay)
 		{
@@ -120,13 +127,42 @@ public class GuiTabbable extends GuiCentered
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(width / 2 - 16, guiTop - 36, 350);
 			GlStateManager.translate(16, 16, 0);
-			GlStateManager.rotate(10 * OTEConfetti.sineF(System.currentTimeMillis() % 4000L / 1000F), 0, 0, 1);
+			GlStateManager.rotate(6 * OTEConfetti.sineF(System.currentTimeMillis() % 4000L / 1000F), 0, 0, 1);
 			GlStateManager.translate(-16, -16, 0);
 			RenderUtil.drawFullTexturedModalRect(0, 0, 32, 32);
 			GlStateManager.popMatrix();
 		}
 		
-		int rgb = GuiTheme.CURRENT_THEME.name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.CURRENT_THEME.bodyColor;
+		if(z != null && PageletUpdate.liveURL != null)
+		{
+			z.glBind(0);
+			
+			float s = 16F / fontRenderer.FONT_HEIGHT;
+			float w = s * fontRenderer.getStringWidth("LIVE");
+			
+			boolean hover = mouseX >= (width - (w + 64)) / 2 && mouseX < (width - (w + 64)) / 2 + w + 64 && mouseY >= guiTop - 36 && mouseY < guiTop - 4;
+			
+			GL11.glColor4f(1, 1, 1, 1);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate((width - (w + 64)) / 2, guiTop - 36, 350);
+			RenderUtil.drawFullTexturedModalRect(0, 0, 32, 32);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(32, 4, 0);
+			GlStateManager.scale(s, s, 1F);
+			fontRenderer.drawString("LIVE", 0, 3, hover ? 0xFFAAAA : 0xFFFFFF);
+			GL11.glColor4f(1, 1, 1, 1);
+			GlStateManager.popMatrix();
+			UtilsFX.bindTexture("minecraft", "textures/gui/stream_indicator.png");
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(w + 32, 0, 0);
+			GlStateManager.scale(1 / 4F, 1, 1F);
+			GlStateManager.scale(32 / 60F, 32 / 60F, 1);
+			RenderUtil.drawTexturedModalRect(0, 0, 0, 0, 240, 60);
+			GlStateManager.popMatrix();
+			GlStateManager.popMatrix();
+		}
+		
+		int rgb = GuiTheme.current().name.equalsIgnoreCase("Vanilla") ? 0x0088FF : GuiTheme.current().bodyColor;
 		
 		IForgeRegistry<PageletBase> pgreg = GameRegistry.findRegistry(PageletBase.class);
 		List<PageletBase> pagelets = new ArrayList<>(pgreg.getValuesCollection());
@@ -278,11 +314,20 @@ public class GuiTabbable extends GuiCentered
 		
 		//
 		
-		if(zeithBDay && mouseX > width / 2 - 16 && mouseY > guiTop - 36 && mouseX < width / 2 + 16 && mouseY < guiTop - 4)
+		float s = 16F / fontRenderer.FONT_HEIGHT;
+		float w = s * fontRenderer.getStringWidth("LIVE");
+		
+		if(PageletUpdate.liveURL != null && mouseX >= (width - (w + 64)) / 2 && mouseX < (width - (w + 64)) / 2 + w + 64 && mouseY >= guiTop - 36 && mouseY < guiTop - 4)
 		{
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, 0, 700);
-			OTETooltip.showTooltip("Happy hatchday, Zeitheron!");
+			OTETooltip.showTooltip("Zeitheron is LIVE!", "\"" + PageletUpdate.liveTitle + "\"", "Click to watch!");
+			GlStateManager.popMatrix();
+		} else if(zeithBDay && mouseX > width / 2 - 16 && mouseY > guiTop - 36 && mouseX < width / 2 + 16 && mouseY < guiTop - 4)
+		{
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, 0, 700);
+			OTETooltip.showTooltip("Happy birthday, Zeitheron!");
 			GlStateManager.popMatrix();
 		}
 		
@@ -303,6 +348,15 @@ public class GuiTabbable extends GuiCentered
 				selPgl.onClick();
 			
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundsIS.PAGE_TURNS, 1F));
+		}
+		
+		float s = 16F / fontRenderer.FONT_HEIGHT;
+		float w = s * fontRenderer.getStringWidth("LIVE");
+		
+		if(PageletUpdate.liveURL != null && mouseX >= (width - (w + 64)) / 2 && mouseX < (width - (w + 64)) / 2 + w + 64 && mouseY >= guiTop - 36 && mouseY < guiTop - 4)
+		{
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, .5F));
+			Sys.openURL(PageletUpdate.liveURL);
 		}
 		
 		super.mouseClicked(mouseX, mouseY, mouseButton);

@@ -33,6 +33,9 @@ public class ItemParchmentFragment extends Item
 	@Override
 	public boolean onEntityItemUpdate(EntityItem e)
 	{
+		if(e == null)
+			return false;
+		
 		float f1 = MathHelper.sin(((float) e.age) / 10.0F + e.hoverStart) * 0.1F + 0.1F;
 		
 		NBTTagCompound nbt = e.getEntityData();
@@ -60,6 +63,8 @@ public class ItemParchmentFragment extends Item
 			for(ConsumableItem ci : r.itemsIn)
 				if(!ci.consume(id))
 					continue rs;
+			
+			double minDist = 400;
 				
 			for(int i = 0; i < copy.size(); ++i)
 			{
@@ -74,10 +79,13 @@ public class ItemParchmentFragment extends Item
 					double mz = (e.posZ - item.posZ) / d;
 					
 					item.addVelocity(mx, my, mz);
-					
 					item.setNoGravity(true);
+					
+					minDist = Math.min(item.getDistanceSq(e), minDist);
 				}
 			}
+			
+			minDist *= 5000;
 			
 			fx = true;
 			recipe = r;
@@ -100,7 +108,7 @@ public class ItemParchmentFragment extends Item
 			
 			if(v > mv)
 			{
-				if(v > mv + 40)
+				if(v > mv + 40 && minDist < 0.5)
 				{
 					if(!e.world.isRemote)
 					{

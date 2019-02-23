@@ -130,6 +130,7 @@ public class PlayerSkillData
 		stats.put(stat.getRegistryName().toString(), lvl.shortValue());
 		if(save)
 			PlayerDataManager.save(player);
+		sync();
 	}
 	
 	public boolean hasCraftedSkillsBook()

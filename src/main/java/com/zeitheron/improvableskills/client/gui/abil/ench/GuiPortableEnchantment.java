@@ -96,12 +96,12 @@ public class GuiPortableEnchantment extends GuiContainer
 		String ln = I18n.format("container.enchant");
 		this.fontRenderer.drawString(ln, 12, 4, 4210752);
 		
-		ln = I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
+		ln = TextFormatting.UNDERLINE + I18n.format("text.improvableskills:enchpower", (int) SyncSkills.getData().enchantPower);
 		
 		boolean mouseOverChant = mouseX >= 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 && mouseY > 3 && mouseX < 60 + (108 - fontRenderer.getStringWidth(ln)) / 2 + fontRenderer.getStringWidth(ln) && mouseY < 3 + fontRenderer.FONT_HEIGHT;
 		
 		if(mouseOverChant)
-			ln = TextFormatting.BLUE.toString() + TextFormatting.UNDERLINE + ln;
+			ln = TextFormatting.BLUE.toString() + ln;
 		
 		this.fontRenderer.drawString(ln, 60 + (108 - fontRenderer.getStringWidth(ln)) / 2, 3, 4210752);
 		

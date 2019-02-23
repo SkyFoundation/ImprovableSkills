@@ -72,9 +72,9 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 		
 		List<PlayerSkillBase> skills = new ArrayList<>(GameRegistry.findRegistry(PlayerSkillBase.class).getValues());
 		
-		skills.remove(SkillsIS.XP_STORAGE);
+//		skills.remove(SkillsIS.XP_STORAGE);
 		
-		texes.add(SkillsIS.XP_STORAGE.tex);
+//		texes.add(SkillsIS.XP_STORAGE.tex);
 		
 		skills //
 		        .stream() //
@@ -161,7 +161,7 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 			} else
 				tex.toUV(false).render(x, y, 24, 24);
 			
-			if(tex.skill != SkillsIS.XP_STORAGE && data.getSkillLevel(tex.skill) >= tex.skill.maxLvl)
+			if(/*tex.skill != SkillsIS.XP_STORAGE &&*/ data.getSkillLevel(tex.skill) >= tex.skill.maxLvl)
 				star.render(x + 15, y + 17, 10, 10);
 			
 			if(tex.skill.getScrollState().hasScroll())
@@ -249,9 +249,9 @@ public class GuiSkillsBook extends GuiTabbable implements IGuiSkillDataConsumer
 		if(cHover >= 0)
 		{
 			PlayerSkillBase skill = texes.get(cHover % texes.size()).skill;
-			if(skill == SkillsIS.XP_STORAGE)
-				mc.displayGuiScreen(new GuiXPBank(this));
-			else
+//			if(skill == SkillsIS.XP_STORAGE)
+//				mc.displayGuiScreen(new GuiXPBank(this));
+//			else
 				mc.displayGuiScreen(new GuiSkillViewer(this, skill));
 			
 			int co = texes.size();

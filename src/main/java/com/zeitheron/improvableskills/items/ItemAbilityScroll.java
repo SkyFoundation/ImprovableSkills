@@ -6,13 +6,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Keyboard;
-
 import com.zeitheron.hammercore.net.HCNet;
-import com.zeitheron.hammercore.utils.CharacterFilteringUtil;
 import com.zeitheron.hammercore.utils.Chars;
 import com.zeitheron.hammercore.utils.SoundUtil;
-import com.zeitheron.hammercore.utils.Symbols;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
@@ -38,6 +34,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -83,7 +80,7 @@ public class ItemAbilityScroll extends Item
 	public static void getItems(NonNullList<ItemStack> items)
 	{
 		GameRegistry.findRegistry(PlayerAbilityBase.class) //
-		        .getValues() //
+		        .getValuesCollection() //
 		        .stream() //
 		        .forEach(skill -> items.add(ItemAbilityScroll.of(skill)));
 	}
@@ -112,8 +109,24 @@ public class ItemAbilityScroll extends Item
 		if(flagIn.isAdvanced())
 			tooltip.add(TextFormatting.DARK_GRAY + " - " + base.getRegistryName());
 		if(GuiScreen.isShiftKeyDown())
-			tooltip.add(I18n.format("recipe." + base.getRegistryName().getNamespace() + ":ability." + base.getRegistryName().getPath()).replace('&', Chars.SECTION_SIGN));
-		else
+		{
+			String ln = I18n.format("recipe." + base.getRegistryName().getNamespace() + ":ability." + base.getRegistryName().getPath()).replace('&', Chars.SECTION_SIGN);
+			int i, j;
+			while((i = ln.indexOf('<')) != -1 && (j = ln.indexOf('>', i + 1)) != -1)
+			{
+				String to = ln.substring(i + 1, j);
+				String t;
+				
+				Item it = ForgeRegistries.ITEMS.getValue(new ResourceLocation(to));
+				if(it != null)
+					t = it.getDefaultInstance().getDisplayName();
+				else
+					t = TextFormatting.DARK_RED + I18n.format("text.improvableskills:unresolved_item") + TextFormatting.GRAY;
+				
+				ln = ln.replaceAll("<" + to + ">", t);
+			}
+			tooltip.add(ln);
+		} else
 			tooltip.add(I18n.format("text.improvableskills:shiftfrecipe").replace('&', Chars.SECTION_SIGN));
 	}
 	
