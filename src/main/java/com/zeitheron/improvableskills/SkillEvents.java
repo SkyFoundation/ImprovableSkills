@@ -46,6 +46,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -284,7 +285,7 @@ public class SkillEvents
 			if(dat == null)
 				break ic;
 			int lvl = dat.getSkillLevel(SkillsIS.ENDER_MANIPULATOR);
-			//ALCHEMICAL DAMAGE !!
+			// ALCHEMICAL DAMAGE !!
 		}
 		
 		if(ds != null && e.getEntityLiving() instanceof EntityPlayer)
@@ -344,6 +345,16 @@ public class SkillEvents
 				} else
 					e.setAttackDamage(e.getAttackDamage() * (1F - prog * .8F));
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void respawn(PlayerRespawnEvent e)
+	{
+		if(e.player instanceof EntityPlayerMP)
+		{
+			EntityPlayerMP mp = (EntityPlayerMP) e.player;
+			PlayerDataManager.getDataFor(mp).sync();
 		}
 	}
 }
