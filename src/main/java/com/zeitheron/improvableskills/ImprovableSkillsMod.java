@@ -63,7 +63,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 
-@Mod(modid = InfoIS.MOD_ID, name = InfoIS.MOD_NAME, version = InfoIS.MOD_VERSION, dependencies = "required-after:hammercore", certificateFingerprint = "4d7b29cd19124e986da685107d16ce4b49bc0a97", updateJSON = "https://pastebin.com/raw/CKrGidbG")
+@Mod(modid = InfoIS.MOD_ID, name = InfoIS.MOD_NAME, version = InfoIS.MOD_VERSION, dependencies = "required-after:hammercore", certificateFingerprint = "4d7b29cd19124e986da685107d16ce4b49bc0a97", updateJSON = "http://dccg.herokuapp.com/api/fmluc/252902")
 public class ImprovableSkillsMod
 {
 	@Instance
@@ -88,9 +88,9 @@ public class ImprovableSkillsMod
 	{
 		LOG.warn("*****************************");
 		LOG.warn("WARNING: Somebody has been tampering with ImprovableSkills jar!");
-		LOG.warn("It is highly recommended that you redownload mod from https://minecraft.curseforge.com/projects/247401 !");
+		LOG.warn("It is highly recommended that you redownload mod from https://www.curseforge.com/projects/252902 !");
 		LOG.warn("*****************************");
-		HammerCore.invalidCertificates.put(InfoIS.MOD_ID, "https://minecraft.curseforge.com/projects/247401");
+		HammerCore.invalidCertificates.put(InfoIS.MOD_ID, "https://www.curseforge.com/projects/252902");
 	}
 	
 	@EventHandler
