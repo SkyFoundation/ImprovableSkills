@@ -108,28 +108,12 @@ public class PlayerSkillData
 	public void sync()
 	{
 		if(player instanceof EntityPlayerMP && !player.world.isRemote)
-		{
-			HCNet.INSTANCE.sendTo(new PacketSyncSkillData(this), (EntityPlayerMP) player);
-			save();
-		}
-	}
-	
-	public void save()
-	{
-		if(player != null)
-			PlayerDataManager.save(player);
+			PacketSyncSkillData.sync((EntityPlayerMP) player);
 	}
 	
 	public void setSkillLevel(PlayerSkillBase stat, Number lvl)
 	{
-		setSkillLevel(stat, lvl, true);
-	}
-	
-	private void setSkillLevel(PlayerSkillBase stat, Number lvl, boolean save)
-	{
 		stats.put(stat.getRegistryName().toString(), lvl.shortValue());
-		if(save)
-			PlayerDataManager.save(player);
 		sync();
 	}
 	
@@ -157,7 +141,7 @@ public class PlayerSkillData
 				continue;
 			}
 			
-			data.setSkillLevel(stat, tag.getShort("Lvl"), false);
+			data.setSkillLevel(stat, tag.getShort("Lvl"));
 		}
 		
 		NBTTagList list = nbt.getTagList("Scrolls", NBT.TAG_STRING);

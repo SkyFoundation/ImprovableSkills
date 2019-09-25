@@ -18,12 +18,13 @@ public class PacketOpenPortableAnvil implements IPacket
 	}
 	
 	@Override
-	public IPacket executeOnServer(PacketContext net)
+	public void executeOnServer2(PacketContext net)
 	{
 		EntityPlayerMP mp = net.getSender();
-		PlayerSkillData dat = PlayerDataManager.getDataFor(mp);
-		if(dat != null && dat.abilities.contains(AbilitiesIS.ANVIL.getRegistryName().toString()))
-			GuiManager.openGuiCallback(GuiHooksIS.ANVIL, mp, mp.world, mp.getPosition());
-		return null;
+		PlayerDataManager.handleDataSafely(mp, dat ->
+		{
+			if(dat.abilities.contains(AbilitiesIS.ANVIL.getRegistryName().toString()))
+				GuiManager.openGuiCallback(GuiHooksIS.ANVIL, mp, mp.world, mp.getPosition());
+		});
 	}
 }

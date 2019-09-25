@@ -1,5 +1,7 @@
 package com.zeitheron.improvableskills;
 
+import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,6 +15,7 @@ import com.zeitheron.improvableskills.api.loot.RandomBoolean;
 import com.zeitheron.improvableskills.api.registry.PageletBase;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
+import com.zeitheron.improvableskills.cfg.SkillsConfigs;
 import com.zeitheron.improvableskills.cmd.CommandImprovableSkills;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.AbilitiesIS;
@@ -23,6 +26,7 @@ import com.zeitheron.improvableskills.init.SkillsIS;
 import com.zeitheron.improvableskills.init.SoundsIS;
 import com.zeitheron.improvableskills.init.TreasuresIS;
 import com.zeitheron.improvableskills.items.ItemAbilityScroll;
+import com.zeitheron.improvableskills.net.NetSkillCalculator;
 import com.zeitheron.improvableskills.net.PacketSyncSkillData;
 import com.zeitheron.improvableskills.proxy.CommonProxy;
 import com.zeitheron.improvableskills.utils.loot.LootConditionRandom;
@@ -55,7 +59,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -108,6 +111,12 @@ public class ImprovableSkillsMod
 		GuiManager.registerGuiCallback(GuiHooksIS.CRAFTING);
 		GuiManager.registerGuiCallback(GuiHooksIS.ANVIL);
 		GuiManager.registerGuiCallback(GuiHooksIS.ENCH_POWER_BOOK_IO);
+		
+		File cfg = evt.getSuggestedConfigurationFile();
+		cfg = new File(cfg.getAbsolutePath().substring(0, cfg.getAbsolutePath().lastIndexOf('.')));
+		if(!cfg.isDirectory())
+			cfg.mkdirs();
+		SkillsConfigs.setConfigFile(new File(cfg, "costs.hcfg"));
 	}
 	
 	@EventHandler
@@ -115,6 +124,7 @@ public class ImprovableSkillsMod
 	{
 		proxy.init();
 		TreasuresIS.register();
+		SkillsConfigs.reloadSkillConfigs();
 		
 		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.ENCHANTING), Blocks.ENCHANTING_TABLE, Blocks.BOOKSHELF, Items.ENDER_PEARL);
 		RecipesParchmentFragment.register(ItemAbilityScroll.of(AbilitiesIS.CRAFTER), Blocks.CRAFTING_TABLE, Items.IRON_INGOT, Items.ENDER_PEARL);
@@ -127,12 +137,31 @@ public class ImprovableSkillsMod
 		e.registerServerCommand(new CommandImprovableSkills());
 	}
 	
+	private static IForgeRegistry<PlayerAbilityBase> abilities;
+	private static IForgeRegistry<PlayerSkillBase> skills;
+	private static IForgeRegistry<PageletBase> pagelets;
+	
 	@SubscribeEvent
-	public void addRecipes(RegistryEvent.NewRegistry e)
+	public void addRegistries(RegistryEvent.NewRegistry e)
 	{
-		new RegistryBuilder<PlayerAbilityBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "abilities")).setType(PlayerAbilityBase.class).create();
-		new RegistryBuilder<PlayerSkillBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "stats")).setType(PlayerSkillBase.class).create();
-		new RegistryBuilder<PageletBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "pagelets")).setType(PageletBase.class).create();
+		abilities = new RegistryBuilder<PlayerAbilityBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "abilities")).setType(PlayerAbilityBase.class).create();
+		skills = new RegistryBuilder<PlayerSkillBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "stats")).setType(PlayerSkillBase.class).create();
+		pagelets = new RegistryBuilder<PageletBase>().setName(new ResourceLocation(InfoIS.MOD_ID, "pagelets")).setType(PageletBase.class).create();
+	}
+	
+	public static IForgeRegistry<PlayerAbilityBase> getAbilities()
+	{
+		return abilities;
+	}
+	
+	public static IForgeRegistry<PageletBase> getPagelets()
+	{
+		return pagelets;
+	}
+	
+	public static IForgeRegistry<PlayerSkillBase> getSkills()
+	{
+		return skills;
 	}
 	
 	@SubscribeEvent
@@ -174,19 +203,14 @@ public class ImprovableSkillsMod
 	}
 	
 	@SubscribeEvent
-	public void playerJoin(PlayerLoadReadyEvent e)
+	public void playerReady(PlayerLoadReadyEvent e)
 	{
 		if(!e.getEntityPlayer().world.isRemote && e.getEntityPlayer() instanceof EntityPlayerMP)
 		{
-			PlayerDataManager.loadLogging(e.getEntityPlayer());
-			HCNet.INSTANCE.sendTo(new PacketSyncSkillData(PlayerDataManager.getDataFor(e.getEntityPlayer())), (EntityPlayerMP) e.getEntityPlayer());
+			EntityPlayerMP mp = (EntityPlayerMP) e.getEntityPlayer();
+			PacketSyncSkillData.sync(mp);
+			NetSkillCalculator.pack().build().sendTo(mp);
 		}
-	}
-	
-	@SubscribeEvent
-	public void playerLeft(PlayerLoggedOutEvent e)
-	{
-		PlayerDataManager.saveQuitting(e.player);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

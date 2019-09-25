@@ -61,11 +61,7 @@ public class ContainerPortableEnchantment extends ContainerEnchantment
 				if(!this.worldIn.isRemote)
 				{
 					int l = 0;
-					float power = 0;
-					
-					PlayerSkillData data = PlayerDataManager.getDataFor(player);
-					if(data != null)
-						power = data.enchantPower;
+					float power = PlayerDataManager.handleDataSafely(player, data -> data.enchantPower, 0F).floatValue();
 					
 					this.random.setSeed((long) this.xpSeed);
 					

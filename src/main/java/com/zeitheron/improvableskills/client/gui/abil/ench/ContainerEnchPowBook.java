@@ -40,43 +40,34 @@ public class ContainerEnchPowBook extends TransferableContainer<World>
 	public boolean enchantItem(EntityPlayer playerIn, int id)
 	{
 		if(id == 11)
-		{
-			ItemStack item = inventory.getStackInSlot(0);
-			
-			PlayerSkillData data = PlayerDataManager.getDataFor(playerIn);
-			
-			if(item.isEmpty() || (item.getItem() == Items.BOOK && item.getCount() < 64) && data != null && data.enchantPower > 0F)
+			PlayerDataManager.handleDataSafely(playerIn, data ->
 			{
-				if(item.isEmpty())
-					inventory.setInventorySlotContents(0, new ItemStack(Items.BOOK));
-				else
-					item.grow(1);
-				data.enchantPower -= 1F;
-				data.sync();
-				playerIn.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 1.5F);
-			}
-		}
-		
+				ItemStack item = inventory.getStackInSlot(0);
+				if(item.isEmpty() || (item.getItem() == Items.BOOK && item.getCount() < 64) && data.enchantPower > 0F)
+				{
+					if(item.isEmpty())
+						inventory.setInventorySlotContents(0, new ItemStack(Items.BOOK));
+					else
+						item.grow(1);
+					data.enchantPower -= 1F;
+					data.sync();
+					playerIn.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 1.5F);
+				}
+			});
 		if(id == 0)
-		{
-			ItemStack item = inventory.getStackInSlot(0);
-			
-			PlayerSkillData data = PlayerDataManager.getDataFor(playerIn);
-			
-			if(!item.isEmpty() && item.getItem() == Items.BOOK && data != null && data.enchantPower < 15F)
+			PlayerDataManager.handleDataSafely(playerIn, data ->
 			{
-				item.shrink(1);
-				data.enchantPower += 1F;
-				data.sync();
-				playerIn.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 1.5F);
-			}
-		}
-		
+				ItemStack item = inventory.getStackInSlot(0);
+				if(!item.isEmpty() && item.getItem() == Items.BOOK && data.enchantPower < 15F)
+				{
+					item.shrink(1);
+					data.enchantPower += 1F;
+					data.sync();
+					playerIn.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, playerIn.world.rand.nextFloat() * 0.1F + 1.5F);
+				}
+			});
 		if(id == 1)
-		{
 			GuiManager.openGuiCallback(GuiHooksIS.ENCHANTMENT, playerIn, playerIn.world, playerIn.getPosition());
-		}
-		
 		return false;
 	}
 	

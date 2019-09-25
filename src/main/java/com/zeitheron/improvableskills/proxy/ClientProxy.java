@@ -33,10 +33,14 @@ import net.minecraftforge.client.event.GuiContainerEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class ClientProxy extends CommonProxy
 {
 	public boolean modifyBookCol, hovered;
+	
+	public boolean inWorld = false;
 	
 	@Override
 	public void init()
@@ -184,6 +188,24 @@ public class ClientProxy extends CommonProxy
 		{
 			/* Grab skills and open GUI */
 			HCNet.INSTANCE.sendToServer(new PacketOpenSkillsBook());
+		}
+	}
+	
+	@SubscribeEvent
+	public void clientTick(ClientTickEvent e)
+	{
+		if(e.phase == Phase.END)
+		{
+			boolean iw = Minecraft.getMinecraft().world != null;
+			if(iw != inWorld)
+			{
+				inWorld = iw;
+				if(!iw)
+				{
+					ImprovableSkillsMod.getSkills().forEach(s -> s.xpCalculator.resetClient());
+					ImprovableSkillsMod.LOG.info("Client settings reloaded.");
+				}
+			}
 		}
 	}
 	

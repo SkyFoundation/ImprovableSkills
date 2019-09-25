@@ -38,32 +38,28 @@ public class CommandImprovableSkills extends CommandTreeBase
 						if(args.length == 0)
 						{
 							EntityPlayerMP mp = getCommandSenderAsPlayer(sender);
-							PlayerSkillData data = PlayerDataManager.getDataFor(mp);
 							
-							if(data != null)
+							PlayerDataManager.handleDataSafely(mp, data ->
 							{
 								data.stats.clear();
 								data.stat_scrolls.clear();
 								data.sync();
-								PlayerDataManager.save(mp);
 								
 								sender.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":skill_reset_self"));
-							}
+							});
 						} else
 						{
 							EntityPlayerMP mp = getPlayer(server, sender, args[0]);
-							PlayerSkillData data = PlayerDataManager.getDataFor(mp);
 							
-							if(data != null)
+							PlayerDataManager.handleDataSafely(mp, data ->
 							{
 								data.stats.clear();
 								data.stat_scrolls.clear();
 								data.sync();
-								PlayerDataManager.save(mp);
 								
 								sender.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":skill_reset_tother", mp.getName()));
 								mp.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":skill_reset_fother", sender.getName()));
-							}
+							});
 						}
 					}
 				});
@@ -105,32 +101,28 @@ public class CommandImprovableSkills extends CommandTreeBase
 						if(args.length == 0)
 						{
 							EntityPlayerMP mp = getCommandSenderAsPlayer(sender);
-							PlayerSkillData data = PlayerDataManager.getDataFor(mp);
 							
-							if(data != null)
+							PlayerDataManager.handleDataSafely(mp, data->
 							{
 								data.abilities.clear();
 								data.enchantPower = 0F;
 								data.sync();
-								PlayerDataManager.save(mp);
 								
 								sender.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":ability_reset_self"));
-							}
+							});
 						} else
 						{
 							EntityPlayerMP mp = getPlayer(server, sender, args[0]);
-							PlayerSkillData data = PlayerDataManager.getDataFor(mp);
 							
-							if(data != null)
+							PlayerDataManager.handleDataSafely(mp, data->
 							{
 								data.abilities.clear();
 								data.enchantPower = 0F;
 								data.sync();
-								PlayerDataManager.save(mp);
 								
 								sender.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":ability_reset_tother", mp.getName()));
 								mp.sendMessage(new TextComponentTranslation("chat." + InfoIS.MOD_ID + ":ability_reset_fother", sender.getName()));
-							}
+							});
 						}
 					}
 				});

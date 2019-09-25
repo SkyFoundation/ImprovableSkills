@@ -1,5 +1,6 @@
 package com.zeitheron.improvableskills.net;
 
+import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
 import com.zeitheron.hammercore.utils.WorldUtil;
@@ -12,6 +13,8 @@ import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +28,19 @@ public class PacketSyncSkillData implements IPacket
 		IPacket.handle(PacketSyncSkillData.class, PacketSyncSkillData::new);
 	}
 	
-	public PacketSyncSkillData(PlayerSkillData data)
+	public static void sync(EntityPlayerMP mp)
+	{
+		try
+		{
+			if(mp != null)
+				PlayerDataManager.handleDataSafely(mp, data -> HCNet.INSTANCE.sendTo(new PacketSyncSkillData(data), mp));
+		} catch(NullPointerException npe)
+		{
+			// networking issues, pretty unsure how to prevent.
+		}
+	}
+	
+	private PacketSyncSkillData(PlayerSkillData data)
 	{
 		nbt = data.serialize();
 		nbt.setInteger("PlayerLocalXP", XPUtil.getXPTotal(data.player));
@@ -37,14 +52,14 @@ public class PacketSyncSkillData implements IPacket
 	}
 	
 	@Override
-	public IPacket executeOnServer(PacketContext net)
+	public void executeOnServer2(PacketContext net)
 	{
-		return new PacketSyncSkillData(PlayerDataManager.getDataFor(net.getSender()));
+		sync(net.getSender());
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IPacket executeOnClient(PacketContext net)
+	public void executeOnClient2(PacketContext net)
 	{
 		IGuiSkillDataConsumer c = WorldUtil.cast(Minecraft.getMinecraft().currentScreen, IGuiSkillDataConsumer.class);
 		SyncSkills.CLIENT_DATA = PlayerSkillData.deserialize(Minecraft.getMinecraft().player, nbt);
@@ -54,13 +69,11 @@ public class PacketSyncSkillData implements IPacket
 		
 		// Prevent console pollution
 		if(player == null)
-			return null;
+			return;
 		
 		XPUtil.setPlayersExpTo(player, nbt.getInteger("PlayerLocalXP"));
 		// This is not REQUIRED but preffered for mods that may use this tag
 		player.getEntityData().setTag(InfoIS.NBT_DATA_TAG, nbt);
-		
-		return null;
 	}
 	
 	@Override

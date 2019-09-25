@@ -2,17 +2,20 @@ package com.zeitheron.improvableskills.api.registry;
 
 import com.zeitheron.hammercore.utils.XPUtil;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
+import com.zeitheron.improvableskills.api.SkillCostConfig;
 import com.zeitheron.improvableskills.api.SkillTex;
 import com.zeitheron.improvableskills.api.loot.SkillLoot;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 {
 	private SkillLoot loot;
-	public SkillTex<PlayerSkillBase> tex = new SkillTex(this);
-	public double xpValue = 1;
+	public SkillCostConfig xpCalculator = new SkillCostConfig(1);
+	public SkillTex<PlayerSkillBase> tex = new SkillTex<>(this);
 	public int maxLvl;
 	protected boolean hasScroll, genScroll;
 	
@@ -23,7 +26,6 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 	
 	public void tick(PlayerSkillData data)
 	{
-		
 	}
 	
 	public String getUnlocalizedName()
@@ -36,11 +38,13 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 		return getUnlocalizedName();
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public String getLocalizedName(PlayerSkillData data)
 	{
 		return I18n.format(getUnlocalizedName(data) + ".name");
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public String getLocalizedName()
 	{
 		return I18n.format(getUnlocalizedName() + ".name");
@@ -51,6 +55,7 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 		return "skill." + getRegistryName().toString();
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public String getLocalizedDesc(PlayerSkillData data)
 	{
 		return I18n.format(getUnlocalizedDesc(data) + ".desc");
@@ -58,7 +63,7 @@ public class PlayerSkillBase extends IForgeRegistryEntry.Impl<PlayerSkillBase>
 	
 	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
 	{
-		return (int) Math.pow(targetLvl + 1, xpValue);
+		return xpCalculator.getXPToUpgrade(data, targetLvl);
 	}
 	
 	public boolean canUpgrade(PlayerSkillData data)

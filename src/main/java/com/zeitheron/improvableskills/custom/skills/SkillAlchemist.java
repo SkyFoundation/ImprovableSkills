@@ -16,7 +16,7 @@ public class SkillAlchemist extends PlayerSkillBase
 	public SkillAlchemist()
 	{
 		super(15);
-		xpValue = 2;
+		xpCalculator.xpValue = 2;
 		setRegistryName(InfoIS.MOD_ID, "alchemist");
 		hasScroll = true;
 		genScroll = true;

@@ -30,11 +30,7 @@ public class LootConditionSkillScroll implements LootCondition
 			return false;
 		Entity ent = context.getKillerPlayer();
 		if(ent instanceof EntityPlayer)
-		{
-			PlayerSkillData data = PlayerDataManager.getDataFor((EntityPlayer) ent);
-			if(data != null)
-				return !data.stat_scrolls.contains(id);
-		}
+			return !PlayerDataManager.handleDataSafely((EntityPlayer) ent, data -> data.stat_scrolls.contains(id), false).booleanValue();
 		return false;
 	}
 }

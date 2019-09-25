@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.Chars;
 import com.zeitheron.hammercore.utils.SoundUtil;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerAbilityBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.ItemsIS;
@@ -134,27 +133,24 @@ public class ItemAbilityScroll extends Item
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
 	{
 		if(!worldIn.isRemote)
-		{
-			PlayerSkillData data = PlayerDataManager.getDataFor(playerIn);
-			PlayerAbilityBase base = getSkillFromScroll(playerIn.getHeldItem(handIn));
-			
-			if(!data.abilities.contains(base.getRegistryName().toString()))
+			return PlayerDataManager.handleDataSafely(playerIn, data ->
 			{
-				data.abilities.add(base.getRegistryName().toString());
-				ItemStack used = playerIn.getHeldItem(handIn).copy();
-				playerIn.getHeldItem(handIn).shrink(1);
-				HCNet.swingArm(playerIn, handIn);
-				SoundUtil.playSoundEffect(worldIn, "block.enchantment_table.use", playerIn.getPosition(), .5F, 1F, SoundCategory.PLAYERS);
-				
-				int slot = handIn == EnumHand.OFF_HAND ? -2 : playerIn.inventory.currentItem;
-				
-				if(playerIn instanceof EntityPlayerMP)
-					HCNet.INSTANCE.sendTo(new PacketScrollUnlockedAbility(slot, used, base.getRegistryName()), (EntityPlayerMP) playerIn);
-				data.sync();
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
-			}
-		}
-		
+				PlayerAbilityBase base = getSkillFromScroll(playerIn.getHeldItem(handIn));
+				if(!data.abilities.contains(base.getRegistryName().toString()))
+				{
+					data.abilities.add(base.getRegistryName().toString());
+					ItemStack used = playerIn.getHeldItem(handIn).copy();
+					playerIn.getHeldItem(handIn).shrink(1);
+					HCNet.swingArm(playerIn, handIn);
+					SoundUtil.playSoundEffect(worldIn, "block.enchantment_table.use", playerIn.getPosition(), .5F, 1F, SoundCategory.PLAYERS);
+					int slot = handIn == EnumHand.OFF_HAND ? -2 : playerIn.inventory.currentItem;
+					if(playerIn instanceof EntityPlayerMP)
+						HCNet.INSTANCE.sendTo(new PacketScrollUnlockedAbility(slot, used, base.getRegistryName()), (EntityPlayerMP) playerIn);
+					data.sync();
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+				}
+				return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+			}, new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn)));
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 	}
 }

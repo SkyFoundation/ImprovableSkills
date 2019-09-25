@@ -31,25 +31,19 @@ public class PacketStoreXP implements IPacket
 	}
 	
 	@Override
-	public IPacket executeOnServer(PacketContext net)
+	public void executeOnServer2(PacketContext net)
 	{
 		EntityPlayerMP player = net.getSender();
 		
-		PlayerDataManager.saveQuitting(player);
-		PlayerDataManager.loadLogging(player);
-		
-		PlayerSkillData data = PlayerDataManager.getDataFor(player);
-		
-		int cxp = XPUtil.getXPTotal(player);
-		int xp = Math.min(this.xp, cxp);
-		
-		XPUtil.setPlayersExpTo(player, cxp - xp);
-		
-		player.connection.sendPacket(new SPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
-		
-		data.storageXp = data.storageXp.add(new BigInteger(xp + ""));
-		
-		return new PacketSyncSkillData(data);
+		PlayerDataManager.handleDataSafely(player, data ->
+		{
+			int cxp = XPUtil.getXPTotal(player);
+			int xp = Math.min(this.xp, cxp);
+			XPUtil.setPlayersExpTo(player, cxp - xp);
+			player.connection.sendPacket(new SPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
+			data.storageXp = data.storageXp.add(new BigInteger(xp + ""));
+			PacketSyncSkillData.sync(player);
+		});
 	}
 	
 	@Override

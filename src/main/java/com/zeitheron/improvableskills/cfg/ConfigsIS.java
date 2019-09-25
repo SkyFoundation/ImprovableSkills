@@ -11,7 +11,7 @@ import com.zeitheron.improvableskills.custom.skills.SkillGrowth;
 
 import net.minecraftforge.common.config.Configuration;
 
-@HCModConfigurations(modid = InfoIS.MOD_ID)
+@HCModConfigurations(modid = InfoIS.MOD_ID, module = "main", isModule = true)
 public class ConfigsIS implements IConfigReloadListener
 {
 	public static Configuration configs;

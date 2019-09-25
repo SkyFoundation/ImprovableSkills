@@ -21,7 +21,7 @@ public class SkillAcceleratedFurnace extends PlayerSkillBase
 	public SkillAcceleratedFurnace()
 	{
 		super(15);
-		xpValue = 2;
+		xpCalculator.xpValue = 2;
 		setRegistryName(InfoIS.MOD_ID, "accelerated_furnace");
 	}
 	

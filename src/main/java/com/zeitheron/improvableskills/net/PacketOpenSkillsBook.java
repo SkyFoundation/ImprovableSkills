@@ -1,6 +1,7 @@
 package com.zeitheron.improvableskills.net;
 
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
+import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.net.IPacket;
 import com.zeitheron.hammercore.net.PacketContext;
 import com.zeitheron.improvableskills.api.PlayerSkillData;
@@ -10,6 +11,7 @@ import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +26,13 @@ public class PacketOpenSkillsBook implements IPacket
 		IPacket.handle(PacketOpenSkillsBook.class, PacketOpenSkillsBook::new);
 	}
 	
-	public PacketOpenSkillsBook(PlayerSkillData data)
+	public static void sync(EntityPlayerMP mp)
+	{
+		if(mp != null)
+			PlayerDataManager.handleDataSafely(mp, data -> HCNet.INSTANCE.sendTo(new PacketOpenSkillsBook(data), mp));
+	}
+	
+	PacketOpenSkillsBook(PlayerSkillData data)
 	{
 		nbt = data.serialize();
 	}
@@ -35,9 +43,9 @@ public class PacketOpenSkillsBook implements IPacket
 	}
 	
 	@Override
-	public IPacket executeOnServer(PacketContext net)
+	public void executeOnServer2(PacketContext net)
 	{
-		return new PacketOpenSkillsBook(PlayerDataManager.getDataFor(net.getSender()));
+		sync(net.getSender());
 	}
 	
 	@Override

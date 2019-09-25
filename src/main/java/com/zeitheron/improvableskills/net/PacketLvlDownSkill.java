@@ -8,6 +8,7 @@ import com.zeitheron.improvableskills.data.PlayerDataManager;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketSetExperience;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -30,27 +31,23 @@ public class PacketLvlDownSkill implements IPacket
 	}
 	
 	@Override
-	public IPacket executeOnServer(PacketContext net)
+	public void executeOnServer2(PacketContext net)
 	{
 		EntityPlayerMP player = net.getSender();
 		
-		PlayerDataManager.saveQuitting(player);
-		PlayerDataManager.loadLogging(player);
-		
-		PlayerSkillData data = PlayerDataManager.getDataFor(player);
-		PlayerSkillBase skill = GameRegistry.findRegistry(PlayerSkillBase.class).getValue(this.skill);
-		short lvl = data.getSkillLevel(skill);
-		
-		if(skill != null && lvl > 0 && skill.isDowngradable(data))
+		PlayerDataManager.handleDataSafely(player, data ->
 		{
-			data.setSkillLevel(skill, lvl - 1);
-			skill.onUpgrade(lvl, (short) (lvl - 1), data);
-			skill.onDowngrade(data, lvl);
-			
-			return new PacketSyncSkillData(data);
-		}
-		
-		return null;
+			PlayerSkillBase skill = GameRegistry.findRegistry(PlayerSkillBase.class).getValue(this.skill);
+			short lvl = data.getSkillLevel(skill);
+			if(skill != null && lvl > 0 && skill.isDowngradable(data))
+			{
+				data.setSkillLevel(skill, lvl - 1);
+				skill.onUpgrade(lvl, (short) (lvl - 1), data);
+				skill.onDowngrade(data, lvl);
+				player.connection.sendPacket(new SPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
+				PacketSyncSkillData.sync(player);
+			}
+		});
 	}
 	
 	@Override

@@ -66,10 +66,7 @@ public class ContainerCrafter extends Container
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn)
 	{
-		PlayerSkillData data = PlayerDataManager.getDataFor(playerIn);
-		if(data == null)
-			return false;
-		return data.abilities.contains(AbilitiesIS.CRAFTER.getRegistryName().toString());
+		return PlayerDataManager.handleDataSafely(playerIn, data -> data.abilities.contains(AbilitiesIS.CRAFTER.getRegistryName().toString()), false).booleanValue();
 	}
 	
 	/**

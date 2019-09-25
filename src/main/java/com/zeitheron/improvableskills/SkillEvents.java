@@ -8,9 +8,9 @@ import com.zeitheron.hammercore.lib.zlib.tuple.OneTuple.Atomic;
 import com.zeitheron.hammercore.net.HCNet;
 import com.zeitheron.hammercore.utils.WorldUtil;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
-import com.zeitheron.improvableskills.api.IDigSpeedAffectorSkill;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor.DamageType;
+import com.zeitheron.improvableskills.api.IDigSpeedAffectorSkill;
+import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 import com.zeitheron.improvableskills.data.PlayerDataManager;
 import com.zeitheron.improvableskills.init.SkillsIS;
@@ -58,12 +58,7 @@ public class SkillEvents
 	public void playerTick(PlayerTickEvent e)
 	{
 		if(e.phase == Phase.START)
-		{
-			PlayerSkillData data = PlayerDataManager.getDataFor(e.player);
-			if(data == null)
-				return;
-			data.handleTick();
-		}
+			PlayerDataManager.handleDataSafely(e.player, PlayerSkillData::handleTick);
 	}
 	
 	@SubscribeEvent
@@ -76,7 +71,7 @@ public class SkillEvents
 			if(data == null)
 				return;
 			data.hasCraftedSkillBook = true;
-			HCNet.INSTANCE.sendTo(new PacketSyncSkillData(data), (EntityPlayerMP) e.player);
+			PacketSyncSkillData.sync((EntityPlayerMP) e.player);
 		}
 	}
 	
@@ -314,7 +309,7 @@ public class SkillEvents
 				 * actually calling the event. Little hack ;) */
 				if(e.getItem() == enc.tableInventory.getStackInSlot(0))
 				{
-					int enchanter = PlayerDataManager.getDataFor(p).getSkillLevel(SkillsIS.ENCHANTER);
+					int enchanter = PlayerDataManager.handleDataSafely(p, data -> data.getSkillLevel(SkillsIS.ENCHANTER), 0).intValue();
 					
 					if(enchanter > 0 && e.getLevel() != 0)
 						e.setLevel(Math.max(1, e.getLevel() - enchanter / 4));
@@ -332,7 +327,7 @@ public class SkillEvents
 		
 		if(p != null)
 		{
-			int lvl = PlayerDataManager.getDataFor(p).getSkillLevel(SkillsIS.ENDER_MANIPULATOR);
+			int lvl = PlayerDataManager.handleDataSafely(p, data -> data.getSkillLevel(SkillsIS.ENDER_MANIPULATOR), 0).intValue();
 			
 			if(lvl > 0)
 			{
@@ -354,7 +349,7 @@ public class SkillEvents
 		if(e.player instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP mp = (EntityPlayerMP) e.player;
-			PlayerDataManager.getDataFor(mp).sync();
+			PacketSyncSkillData.sync(mp);
 		}
 	}
 }
