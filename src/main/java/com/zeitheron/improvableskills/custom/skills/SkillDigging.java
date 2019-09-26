@@ -15,12 +15,8 @@ public class SkillDigging extends PlayerSkillBase implements IDigSpeedAffectorSk
 	{
 		super(25);
 		setRegistryName(InfoIS.MOD_ID, "digging");
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 1.5);
+		
+		xpCalculator.baseFormula = "%lvl%^1.5";
 	}
 	
 	@Override

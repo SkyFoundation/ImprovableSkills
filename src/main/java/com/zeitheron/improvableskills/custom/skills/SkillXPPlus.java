@@ -18,11 +18,7 @@ public class SkillXPPlus extends PlayerSkillBase
 		
 		getLoot().chance.n = 3;
 		getLoot().setLootTable(LootTableList.ENTITIES_ELDER_GUARDIAN);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 3) + (targetLvl + 1) * 100;
+		
+		xpCalculator.baseFormula = "%lvl%^3+(%lvl%+1)*100";
 	}
 }

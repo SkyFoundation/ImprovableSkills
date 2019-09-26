@@ -1,11 +1,15 @@
 package com.zeitheron.improvableskills;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
+import com.google.common.base.Predicates;
 import com.zeitheron.hammercore.annotations.MCFBus;
 import com.zeitheron.hammercore.lib.zlib.tuple.OneTuple;
 import com.zeitheron.hammercore.lib.zlib.tuple.OneTuple.Atomic;
 import com.zeitheron.hammercore.net.HCNet;
+import com.zeitheron.hammercore.utils.ReflectionUtil;
 import com.zeitheron.hammercore.utils.WorldUtil;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor;
 import com.zeitheron.improvableskills.api.DamageSourceProcessor.DamageType;
@@ -27,6 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerEnchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -44,11 +49,13 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @MCFBus
@@ -84,15 +91,13 @@ public class SkillEvents
 			PlayerSkillData data = p.world.isRemote ? SyncSkills.CLIENT_DATA : PlayerDataManager.getDataFor(p);
 			if(data == null || data.player == null)
 				return;
-			
 			ItemStack item = p.getHeldItemMainhand();
-			
 			OneTuple.Atomic<Float> tot = new Atomic<>(1F);
-			GameRegistry.findRegistry(PlayerSkillBase.class).getValues().stream().filter(s -> s instanceof IDigSpeedAffectorSkill).forEach(s ->
-			{
-				IDigSpeedAffectorSkill d = (IDigSpeedAffectorSkill) s;
-				tot.set(tot.get() + d.getDigMultiplier(item, e.getPos(), data));
-			});
+			ImprovableSkillsMod.getSkills().getValuesCollection() //
+			        .stream() //
+			        .map(s -> WorldUtil.cast(s, IDigSpeedAffectorSkill.class)) //
+			        .filter(Predicates.notNull()) //
+			        .forEach(d -> tot.set(tot.get() + d.getDigMultiplier(item, e.getPos(), data)));
 			e.setNewSpeed(e.getNewSpeed() * tot.get());
 		}
 	}
@@ -350,6 +355,25 @@ public class SkillEvents
 		{
 			EntityPlayerMP mp = (EntityPlayerMP) e.player;
 			PacketSyncSkillData.sync(mp);
+		}
+	}
+	
+	@SubscribeEvent
+	public void serverTick(ServerTickEvent e)
+	{
+		if(e.phase == Phase.END)
+		{
+			MinecraftServer mcs = FMLCommonHandler.instance().getMinecraftServerInstance();
+			if(mcs != null)
+				PlayerDataManager.DATAS.keySet().removeIf(uuid ->
+				{
+					EntityPlayerMP mp = mcs.getPlayerList().getPlayerByUUID(UUID.fromString(uuid));
+					PlayerSkillData data = PlayerDataManager.DATAS.get(uuid);
+					if(mp == null)
+						return true;
+					data.player = mp;
+					return false;
+				});
 		}
 	}
 }

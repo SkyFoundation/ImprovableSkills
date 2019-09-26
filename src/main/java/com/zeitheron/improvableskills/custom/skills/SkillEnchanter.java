@@ -18,11 +18,7 @@ public class SkillEnchanter extends PlayerSkillBase
 		
 		getLoot().chance.n = 4;
 		getLoot().setLootTable(LootTableList.CHESTS_STRONGHOLD_LIBRARY);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2);
+		
+		xpCalculator.xpValue = 2;
 	}
 }

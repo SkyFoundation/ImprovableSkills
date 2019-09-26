@@ -33,12 +33,8 @@ public class SkillGrowth extends PlayerSkillBase
 		
 		getLoot().chance.n = 4;
 		getLoot().setLootTable(LootTableList.CHESTS_JUNGLE_TEMPLE);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 3);
+		
+		xpCalculator.xpValue = 3;
 	}
 	
 	@Override

@@ -17,11 +17,7 @@ public class SkillObsidianSkin extends PlayerSkillBase
 		
 		getLoot().chance.n = 3;
 		getLoot().setLootTable(LootTableList.CHESTS_NETHER_BRIDGE);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2);
+		
+		xpCalculator.xpValue = 2;
 	}
 }

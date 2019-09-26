@@ -17,6 +17,7 @@ import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.proxy.SyncSkills;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
@@ -28,7 +29,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 @EventBusSubscriber
 public class PlayerDataManager
 {
-	private static final Map<String, PlayerSkillData> DATAS = new HashMap<>();
+	public static final Map<String, PlayerSkillData> DATAS = new HashMap<>();
 	
 	private static ThreadLocal<EntityPlayer> LPLAYER = ThreadLocal.withInitial(() -> null);
 	
@@ -54,7 +55,13 @@ public class PlayerDataManager
 		if(player.world.isRemote)
 			return SyncSkills.getData();
 		LPLAYER.set(player);
-		return getDataFor(player.getGameProfile());
+		PlayerSkillData psd = getDataFor(player.getGameProfile());
+		
+		// Update player reference -- keep it up-to-date
+		if(psd != null && psd.getPlayer() != player)
+			DATAS.put(player.getGameProfile().getId().toString(), psd = PlayerSkillData.deserialize(player, psd.serialize()));
+		
+		return psd;
 	}
 	
 	public static PlayerSkillData getDataFor(GameProfile player)
@@ -71,6 +78,12 @@ public class PlayerDataManager
 		String u = player.toString();
 		if(DATAS.containsKey(u))
 			return DATAS.get(u);
+		EntityPlayer epl = LPLAYER.get();
+		if(epl instanceof EntityPlayerMP)
+		{
+			EntityPlayerMP mp = (EntityPlayerMP) epl;
+			
+		}
 		return null;
 	}
 	
@@ -128,11 +141,6 @@ public class PlayerDataManager
 		} catch(Exception var5)
 		{
 			ImprovableSkillsMod.LOG.warn("Failed to save player data for {}", e.getEntityPlayer().getName());
-		}
-		if(logoff.contains(e.getPlayerUUID()))
-		{
-			DATAS.remove(e.getPlayerUUID());
-			logoff.remove(e.getPlayerUUID());
 		}
 	}
 }

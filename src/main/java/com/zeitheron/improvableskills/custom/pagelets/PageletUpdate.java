@@ -1,6 +1,7 @@
 package com.zeitheron.improvableskills.custom.pagelets;
 
 import java.io.FileOutputStream;
+import java.util.Base64;
 
 import com.zeitheron.hammercore.lib.zlib.json.JSONObject;
 import com.zeitheron.hammercore.lib.zlib.json.JSONTokener;
@@ -78,10 +79,10 @@ public class PageletUpdate extends PageletBase
 		{
 			try
 			{
-				JSONObject o = (JSONObject) new JSONTokener(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").body()).nextValue();
+				JSONObject o = (JSONObject) new JSONTokener(HttpRequest.get("https://dccg.herokuapp.com/api/fmluc/252902?changelog=true&zdev=true").body()).nextValue();
 				
-				changes = o.getString("changelog");
-				discord = o.getString("discordURL");
+				changes = new String(Base64.getDecoder().decode(o.getJSONObject("changelogs64").getString(Loader.MC_VERSION + "-latest")));
+				discord = "https://dccg.herokuapp.com/invite/zeithdev";
 				homepage = o.getString("homepage");
 				latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
 				level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(latest));
@@ -89,8 +90,8 @@ public class PageletUpdate extends PageletBase
 				liveURL = null;
 				liveTitle = null;
 				
-				JSONObject dev = o.getJSONObject("dev");
-				if(dev.getBoolean("live"))
+				JSONObject dev = o.optJSONObject("dev");
+				if(dev != null && dev.getBoolean("live"))
 				{
 					liveURL = dev.getString("url");
 					

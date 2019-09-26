@@ -35,7 +35,7 @@ public class PlayerSkillData
 	
 	public BigInteger storageXp = BigInteger.ZERO;
 	
-	public final EntityPlayer player;
+	public EntityPlayer player;
 	public NBTTagCompound persistedData = new NBTTagCompound();
 	/** The array of scrolls that have been used */
 	public List<String> stat_scrolls = new ArrayList<>();
@@ -46,11 +46,20 @@ public class PlayerSkillData
 	
 	public float enchantPower = 0;
 	
+	private boolean isInIO = false;
+	
 	public EntityPlayer getPlayer()
 	{
 		if(this == SyncSkills.CLIENT_DATA)
 			return HammerCore.renderProxy.getClientPlayer();
 		return player;
+	}
+	
+	public PlayerSkillData toCurrent(EntityPlayer playerReference)
+	{
+		if(player != playerReference)
+			this.player = playerReference;
+		return this;
 	}
 	
 	public PlayerSkillData(EntityPlayer player)
@@ -107,7 +116,7 @@ public class PlayerSkillData
 	
 	public void sync()
 	{
-		if(player instanceof EntityPlayerMP && !player.world.isRemote)
+		if(!isInIO && player instanceof EntityPlayerMP && !player.world.isRemote)
 			PacketSyncSkillData.sync((EntityPlayerMP) player);
 	}
 	
@@ -125,6 +134,7 @@ public class PlayerSkillData
 	public static PlayerSkillData deserialize(EntityPlayer player, NBTTagCompound nbt)
 	{
 		PlayerSkillData data = new PlayerSkillData(player);
+		data.isInIO = true;
 		
 		IForgeRegistry<PlayerSkillBase> reg = GameRegistry.findRegistry(PlayerSkillBase.class);
 		NBTTagList lvls = nbt.getTagList("Levels", NBT.TAG_COMPOUND);
@@ -167,6 +177,7 @@ public class PlayerSkillData
 		data.hasCraftedSkillBook = data.persistedData.getBoolean("SkillBookCrafted");
 		data.hcsbPrev = data.persistedData.getBoolean("PrevSkillBookCrafted");
 		
+		data.isInIO = false;
 		return data;
 	}
 	

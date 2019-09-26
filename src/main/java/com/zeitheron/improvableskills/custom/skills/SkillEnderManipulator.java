@@ -1,7 +1,6 @@
 package com.zeitheron.improvableskills.custom.skills;
 
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 
 import net.minecraft.world.storage.loot.LootTableList;
@@ -18,11 +17,7 @@ public class SkillEnderManipulator extends PlayerSkillBase
 		
 		getLoot().chance.n = 20;
 		getLoot().setLootTable(LootTableList.ENTITIES_ENDERMAN);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 3);
+		
+		xpCalculator.xpValue = 3;
 	}
 }

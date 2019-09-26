@@ -15,7 +15,7 @@ import com.zeitheron.hammercore.client.utils.UV;
 import com.zeitheron.hammercore.client.utils.texture.gui.theme.GuiTheme;
 import com.zeitheron.hammercore.lib.zlib.utils.Threading;
 import com.zeitheron.hammercore.lib.zlib.web.HttpRequest;
-import com.zeitheron.hammercore.utils.FinalFieldHelper;
+import com.zeitheron.hammercore.utils.ReflectionUtil;
 import com.zeitheron.hammercore.utils.color.ColorHelper;
 import com.zeitheron.improvableskills.InfoIS;
 import com.zeitheron.improvableskills.client.gui.base.GuiTabbable;
@@ -45,7 +45,7 @@ public class GuiDiscord extends GuiTabbable
 		
 		if(DISCORD_SERVER_ID_TEXTURE == null)
 		{
-			FinalFieldHelper.setStaticFinalField(GuiDiscord.class, "DISCORD_SERVER_ID_TEXTURE", (Integer) GlStateManager.generateTexture());
+			ReflectionUtil.setStaticFinalField(GuiDiscord.class, "DISCORD_SERVER_ID_TEXTURE", (Integer) GlStateManager.generateTexture());
 			
 			if(DISCORD_SERVER_ID_TEXTURE != null)
 				Threading.createAndStart("IS3ZD", () ->

@@ -25,12 +25,8 @@ public class SkillGenericProtection extends PlayerSkillBase
 		
 		getLoot().chance.n = 4;
 		getLoot().setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2.75);
+		
+		xpCalculator.baseFormula = "%lvl%^2.75";
 	}
 	
 	@Override

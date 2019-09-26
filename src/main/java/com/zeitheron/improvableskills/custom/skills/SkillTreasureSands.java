@@ -12,7 +12,6 @@ import com.zeitheron.improvableskills.api.treasures.TreasureContext;
 import com.zeitheron.improvableskills.api.treasures.TreasureDropBase;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -31,12 +30,8 @@ public class SkillTreasureSands extends PlayerSkillBase
 		
 		getLoot().chance.n = 8;
 		getLoot().setLootTable(LootTableList.CHESTS_DESERT_PYRAMID);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl + 1, 7) + 200;
+		
+		xpCalculator.baseFormula = "(%lvl%+1)^7+200";
 	}
 	
 	public void handleDropAdd(BlockEvent.HarvestDropsEvent loc, PlayerSkillData data, List<ItemStack> drops)

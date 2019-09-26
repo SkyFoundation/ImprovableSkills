@@ -1,8 +1,8 @@
 package com.zeitheron.improvableskills.custom.skills;
 
 import com.zeitheron.improvableskills.InfoIS;
-import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.IDigSpeedAffectorSkill;
+import com.zeitheron.improvableskills.api.PlayerSkillData;
 import com.zeitheron.improvableskills.api.registry.PlayerSkillBase;
 
 import net.minecraft.block.Block;
@@ -15,12 +15,8 @@ public class SkillMining extends PlayerSkillBase implements IDigSpeedAffectorSki
 	{
 		super(25);
 		setRegistryName(InfoIS.MOD_ID, "mining");
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 1.5) * 3;
+		
+		xpCalculator.baseFormula = "sqrt(%lvl%^3)*3";
 	}
 	
 	@Override

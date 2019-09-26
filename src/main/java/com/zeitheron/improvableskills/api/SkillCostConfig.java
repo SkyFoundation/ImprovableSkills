@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 public class SkillCostConfig extends ExpressionFunction
 {
 	public static final String DEF_FORMULA = "(%lvl%+1)^%xpv%";
-	public String formula = DEF_FORMULA;
+	public String baseFormula = DEF_FORMULA, formula = DEF_FORMULA;
 	public int xpValue;
 	
 	public String clientFormula;
@@ -23,7 +23,7 @@ public class SkillCostConfig extends ExpressionFunction
 	
 	public void load(ConfigEntryCategory cfg)
 	{
-		formula = cfg.getStringEntry("formula", DEF_FORMULA).setDescription("Cost calculator for this skill.\nAvailable variables:\n- %lvl% = the level we want to calculate XP value for.\n- %xpv% preset value (" + xpValue + ") for current skill.").getValue();
+		formula = cfg.getStringEntry("formula", baseFormula).setDescription("Cost calculator for this skill.\nAvailable variables:\n- %lvl% = the level we want to calculate XP value for.\n- %xpv% preset value (" + xpValue + ") for current skill.").getValue();
 	}
 	
 	public void writeServerNBT(NBTTagCompound nbt)
@@ -34,9 +34,9 @@ public class SkillCostConfig extends ExpressionFunction
 	
 	public void readClientNBT(NBTTagCompound nbt)
 	{
-		formula = null;
+		resetClient();
 		if(nbt.hasKey("Formula", NBT.TAG_STRING))
-			formula = nbt.getString("Formula");
+			clientFormula = nbt.getString("Formula");
 	}
 	
 	public void resetClient()
@@ -48,13 +48,13 @@ public class SkillCostConfig extends ExpressionFunction
 	{
 		if(clientFormula != null)
 		{
-			String formula = this.clientFormula.replaceAll("%lvl%", Short.toString(targetLvl)).replaceAll("%xpv%", Integer.toString(targetLvl));
+			String formula = this.clientFormula.replaceAll("%lvl%", Short.toString(targetLvl)).replaceAll("%xpv%", Integer.toString(xpValue));
 			return (int) Math.ceil(ExpressionEvaluator.evaluateDouble(formula, this));
 		}
 		
 		if(formula != null)
 		{
-			String formula = this.formula.replaceAll("%lvl%", Short.toString(targetLvl)).replaceAll("%xpv%", Integer.toString(targetLvl));
+			String formula = this.formula.replaceAll("%lvl%", Short.toString(targetLvl)).replaceAll("%xpv%", Integer.toString(xpValue));
 			return (int) Math.ceil(ExpressionEvaluator.evaluateDouble(formula, this));
 		}
 		

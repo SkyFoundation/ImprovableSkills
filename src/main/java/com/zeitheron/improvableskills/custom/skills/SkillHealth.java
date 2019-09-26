@@ -21,15 +21,10 @@ public class SkillHealth extends PlayerSkillBase
 		setRegistryName(InfoIS.MOD_ID, "health");
 		hasScroll = true;
 		genScroll = true;
+		xpCalculator.xpValue = 3;
 		
 		getLoot().chance.n = 9;
 		getLoot().setLootTable(LootTableList.CHESTS_END_CITY_TREASURE);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 3);
 	}
 	
 	@Override
@@ -37,10 +32,18 @@ public class SkillHealth extends PlayerSkillBase
 	{
 		IAttributeInstance hp = data.player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 		
-		hp.removeModifier(HP_ID);
-		hp.applyModifier(new AttributeModifier(HP_ID, "IS3 Health", data.getSkillLevel(this), 0));
+		AttributeModifier mod = hp.getModifier(HP_ID);
+		
+		double val = data.getSkillLevel(this);
+		
+		if(mod == null || mod.getAmount() != val)
+		{
+			if(mod != null)
+				hp.removeModifier(HP_ID);
+			hp.applyModifier(new AttributeModifier(HP_ID, "IS3 Health", val, 0));
+		}
 		
 		if(data.player.getHealth() > hp.getAttributeValue())
-			data.player.heal(0.001F);
+			data.player.setHealth(data.player.getHealth());
 	}
 }

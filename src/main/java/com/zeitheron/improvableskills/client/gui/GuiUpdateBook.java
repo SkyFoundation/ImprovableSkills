@@ -7,9 +7,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.base.Joiner;
@@ -48,6 +50,7 @@ import net.minecraftforge.fml.common.Loader;
 
 public class GuiUpdateBook extends GuiTabbable
 {
+	public int scroll;
 	public String changes, translated;
 	
 	public GuiUpdateBook(PageletBase pagelet)
@@ -143,22 +146,26 @@ public class GuiUpdateBook extends GuiTabbable
 		{
 			try
 			{
-				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://pastebin.com/raw/CKrGidbG").bytes())).nextValue();
+				JSONObject o = (JSONObject) new JSONTokener(new String(HttpRequest.get("https://dccg.herokuapp.com/api/fmluc/252902?changelog=true&zdev=true").bytes())).nextValue();
 				
-				PageletUpdate.changes = changes = o.getString("changelog");
+				String changelog = new String(java.util.Base64.getDecoder().decode(o.getJSONObject("changelogs64").getString(Loader.MC_VERSION + "-latest")));
+				changelog = Pattern.compile("<[^>]*>").matcher(changelog.replaceAll("<br>", "\n")).replaceAll("").replaceAll("\t", " ").replaceAll("  ", "");
+				
+				PageletUpdate.changes = changes = changelog;
 				PageletUpdate.homepage = o.getString("homepage");
 				PageletUpdate.latest = o.getJSONObject("promos").getString(Loader.MC_VERSION + "-latest");
 				PageletUpdate.level = new VersionCompareTool(InfoIS.MOD_VERSION).compare(new VersionCompareTool(PageletUpdate.latest));
 			} catch(Throwable err)
 			{
 				changes = "Unable to connect!";
+				err.printStackTrace();
 			}
 			
 			String ts = changes;
 			try
 			{
 				String c = "\u25BA ";
-				ts = c + getOrTranslate(changes).replaceAll("\n", "\n" + c);
+				ts = getOrTranslate(changes).replaceAll("\n\n", "\n").replaceAll("\n", "\n" + c);
 			} catch(Throwable er)
 			{
 				er.printStackTrace();
@@ -180,14 +187,13 @@ public class GuiUpdateBook extends GuiTabbable
 		GL11.glScissor((int) Math.ceil(guiLeft * sr.getScaleFactor()), (int) Math.ceil((guiTop + 5) * sr.getScaleFactor()), (int) Math.ceil(xSize * sr.getScaleFactor()), (int) Math.ceil((ySize - 10) * sr.getScaleFactor()));
 		
 		String upd = I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest;
-		boolean dwnHover = mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 + fontRenderer.FONT_HEIGHT;
+		boolean dwnHover = mouseY >= guiTop + 8 && mouseY < guiTop + ySize - 11 && mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 - scroll && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 - scroll + fontRenderer.FONT_HEIGHT;
 		
 		if(translated != null)
 		{
-			fontRenderer.drawSplitString((dwnHover ? TextFormatting.BLUE : TextFormatting.RESET) + TextFormatting.UNDERLINE.toString() + upd, (int) guiLeft + 16, (int) guiTop + 11, (int) gui1.width - 22, 0xFF_000000);
-			fontRenderer.drawSplitString(I18n.format("gui." + InfoIS.MOD_ID + ":changes") + ": \n" + translated, (int) guiLeft + 12, (int) guiTop + 12 + fontRenderer.FONT_HEIGHT, (int) gui1.width - 22, 0xFF_000000);
-		}
-		else
+			fontRenderer.drawSplitString((dwnHover ? TextFormatting.BLUE : TextFormatting.RESET) + TextFormatting.UNDERLINE.toString() + upd, (int) guiLeft + 16, (int) guiTop + 11 - scroll, (int) gui1.width - 22, 0xFF_000000);
+			fontRenderer.drawSplitString(translated, (int) guiLeft + 12, (int) guiTop + 12 - scroll, (int) gui1.width - 22, 0xFF_000000);
+		} else
 			GuiNewsBook.spawnLoading(width, height);
 		
 		GlStateManager.enableDepth();
@@ -212,7 +218,7 @@ public class GuiUpdateBook extends GuiTabbable
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
 	{
 		String upd = I18n.format("gui." + InfoIS.MOD_ID + ":nver") + ": " + PageletUpdate.latest;
-		boolean dwnHover = mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 + fontRenderer.FONT_HEIGHT;
+		boolean dwnHover = mouseY >= guiTop + 8 && mouseY < guiTop + ySize - 11 && mouseX >= guiLeft + 16 && mouseY >= guiTop + 11 - scroll && mouseX < guiLeft + 16 + fontRenderer.getStringWidth(upd) && mouseY < guiTop + 11 - scroll + fontRenderer.FONT_HEIGHT;
 		
 		if(dwnHover)
 		{
@@ -233,5 +239,18 @@ public class GuiUpdateBook extends GuiTabbable
 			if(mc.currentScreen == null)
 				mc.setIngameFocus();
 		}
+	}
+	
+	@Override
+	public void handleMouseInput() throws IOException
+	{
+		int dw = Mouse.getEventDWheel() / -30;
+		if(dw != 0)
+		{
+			scroll += dw;
+			int totHe = Math.max(fontRenderer.listFormattedStringToWidth(translated, (int) gui1.width - 22).size() * fontRenderer.FONT_HEIGHT - ((int) ySize - 36), 0);
+			scroll = Math.min(Math.max(0, scroll), totHe);
+		}
+		super.handleMouseInput();
 	}
 }

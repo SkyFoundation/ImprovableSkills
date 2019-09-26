@@ -27,12 +27,8 @@ public class SkillLuckOfTheSea extends PlayerSkillBase
 		
 		getLoot().chance.n = 10;
 		getLoot().setLootTable(LootTableList.GAMEPLAY_FISHING);
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2);
+		
+		xpCalculator.xpValue = 2;
 	}
 	
 	@Override

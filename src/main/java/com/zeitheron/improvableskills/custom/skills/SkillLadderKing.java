@@ -12,12 +12,7 @@ public class SkillLadderKing extends PlayerSkillBase
 	{
 		super(15);
 		setRegistryName(InfoIS.MOD_ID, "ladder_king");
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2);
+		xpCalculator.xpValue = 2;
 	}
 	
 	@Override

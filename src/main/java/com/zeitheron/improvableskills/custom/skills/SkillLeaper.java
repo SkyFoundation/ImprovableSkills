@@ -10,11 +10,7 @@ public class SkillLeaper extends PlayerSkillBase
 	{
 		super(15);
 		setRegistryName(InfoIS.MOD_ID, "leaper");
-	}
-	
-	@Override
-	public int getXPToUpgrade(PlayerSkillData data, short targetLvl)
-	{
-		return (int) Math.pow(targetLvl, 2);
+		
+		xpCalculator.xpValue = 2;
 	}
 }
